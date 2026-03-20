@@ -34,6 +34,11 @@ pnpm-debug.log*
 # Testing
 coverage/
 .playwright-mcp/
+.playwright-cli/
+
+# Images (raw originals stay local, optimized are generated)
+src/assets/wedding-images/
+public/images/
 
 # Misc
 *.local

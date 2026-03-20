@@ -1,16 +1,18 @@
 import { weddingImages, weddingConfig } from './wedding-config'
 import { useScrollAnimation } from './useScrollAnimation'
+import { WeddingImage } from './WeddingImage'
 
 export function ThankYou() {
     const ref = useScrollAnimation()
 
     return (
         <section className="relative" style={{ height: '320px' }}>
-            <img
-                src={weddingImages.thankYou}
+            <WeddingImage
+                image={weddingImages.thankYou}
                 alt="Đôi uyên ương trong khung cảnh lãng mạn"
-                className="absolute inset-0 w-full h-full object-cover"
-                loading="lazy"
+                sizes="430px"
+                className="absolute inset-0 w-full h-full"
+                style={{ aspectRatio: 'unset' }}
             />
             {/* Gradient overlay */}
             <div

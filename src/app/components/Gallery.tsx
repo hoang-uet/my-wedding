@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { X, ChevronLeft, ChevronRight } from 'lucide-react'
 import { weddingImages } from './wedding-config'
+import { WeddingImage } from './WeddingImage'
 
 export function Gallery() {
     const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
@@ -120,8 +121,8 @@ export function Gallery() {
 
             {/* Gallery grid - masonry-like with varied sizes */}
             <div ref={gridRef} className="grid grid-cols-2 px-2" style={{ gap: '3px' }}>
-                {images.map((src, i) => {
-                    // Alternating layout: full-width for 0, 3, 5
+                {images.map((image, i) => {
+                    // Alternating layout: full-width for 0, 3
                     const isFullWidth = i === 0 || i === 3
                     return (
                         <div
@@ -134,11 +135,12 @@ export function Gallery() {
                             }}
                             onClick={() => openLightbox(i)}
                         >
-                            <img
-                                src={src}
+                            <WeddingImage
+                                image={image}
                                 alt={`Ảnh cưới ${i + 1}`}
-                                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                                loading="lazy"
+                                sizes={isFullWidth ? '430px' : '215px'}
+                                className="w-full h-full"
+                                style={{ aspectRatio: 'unset' }}
                             />
                         </div>
                     )
@@ -186,7 +188,9 @@ export function Gallery() {
                     </button>
 
                     <img
-                        src={images[lightboxIndex]}
+                        src={images[lightboxIndex].src}
+                        srcSet={images[lightboxIndex].srcSet}
+                        sizes="100vw"
                         alt={`Ảnh cưới ${lightboxIndex + 1}`}
                         className="max-w-[92vw] max-h-[85vh] object-contain"
                         onClick={(e) => e.stopPropagation()}

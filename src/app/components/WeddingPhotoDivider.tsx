@@ -1,16 +1,18 @@
 import { useScrollAnimation } from './useScrollAnimation'
-import heroCouple from '@/assets/hero-couple.jpg'
+import { weddingImages } from './wedding-config'
+import { WeddingImage } from './WeddingImage'
 
 export function WeddingPhotoDivider() {
     const ref = useScrollAnimation({ threshold: 0.1 })
 
     return (
         <section ref={ref} className="relative" style={{ height: '380px' }}>
-            <img
-                src={heroCouple}
+            <WeddingImage
+                image={weddingImages.heroCouple}
                 alt="Đôi uyên ương trên cánh đồng xanh"
-                className="absolute inset-0 w-full h-full object-cover"
-                loading="lazy"
+                sizes="430px"
+                className="absolute inset-0 w-full h-full"
+                style={{ aspectRatio: 'unset' }}
             />
             {/* Soft gradient top & bottom edges to blend with adjacent sections */}
             <div

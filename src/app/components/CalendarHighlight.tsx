@@ -1,5 +1,6 @@
 import { useMemo, useRef, useEffect } from 'react'
 import { weddingImages } from './wedding-config'
+import { WeddingImage } from './WeddingImage'
 
 export function CalendarHighlight() {
     const ref = useRef<HTMLDivElement>(null)
@@ -54,11 +55,12 @@ export function CalendarHighlight() {
 
     return (
         <section className="relative" style={{ minHeight: '440px' }}>
-            <img
-                src={weddingImages.scenic}
+            <WeddingImage
+                image={weddingImages.scenic}
                 alt="Đôi uyên ương trong khung cảnh đẹp"
-                className="absolute inset-0 w-full h-full object-cover"
-                loading="lazy"
+                sizes="430px"
+                className="absolute inset-0 w-full h-full"
+                style={{ aspectRatio: 'unset' }}
             />
             <div
                 className="absolute inset-0"

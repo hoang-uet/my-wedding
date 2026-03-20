@@ -1,16 +1,20 @@
 import { weddingImages, weddingConfig } from './wedding-config'
 import { useScrollAnimation } from './useScrollAnimation'
+import { WeddingImage } from './WeddingImage'
 
 export function PhotoHero() {
     const textRef = useScrollAnimation()
 
     return (
         <section className="relative" style={{ height: '480px' }}>
-            <img
-                src={weddingImages.heroCouple}
+            <WeddingImage
+                image={weddingImages.heroCouple}
                 alt="Đôi uyên ương đi trên cánh đồng xanh"
-                className="absolute inset-0 w-full h-full object-cover"
-                loading="lazy"
+                sizes="430px"
+                fetchPriority="high"
+                loading="eager"
+                className="absolute inset-0 w-full h-full"
+                style={{ aspectRatio: 'unset' }}
             />
             {/* Gradient overlay */}
             <div

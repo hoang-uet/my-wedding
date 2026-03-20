@@ -1,3 +1,5 @@
+import { imageManifest } from './image-manifest'
+
 export const weddingConfig = {
     couple: {
         groom: {
@@ -53,23 +55,20 @@ export const weddingConfig = {
     },
 }
 
-// Image URLs
+// Photo-to-role mapping — adjust which photo goes where
 export const weddingImages = {
-    heroCouple:
-        'https://images.unsplash.com/photo-1695277501850-329c3b1e7679?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhc2lhbiUyMHdlZGRpbmclMjBjb3VwbGUlMjB3YWxraW5nJTIwZ3JlZW4lMjBmaWVsZCUyMG91dGRvb3J8ZW58MXx8fHwxNzczNzU2OTM1fDA&ixlib=rb-4.1.0&q=80&w=1080',
-    groom: 'https://images.unsplash.com/photo-1529635229076-82fefed713c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhc2lhbiUyMGdyb29tJTIwcG9ydHJhaXQlMjBmb3JtYWwlMjBzdWl0JTIwb3V0ZG9vcnxlbnwxfHx8fDE3NzM3NTY5MzV8MA&ixlib=rb-4.1.0&q=80&w=1080',
-    bride: 'https://images.unsplash.com/photo-1771495307120-dd557e4db001?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhc2lhbiUyMGJyaWRlJTIwd2hpdGUlMjBkcmVzcyUyMHBvcnRyYWl0JTIwZWxlZ2FudHxlbnwxfHx8fDE3NzM3NTY5MzV8MA&ixlib=rb-4.1.0&q=80&w=1080',
-    scenic: 'https://images.unsplash.com/photo-1766098585092-f35f2ab732da?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3ZWRkaW5nJTIwY291cGxlJTIwcm9tYW50aWMlMjBzdW5zZXQlMjBzaWxob3VldHRlJTIwbGFrZXxlbnwxfHx8fDE3NzM3NTY5MzZ8MA&ixlib=rb-4.1.0&q=80&w=1080',
-    quotePhoto:
-        'https://images.unsplash.com/photo-1765615198911-cac121c06587?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3ZWRkaW5nJTIwY291cGxlJTIwaG9sZGluZyUyMGZsb3dlciUyMGJvdXF1ZXQlMjBnYXJkZW58ZW58MXx8fHwxNzczNzU2OTM2fDA&ixlib=rb-4.1.0&q=80&w=1080',
+    heroCouple: imageManifest['hero-couple'],
+    groom: imageManifest['2S8A6480'],
+    bride: imageManifest['2S8A6575'],
+    scenic: imageManifest['2S8A6676'],
+    quotePhoto: imageManifest['2S8A6578'],
+    thankYou: imageManifest['2S8A6682'],
     gallery: [
-        'https://images.unsplash.com/photo-1695277501850-329c3b1e7679?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhc2lhbiUyMHdlZGRpbmclMjBjb3VwbGUlMjB3YWxraW5nJTIwZ3JlZW4lMjBmaWVsZCUyMG91dGRvb3J8ZW58MXx8fHwxNzczNzU2OTM1fDA&ixlib=rb-4.1.0&q=80&w=1080',
-        'https://images.unsplash.com/photo-1767790692964-93711dff01b5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3ZWRkaW5nJTIwY291cGxlJTIwZGFuY2luZyUyMG91dGRvb3IlMjBnYXJkZW4lMjByb21hbnRpY3xlbnwxfHx8fDE3NzM3NTY5MzZ8MA&ixlib=rb-4.1.0&q=80&w=1080',
-        'https://images.unsplash.com/photo-1773370812335-cb6ab11cc37f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3ZWRkaW5nJTIwY291cGxlJTIwZm9yZXN0JTIwZ3JlZW4lMjBuYXR1cmUlMjBiZWF1dGlmdWx8ZW58MXx8fHwxNzczNzU2OTM3fDA&ixlib=rb-4.1.0&q=80&w=1080',
-        'https://images.unsplash.com/photo-1769540209420-f137f98194e8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3ZWRkaW5nJTIwY291cGxlJTIwYmVhY2glMjBzdW5zZXQlMjByb21hbnRpYyUyMHdhbGt8ZW58MXx8fHwxNzczNzU2OTM4fDA&ixlib=rb-4.1.0&q=80&w=1080',
-        'https://images.unsplash.com/photo-1765084379662-f7c7252b501d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3ZWRkaW5nJTIwY291cGxlJTIwZW1icmFjaW5nJTIwb3V0ZG9vciUyMGZpZWxkJTIwZ29sZGVuJTIwaG91cnxlbnwxfHx8fDE3NzM3NTY5NTR8MA&ixlib=rb-4.1.0&q=80&w=1080',
-        'https://images.unsplash.com/photo-1772868357202-347e1f8ae16e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3ZWRkaW5nJTIwY291cGxlJTIwbGF1Z2hpbmclMjBqb3lmdWwlMjBjYW5kaWQlMjBvdXRkb29yfGVufDF8fHx8MTc3Mzc1NjkzOHww&ixlib=rb-4.1.0&q=80&w=1080',
+        imageManifest['hero-couple'],
+        imageManifest['2S8A6480'],
+        imageManifest['2S8A6575'],
+        imageManifest['2S8A6578'],
+        imageManifest['Z72_6163'],
+        imageManifest['Z72_6221'],
     ],
-    thankYou:
-        'https://images.unsplash.com/photo-1751552272702-1cd0fd2db2fe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3ZWRkaW5nJTIwcmluZyUyMGRldGFpbCUyMGNsb3NlLXVwJTIwZmxvd2Vyc3xlbnwxfHx8fDE3NzM3NTY5NTV8MA&ixlib=rb-4.1.0&q=80&w=1080',
 }

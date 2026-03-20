@@ -1,5 +1,6 @@
 import { weddingConfig, weddingImages } from './wedding-config'
 import { useScrollAnimation } from './useScrollAnimation'
+import { WeddingImage } from './WeddingImage'
 import orchidBouquet from '@/assets/orchid-bouquet.png'
 import orchidSingle from '@/assets/orchid-single.png'
 import orchidBranch from '@/assets/orchid-branch.png'
@@ -63,16 +64,15 @@ export function CouplePortraits() {
                             transform: 'rotate(-5deg)',
                         }}
                     >
-                        <img
-                            src={weddingImages.groom}
+                        <WeddingImage
+                            image={weddingImages.groom}
                             alt={`Chú rể ${weddingConfig.couple.groom.name}`}
+                            sizes="170px"
                             style={{
                                 width: '170px',
                                 height: '215px',
-                                objectFit: 'cover',
-                                display: 'block',
+                                aspectRatio: 'unset',
                             }}
-                            loading="lazy"
                         />
                     </div>
                 </div>
@@ -162,16 +162,15 @@ export function CouplePortraits() {
                             transform: 'rotate(4deg)',
                         }}
                     >
-                        <img
-                            src={weddingImages.bride}
+                        <WeddingImage
+                            image={weddingImages.bride}
                             alt={`Cô dâu ${weddingConfig.couple.bride.name}`}
+                            sizes="175px"
                             style={{
                                 width: '175px',
                                 height: '220px',
-                                objectFit: 'cover',
-                                display: 'block',
+                                aspectRatio: 'unset',
                             }}
-                            loading="lazy"
                         />
                     </div>
                 </div>

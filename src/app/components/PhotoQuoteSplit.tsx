@@ -1,5 +1,6 @@
 import { weddingImages, weddingConfig } from './wedding-config'
 import { useScrollAnimation } from './useScrollAnimation'
+import { WeddingImage } from './WeddingImage'
 
 export function PhotoQuoteSplit() {
     const ref = useScrollAnimation()
@@ -8,12 +9,12 @@ export function PhotoQuoteSplit() {
         <section ref={ref} className="flex" style={{ minHeight: '300px' }}>
             {/* Photo left */}
             <div className="w-1/2 relative overflow-hidden">
-                <img
-                    src={weddingImages.quotePhoto}
+                <WeddingImage
+                    image={weddingImages.quotePhoto}
                     alt="Đôi uyên ương cầm hoa"
-                    className="w-full h-full object-cover"
-                    style={{ minHeight: '300px' }}
-                    loading="lazy"
+                    sizes="215px"
+                    className="w-full h-full"
+                    style={{ minHeight: '300px', aspectRatio: 'unset' }}
                 />
                 {/* Subtle vignette */}
                 <div

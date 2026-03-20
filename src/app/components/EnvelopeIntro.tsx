@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { weddingImages, weddingConfig } from './wedding-config'
+import { WeddingImage } from './WeddingImage'
 
 interface EnvelopeIntroProps {
     onOpen: () => void
@@ -132,11 +133,13 @@ export function EnvelopeIntro({ onOpen }: EnvelopeIntroProps) {
                         }}
                     >
                         <div className="p-3 text-center flex flex-col items-center gap-1">
-                            <img
-                                src={weddingImages.heroCouple}
+                            <WeddingImage
+                                image={weddingImages.heroCouple}
                                 alt="Ảnh cưới đôi uyên ương"
-                                className="w-full h-[60px] object-cover rounded-sm mb-1"
-                                style={{ opacity: 0.85 }}
+                                sizes="240px"
+                                loading="eager"
+                                className="w-full rounded-sm mb-1"
+                                style={{ height: '60px', opacity: 0.85, aspectRatio: 'unset' }}
                             />
                             <p
                                 style={{

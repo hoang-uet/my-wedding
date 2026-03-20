@@ -10,7 +10,8 @@
         "lint": "eslint src",
         "lint:fix": "eslint src --fix",
         "format": "prettier --write src",
-        "format:check": "prettier --check src"
+        "format:check": "prettier --check src",
+        "optimize-images": "tsx scripts/optimize-images.mts"
     },
     "dependencies": {
         "@emotion/react": "11.14.0",
@@ -75,6 +76,7 @@
         "@eslint/js": "^10.0.1",
         "@playwright/test": "^1.58.2",
         "@tailwindcss/vite": "4.1.12",
+        "@types/node": "^25.5.0",
         "@types/react": "^19.2.14",
         "@types/react-dom": "^19.2.3",
         "@vitejs/plugin-react": "4.7.0",
@@ -84,7 +86,9 @@
         "eslint-plugin-react-hooks": "^7.0.1",
         "eslint-plugin-react-refresh": "^0.5.2",
         "prettier": "^3.8.1",
+        "sharp": "^0.34.5",
         "tailwindcss": "4.1.12",
+        "tsx": "^4.21.0",
         "typescript": "^5.9.3",
         "typescript-eslint": "^8.57.1",
         "vite": "6.3.5"
