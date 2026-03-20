@@ -10,7 +10,7 @@ import orchidSingle from '@/assets/orchid-single.png'
  *   closed → opening → open → closing → closed
  *
  * Z-index layers (inside envelope):
- *   0: body   1: side flaps   3: card   4: pocket   5: top flap   6: seal   7: hearts
+ *   0: body   1: side flaps   1-2: card (1 closed, 2 open)   3: pocket   1-5: flap (5 closed, 1 open)   10: seal   7: hearts
  *
  * Animation timings matched exactly to cinelove.me/template/pc/thiep-cuoi-48:
  *   - Idle: float up/down 20px (3s ease-in-out infinite)
@@ -25,8 +25,7 @@ const ENV_W = 310
 const ENV_H = 215
 const FLAP_H = 108
 const POCKET_H = 105
-const CARD_H = 230
-// Reference: 83px rise for 262px wide envelope → proportional for 310px = ~98px
+// Reference: original letter rise = 94.47px for 298px wide → proportional for 310px = ~98px
 const CARD_RISE = 98
 
 export function EnvelopeCard() {
@@ -57,12 +56,10 @@ export function EnvelopeCard() {
     const isOpen = state === 'open'
     const isClosing = state === 'closing'
     const flapOpen = isOpening || isOpen
-    const sealVisible = isClosed || isClosing
     const showHearts = isOpen
 
-    const cardY = isOpen ? -CARD_RISE : isOpening ? -CARD_RISE * 0.35 : 0
-    // Card fully hidden when closing — it slides down and fades out quickly
-    const cardOpacity = isOpen ? 1 : isOpening ? 0.85 : 0
+    // Card position: CSS transition handles the smooth animation
+    const cardY = (isOpen || isOpening) ? -CARD_RISE : 0
 
     // Wrapper grows to accommodate the card rising above.
     // During closing, keep expanded briefly so layout doesn't jump while card descends.
@@ -161,8 +158,7 @@ export function EnvelopeCard() {
                     style={{
                         width: `${ENV_W}px`,
                         height: `${ENV_H}px`,
-                        perspective: '1200px',
-                        animation: isClosed ? 'envelopeFloat 3s ease-in-out infinite' : 'none',
+                        animation: 'envelopeFloat 3s ease-in-out infinite',
                         overflow: 'visible',
                     }}
                     onClick={handleClick}
@@ -180,7 +176,7 @@ export function EnvelopeCard() {
                             transform: 'translateX(-50%)',
                             filter: 'blur(4px)',
                             boxShadow: '0 0 20px rgba(0, 0, 0, 0.2)',
-                            animation: isClosed ? 'shadowScale 3s ease-in-out infinite' : 'none',
+                            animation: 'shadowScale 3s ease-in-out infinite',
                             zIndex: 0,
                         }}
                     />
@@ -189,59 +185,34 @@ export function EnvelopeCard() {
                     <div
                         className="absolute inset-0"
                         style={{
-                            background:
-                                'linear-gradient(160deg, #4E6B3C 0%, #3C5230 40%, #354A2A 100%)',
+                            background: '#3C4E34',
                             borderRadius: '0 0 6px 6px',
                             boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
                             transition: 'box-shadow 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                         }}
                     />
 
-                    {/* Left side flap — z:1 */}
-                    <div
-                        className="absolute top-0 left-0"
-                        style={{
-                            zIndex: 1,
-                            width: 0,
-                            height: 0,
-                            borderTop: `${FLAP_H}px solid transparent`,
-                            borderBottom: `${ENV_H - FLAP_H}px solid transparent`,
-                            borderLeft: `${ENV_W / 2}px solid #445E34`,
-                        }}
-                    />
-
-                    {/* Right side flap — z:1 */}
-                    <div
-                        className="absolute top-0 right-0"
-                        style={{
-                            zIndex: 1,
-                            width: 0,
-                            height: 0,
-                            borderTop: `${FLAP_H}px solid transparent`,
-                            borderBottom: `${ENV_H - FLAP_H}px solid transparent`,
-                            borderRight: `${ENV_W / 2}px solid #445E34`,
-                        }}
-                    />
+                    {/* Side flaps are part of the pocket element (solid side borders) */}
 
                     {/* ───────────────────────────────────
-              INVITATION CARD — z:3
-              Between side flaps (z:1) and pocket (z:4).
-              Pocket covers the card bottom → "inside envelope" look.
+              INVITATION CARD
+              Ref: position: relative; width: 90%; height: 90%; top: 5%
+              Fully contained in envelope when closed (no overhang).
+              z:1 closed (below pocket z:3), z:2 open (still below pocket).
               ─────────────────────────────────── */}
                     <div
                         className="absolute"
                         data-testid="invitation-card"
                         style={{
-                            zIndex: 3,
+                            zIndex: (isOpen || isOpening) ? 2 : 1,
                             left: '5%',
                             right: '5%',
-                            height: `${CARD_H}px`,
-                            bottom: `${ENV_H * 0.05}px`,
+                            top: '5%',
+                            bottom: '5%',
                             transform: `translateY(${cardY}px)`,
                             transition: isClosing
-                                ? 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease'
-                                : 'transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s, opacity 0.8s ease 0.4s',
-                            opacity: cardOpacity,
+                                ? 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s'
+                                : 'transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s',
                             pointerEvents: isOpen ? 'auto' : 'none',
                         }}
                     >
@@ -351,83 +322,60 @@ export function EnvelopeCard() {
                         </div>
                     </div>
 
-                    {/* Bottom pocket flap — z:4
-              Covers card bottom to create "inside envelope" illusion */}
-                    <div className="absolute bottom-0 left-0 right-0" style={{ zIndex: 4 }}>
-                        <div
-                            style={{
-                                width: 0,
-                                height: 0,
-                                borderLeft: `${ENV_W / 2}px solid #465C3D`,
-                                borderRight: `${ENV_W / 2}px solid #465C3D`,
-                                borderTop: `${POCKET_H}px solid #4A6240`,
-                                borderBottomLeftRadius: '6px',
-                                borderBottomRightRadius: '6px',
-                            }}
-                        />
-                    </div>
-
-                    {/* Top flap — z:5
-              Open: flap rotates back (1.2s), z drops to 1 so card rises above
-              Close: card slides down first (0.5s), then flap closes (0.8s after 0.6s delay)
-              z-index must stay low until flap starts closing so card descends cleanly */}
+                    {/* Pocket — z:3 (full-height element)
+              Ref: .front.pocket { z-index: 3 }
+              border-top: transparent (V-opening), border-bottom: solid (bottom panel),
+              border-left/right: solid (side panels).
+              Together with flap, completely covers the card (z:1-2) when closed. */}
                     <div
-                        className="absolute top-0 left-0 right-0"
+                        className="absolute top-0 left-0"
                         style={{
-                            zIndex: isClosed ? 5 : flapOpen ? 1 : 1,
-                            height: `${FLAP_H}px`,
-                            transformOrigin: 'top center',
+                            zIndex: 3,
+                            width: 0,
+                            height: 0,
+                            borderTop: `${ENV_H - POCKET_H}px solid transparent`,
+                            borderBottom: `${POCKET_H}px solid #4A6240`,
+                            borderLeft: `${ENV_W / 2}px solid #465C3D`,
+                            borderRight: `${ENV_W / 2}px solid #465C3D`,
+                            borderBottomLeftRadius: '6px',
+                            borderBottomRightRadius: '6px',
+                        }}
+                    />
+
+                    {/* Top flap — z:5 (full-height element)
+              Ref: .front.flap { z-index: 5 closed, 1 open }
+              border-top: solid (visible triangle), border-bottom: transparent (for full height),
+              border-left/right: transparent.
+              Open: rotateX(180deg) 1.2s, Close: 0.8s with 0.8s delay */}
+                    <div
+                        className="absolute top-0 left-0"
+                        style={{
+                            zIndex: isClosed ? 5 : 1,
+                            width: 0,
+                            height: 0,
+                            borderTop: `${FLAP_H}px solid #3C4E34`,
+                            borderBottom: `${ENV_H - FLAP_H}px solid transparent`,
+                            borderLeft: `${ENV_W / 2}px solid transparent`,
+                            borderRight: `${ENV_W / 2}px solid transparent`,
+                            transformOrigin: 'center top',
                             transform: flapOpen ? 'rotateX(180deg)' : 'rotateX(0deg)',
                             transition: isClosing
-                                ? 'transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s, z-index 0s linear 0.6s'
-                                : 'transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), z-index 0s',
-                            transformStyle: 'preserve-3d',
+                                ? 'transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.8s, z-index 0.8s'
+                                : 'transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), z-index 1.2s',
                         }}
-                    >
-                        {/* Front */}
-                        <div
-                            style={{
-                                position: 'absolute',
-                                width: 0,
-                                height: 0,
-                                borderLeft: `${ENV_W / 2}px solid transparent`,
-                                borderRight: `${ENV_W / 2}px solid transparent`,
-                                borderTop: `${FLAP_H}px solid #3C5230`,
-                                backfaceVisibility: 'hidden',
-                            }}
-                        />
-                        {/* Back (visible when flipped) */}
-                        <div
-                            style={{
-                                position: 'absolute',
-                                width: 0,
-                                height: 0,
-                                borderLeft: `${ENV_W / 2}px solid transparent`,
-                                borderRight: `${ENV_W / 2}px solid transparent`,
-                                borderTop: `${FLAP_H}px solid #2E4023`,
-                                transform: 'rotateX(180deg)',
-                                backfaceVisibility: 'hidden',
-                            }}
-                        />
-                    </div>
+                    />
 
-                    {/* Wax seal — z:6
-              Ref: positioned at ~40% of envelope height, 34x34px */}
+                    {/* Wax seal — z:10
+              Ref: always visible, centered at ~40% height, no animation */}
                     <div
                         className="absolute flex items-center justify-center"
                         style={{
-                            zIndex: 6,
+                            zIndex: 10,
                             width: '54px',
                             height: '54px',
                             top: '50%',
                             left: '50%',
-                            transform: sealVisible
-                                ? 'translate(-50%, -50%) scale(1) rotate(0deg)'
-                                : 'translate(-50%, -50%) scale(0) rotate(90deg)',
-                            transition: isClosing
-                                ? 'transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1) 1.2s, opacity 300ms ease 1.1s'
-                                : 'transform 400ms cubic-bezier(0.4, 0, 0.2, 1), opacity 300ms ease',
-                            opacity: sealVisible ? 1 : 0,
+                            transform: 'translate(-50%, -50%)',
                             filter: 'drop-shadow(0 3px 8px rgba(0,0,0,0.3))',
                         }}
                     >
@@ -590,7 +538,7 @@ export function EnvelopeCard() {
         @keyframes heartScaleWrap {
           0%   { transform: scale(0); opacity: 0; }
           50%  { transform: scale(1.2); opacity: 0.8; }
-          100% { transform: scale(1); opacity: 1; }
+          100% { transform: scale(var(--heart-scale, 1)); opacity: 1; }
         }
 
         /* ── Heart float upward (ref: top 0→-600px, multi-step opacity) ── */
