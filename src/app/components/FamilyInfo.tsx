@@ -1,5 +1,6 @@
 import { weddingConfig } from './wedding-config'
 import { useChildrenStagger } from './useScrollAnimation'
+import { CornerOrchidCluster } from './FloralOverlay'
 
 export function FamilyInfo() {
     const ref = useChildrenStagger(120)
@@ -12,6 +13,9 @@ export function FamilyInfo() {
                 padding: '48px 20px 40px',
             }}
         >
+            {/* Floral corner — top-right orchid (z-1, below text z-10) */}
+            <CornerOrchidCluster position="top-right" size={100} delay={200} />
+
             {/* Decorative top ornament */}
             <div className="flex justify-center mb-6">
                 <FloralOrnament />

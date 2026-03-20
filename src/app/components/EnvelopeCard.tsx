@@ -28,7 +28,12 @@ const POCKET_H = 105
 // Reference: original letter rise = 94.47px for 298px wide → proportional for 310px = ~98px
 const CARD_RISE = 98
 
-export function EnvelopeCard() {
+interface EnvelopeCardProps {
+    /** Called when user taps the envelope to open (first click). Use to trigger music. */
+    onOpen?: () => void
+}
+
+export function EnvelopeCard({ onOpen }: EnvelopeCardProps) {
     const [state, setState] = useState<EnvelopeState>('closed')
     const [heartsKey, setHeartsKey] = useState(0)
     const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -38,6 +43,7 @@ export function EnvelopeCard() {
         if (timerRef.current) clearTimeout(timerRef.current)
 
         if (state === 'closed') {
+            onOpen?.() // Trigger music with envelope opening (user gesture satisfies autoplay policy)
             setState('opening')
             // 1.2s flap + 0.5s card delay = 1.7s total
             timerRef.current = setTimeout(() => {
@@ -49,7 +55,7 @@ export function EnvelopeCard() {
             // 0.8s delay + 0.8s flap = 1.6s total
             timerRef.current = setTimeout(() => setState('closed'), 1600)
         }
-    }, [state])
+    }, [state, onOpen])
 
     const isClosed = state === 'closed'
     const isOpening = state === 'opening'

@@ -1,6 +1,7 @@
-import { useRef, useCallback, useState } from 'react'
-import { Volume2, VolumeX } from 'lucide-react'
+import { useRef, useCallback } from 'react'
 import { EnvelopeCard } from './components/EnvelopeCard'
+import { MusicButton } from './components/MusicButton'
+import { useAudioPlayer } from './components/useAudioPlayer'
 import { WeddingPhotoDivider } from './components/WeddingPhotoDivider'
 import { FamilyInfo } from './components/FamilyInfo'
 import { EventDetails } from './components/EventDetails'
@@ -16,10 +17,20 @@ import { RSVPForm } from './components/RSVPForm'
 import { WeddingGift } from './components/WeddingGift'
 import { ThankYou } from './components/ThankYou'
 import { FloatingBar } from './components/FloatingBar'
+import { FloralAnimationStyles, OrchidBranchDivider } from './components/FloralOverlay'
 
 export default function App() {
-    const [musicPlaying, setMusicPlaying] = useState(false)
+    const { isPlaying, toggle, play } = useAudioPlayer()
+    const musicStarted = useRef(false)
     const scrollContainerRef = useRef<HTMLDivElement>(null)
+
+    // Start music on first envelope open (once only — respects manual toggle after)
+    const handleEnvelopeOpen = useCallback(() => {
+        if (!musicStarted.current) {
+            musicStarted.current = true
+            play()
+        }
+    }, [play])
 
     const scrollToSection = useCallback((id: string) => {
         const container = scrollContainerRef.current
@@ -47,35 +58,8 @@ export default function App() {
                     background: '#F0EBE2',
                 }}
             >
-                {/* Music button */}
-                <button
-                    onClick={() => setMusicPlaying(!musicPlaying)}
-                    className="absolute top-4 right-4 z-[900] flex items-center justify-center cursor-pointer"
-                    style={{
-                        width: '40px',
-                        height: '40px',
-                        borderRadius: '50%',
-                        background: musicPlaying ? 'rgba(74,93,58,0.9)' : 'rgba(255,255,255,0.85)',
-                        border: 'none',
-                        transition: 'all 300ms ease',
-                        boxShadow: '0 2px 12px rgba(0,0,0,0.1)',
-                        backdropFilter: 'blur(8px)',
-                    }}
-                    aria-label={musicPlaying ? 'Tắt nhạc' : 'Bật nhạc'}
-                >
-                    {musicPlaying ? (
-                        <Volume2
-                            size={18}
-                            color="white"
-                            strokeWidth={1.5}
-                            style={{
-                                animation: 'musicSpin 4s linear infinite',
-                            }}
-                        />
-                    ) : (
-                        <VolumeX size={18} color="#4A5D3A" strokeWidth={1.5} />
-                    )}
-                </button>
+                {/* Music toggle — vinyl disc button */}
+                <MusicButton isPlaying={isPlaying} onClick={toggle} />
 
                 {/* Scrollable content */}
                 <div
@@ -87,12 +71,14 @@ export default function App() {
                     }}
                 >
                     <div className="relative">
-                        <EnvelopeCard />
+                        <EnvelopeCard onOpen={handleEnvelopeOpen} />
                         <WeddingPhotoDivider />
                         <FamilyInfo />
                         <EventDetails />
                         <PhotoHero />
                         <CouplePortraits />
+                        {/* Orchid branch divider between story sections */}
+                        <OrchidBranchDivider delay={100} />
                         <OurStory />
                         <CalendarHighlight />
                         <WeddingTimeline />
@@ -112,6 +98,9 @@ export default function App() {
                 />
             </div>
 
+            {/* Global floral animation keyframes */}
+            <FloralAnimationStyles />
+
             <style>{`
         @media (min-width: 768px) {
           .phone-frame {
@@ -124,11 +113,6 @@ export default function App() {
             max-width: 100% !important;
           }
         }
-        @keyframes musicSpin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        
         /* Elegant thin scrollbar */
         div::-webkit-scrollbar {
           width: 2px;

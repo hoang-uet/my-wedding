@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 import { X, ChevronLeft, ChevronRight } from 'lucide-react'
 import { weddingImages } from './wedding-config'
 import { WeddingImage } from './WeddingImage'
+import { FloatingPetals } from './FloralOverlay'
 
 export function Gallery() {
     const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
@@ -71,7 +72,10 @@ export function Gallery() {
     }, [lightboxIndex, closeLightbox, navigate])
 
     return (
-        <section id="gallery-section" style={{ background: '#F0EBE2', padding: '48px 0 16px' }}>
+        <section id="gallery-section" className="relative" style={{ background: '#F0EBE2', padding: '48px 0 16px' }}>
+            {/* Floating petals — z-1, subtle background decoration */}
+            <FloatingPetals />
+
             {/* Header */}
             <div className="text-center mb-8 px-4">
                 <div className="flex items-baseline justify-center gap-4 flex-wrap">

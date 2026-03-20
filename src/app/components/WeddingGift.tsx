@@ -1,4 +1,5 @@
 import { useScrollAnimation } from './useScrollAnimation'
+import { CornerOrchidCluster } from './FloralOverlay'
 
 export function WeddingGift() {
     const ref = useScrollAnimation()
@@ -7,10 +8,13 @@ export function WeddingGift() {
         <section
             id="gift-section"
             ref={ref}
+            className="relative overflow-hidden"
             style={{ background: '#F0EBE2', padding: '48px 24px' }}
         >
-            {/* Ornamental line */}
-            <div className="flex justify-center mb-6">
+            {/* Floral corner — z-1, below content */}
+            <CornerOrchidCluster position="top-right" size={85} delay={200} />
+            {/* Ornamental line — z-10, above floral */}
+            <div className="flex justify-center mb-6 relative z-10">
                 <div
                     style={{
                         width: '50px',
@@ -21,13 +25,13 @@ export function WeddingGift() {
             </div>
 
             {/* Gift box illustration */}
-            <div className="flex justify-center mb-6">
+            <div className="flex justify-center mb-6 relative z-10">
                 <GiftBoxIllustration />
             </div>
 
             {/* Thank you text */}
             <p
-                className="text-center mb-3"
+                className="text-center mb-3 relative z-10"
                 style={{
                     fontFamily: 'var(--font-primary)',
                     fontSize: '16px',
@@ -102,7 +106,7 @@ function GiftBoxIllustration() {
     )
 }
 
-function FloralWreath() {
+export function FloralWreath() {
     return (
         <svg width="80" height="40" viewBox="0 0 80 40" opacity="0.6">
             <path

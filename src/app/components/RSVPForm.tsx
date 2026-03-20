@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useScrollAnimation } from './useScrollAnimation'
+import { CornerOrchidCluster, BouquetAccent } from './FloralOverlay'
 
 export function RSVPForm() {
     const ref = useScrollAnimation()
@@ -81,10 +82,14 @@ export function RSVPForm() {
     }
 
     return (
-        <section ref={ref} style={{ background: '#F0EBE2', padding: '48px 20px' }}>
-            {/* Intro text */}
+        <section ref={ref} className="relative overflow-hidden" style={{ background: '#F0EBE2', padding: '48px 20px' }}>
+            {/* Floral accents — z-1, below form content */}
+            <CornerOrchidCluster position="top-left" size={95} delay={200} />
+            <BouquetAccent position="bottom-right" size={140} delay={500} />
+
+            {/* Intro text — z-10 ensures text stays above floral decorations */}
             <p
-                className="text-center mb-6"
+                className="text-center mb-6 relative z-10"
                 style={{
                     fontFamily: "var(--font-display-serif)",
                     fontSize: '16px',
@@ -97,9 +102,10 @@ export function RSVPForm() {
                 nhất. Trân trọng!
             </p>
 
-            {/* Form */}
+            {/* Form — z-10 stays above floral decorations (z-1) */}
             <form
                 onSubmit={handleSubmit}
+                className="relative z-10"
                 style={{
                     background: 'rgba(255,255,255,0.6)',
                     borderRadius: '12px',

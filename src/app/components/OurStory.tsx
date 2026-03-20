@@ -1,22 +1,27 @@
 import { weddingConfig } from './wedding-config'
 import { useChildrenStagger } from './useScrollAnimation'
+import { BouquetAccent } from './FloralOverlay'
 
 export function OurStory() {
     const ref = useChildrenStagger(150)
 
     return (
         <section
+            className="relative overflow-hidden"
             style={{
                 background: 'linear-gradient(180deg, #F0EBE2 0%, #EDE8DD 100%)',
                 padding: '52px 28px',
             }}
         >
+            {/* Bouquet accent — bottom-left, z-1, below text content */}
+            <BouquetAccent position="bottom-left" size={130} delay={300} />
+
             {/* Top leaf ornament */}
             <div className="flex justify-center mb-2 opacity-50">
                 <LeafSprig />
             </div>
 
-            <div ref={ref}>
+            <div ref={ref} className="relative z-10">
                 <h2
                     className="text-center mb-3"
                     style={{

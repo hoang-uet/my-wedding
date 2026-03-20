@@ -1,6 +1,7 @@
 import { MapPin } from 'lucide-react'
 import { weddingConfig } from './wedding-config'
 import { useChildrenStagger } from './useScrollAnimation'
+import { CornerOrchidCluster, VineFrame } from './FloralOverlay'
 
 export function EventDetails() {
     const ref = useChildrenStagger(80)
@@ -13,10 +14,14 @@ export function EventDetails() {
                 padding: '32px 16px 40px',
             }}
         >
-            {/* Right floral decoration */}
+            {/* Right floral decoration (original SVG) */}
             <div className="absolute -top-2 -right-2 opacity-50">
                 <FloralBranch />
             </div>
+
+            {/* Vine corner accents — z-1, below content z-10 */}
+            <VineFrame position="top-left" delay={100} />
+            <CornerOrchidCluster position="bottom-right" size={90} delay={400} />
 
             <div ref={ref} className="text-center relative z-10">
                 {/* Couple names */}

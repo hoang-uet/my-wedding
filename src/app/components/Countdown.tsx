@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useScrollAnimation } from './useScrollAnimation'
+import { VineFrame } from './FloralOverlay'
 
 const weddingDate = new Date('2026-04-05T09:00:00+07:00')
 
@@ -36,6 +37,12 @@ export function Countdown() {
                 overflow: 'hidden',
             }}
         >
+            {/* Vine corner accents — z-1, light on dark background */}
+            <div style={{ opacity: 0.6 }}>
+                <VineFrame position="top-left" delay={200} />
+                <VineFrame position="bottom-right" delay={400} />
+            </div>
+
             {/* Subtle leaf pattern overlay */}
             <div className="absolute inset-0 pointer-events-none" style={{ opacity: 0.04 }}>
                 <svg width="100%" height="100%" viewBox="0 0 400 300">
