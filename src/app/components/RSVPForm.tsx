@@ -37,7 +37,7 @@ export function RSVPForm() {
                 <div style={{ animation: 'rsvpFadeIn 600ms ease' }}>
                     <p
                         style={{
-                            fontFamily: "'Monsieur La Doulaise', cursive",
+                            fontFamily: "var(--font-script-elegant)",
                             fontSize: '36px',
                             color: '#4A5D3A',
                             marginBottom: '12px',
@@ -47,7 +47,7 @@ export function RSVPForm() {
                     </p>
                     <p
                         style={{
-                            fontFamily: "'Cormorant Garamond', serif",
+                            fontFamily: "var(--font-display-serif)",
                             fontSize: '16px',
                             color: '#666',
                             fontStyle: 'italic',
@@ -71,7 +71,7 @@ export function RSVPForm() {
         border: '1px solid #D4CCBE',
         borderRadius: '6px',
         padding: '11px 14px',
-        fontFamily: "'Quicksand', sans-serif",
+        fontFamily: "var(--font-primary)",
         fontSize: '14px',
         outline: 'none',
         boxSizing: 'border-box' as const,
@@ -86,7 +86,7 @@ export function RSVPForm() {
             <p
                 className="text-center mb-6"
                 style={{
-                    fontFamily: "'Cormorant Garamond', serif",
+                    fontFamily: "var(--font-display-serif)",
                     fontSize: '16px',
                     color: '#4A5D3A',
                     lineHeight: 1.8,
@@ -111,7 +111,7 @@ export function RSVPForm() {
                 <h3
                     className="text-center mb-6"
                     style={{
-                        fontFamily: "'Cormorant Garamond', serif",
+                        fontFamily: "var(--font-display-serif)",
                         fontSize: '22px',
                         fontWeight: 600,
                         color: '#4A5D3A',
@@ -126,7 +126,7 @@ export function RSVPForm() {
                     <label
                         htmlFor="rsvp-name"
                         style={{
-                            fontFamily: "'Quicksand', sans-serif",
+                            fontFamily: "var(--font-primary)",
                             fontSize: '13px',
                             fontWeight: 600,
                             color: '#4A5D3A',
@@ -159,7 +159,7 @@ export function RSVPForm() {
                     {error && (
                         <p
                             style={{
-                                fontFamily: "'Quicksand', sans-serif",
+                                fontFamily: "var(--font-primary)",
                                 fontSize: '12px',
                                 color: '#E87461',
                                 marginTop: '4px',
@@ -174,7 +174,7 @@ export function RSVPForm() {
                 <div className="mb-5">
                     <p
                         style={{
-                            fontFamily: "'Quicksand', sans-serif",
+                            fontFamily: "var(--font-primary)",
                             fontSize: '13px',
                             fontWeight: 600,
                             color: '#4A5D3A',
@@ -194,7 +194,7 @@ export function RSVPForm() {
                         />
                         <span
                             style={{
-                                fontFamily: "'Quicksand', sans-serif",
+                                fontFamily: "var(--font-primary)",
                                 fontSize: '14px',
                                 color: '#3A3A3A',
                             }}
@@ -212,7 +212,7 @@ export function RSVPForm() {
                         />
                         <span
                             style={{
-                                fontFamily: "'Quicksand', sans-serif",
+                                fontFamily: "var(--font-primary)",
                                 fontSize: '14px',
                                 color: '#3A3A3A',
                             }}
@@ -228,7 +228,7 @@ export function RSVPForm() {
                         <label
                             htmlFor="rsvp-guests"
                             style={{
-                                fontFamily: "'Quicksand', sans-serif",
+                                fontFamily: "var(--font-primary)",
                                 fontSize: '13px',
                                 fontWeight: 600,
                                 color: '#4A5D3A',
@@ -259,7 +259,7 @@ export function RSVPForm() {
                     <label
                         htmlFor="rsvp-wish"
                         style={{
-                            fontFamily: "'Quicksand', sans-serif",
+                            fontFamily: "var(--font-primary)",
                             fontSize: '13px',
                             fontWeight: 600,
                             color: '#4A5D3A',
@@ -302,7 +302,7 @@ export function RSVPForm() {
                         border: 'none',
                         borderRadius: '6px',
                         padding: '13px',
-                        fontFamily: "'Quicksand', sans-serif",
+                        fontFamily: "var(--font-primary)",
                         fontSize: '14px',
                         fontWeight: 600,
                         cursor: loading ? 'not-allowed' : 'pointer',

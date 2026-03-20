@@ -9,23 +9,6 @@ export function WeddingGift() {
             ref={ref}
             style={{ background: '#F0EBE2', padding: '48px 24px' }}
         >
-            {/* Floral top */}
-            <div className="flex justify-center mb-4">
-                <FloralWreath />
-            </div>
-
-            <h2
-                className="text-center mb-2"
-                style={{
-                    fontFamily: "'Monsieur La Doulaise', cursive",
-                    fontSize: '44px',
-                    color: '#4A5D3A',
-                    fontWeight: 400,
-                }}
-            >
-                Gửi mừng cưới
-            </h2>
-
             {/* Ornamental line */}
             <div className="flex justify-center mb-6">
                 <div
@@ -46,7 +29,7 @@ export function WeddingGift() {
             <p
                 className="text-center mb-3"
                 style={{
-                    fontFamily: "'Cormorant Garamond', serif",
+                    fontFamily: 'var(--font-primary)',
                     fontSize: '16px',
                     color: '#4A4A4A',
                     lineHeight: 1.8,

@@ -77,7 +77,7 @@ export function Countdown() {
             <h2
                 className="text-center mb-3 relative z-10"
                 style={{
-                    fontFamily: "'Monsieur La Doulaise', cursive",
+                    fontFamily: "var(--font-calligraphy-vn)",
                     fontSize: '44px',
                     color: '#FFFFFF',
                     fontWeight: 400,
@@ -102,7 +102,7 @@ export function Countdown() {
                 <p
                     className="text-center relative z-10"
                     style={{
-                        fontFamily: "'Cormorant Garamond', serif",
+                        fontFamily: "var(--font-primary)",
                         fontSize: '22px',
                         color: '#FFFFFF',
                         fontStyle: 'italic',
@@ -127,7 +127,7 @@ export function Countdown() {
                         >
                             <p
                                 style={{
-                                    fontFamily: "'Cormorant Garamond', serif",
+                                    fontFamily: "var(--font-primary)",
                                     fontSize: '36px',
                                     fontWeight: 300,
                                     color: '#FFFFFF',
@@ -138,7 +138,7 @@ export function Countdown() {
                             </p>
                             <p
                                 style={{
-                                    fontFamily: "'Quicksand', sans-serif",
+                                    fontFamily: "var(--font-primary)",
                                     fontSize: '10px',
                                     color: 'rgba(255,255,255,0.55)',
                                     letterSpacing: '0.15em',

@@ -64,7 +64,7 @@ export function PhotoQuoteSplit() {
                     <p
                         className="text-center mb-2"
                         style={{
-                            fontFamily: "'Monsieur La Doulaise', cursive",
+                            fontFamily: "var(--font-script-elegant)",
                             fontSize: '48px',
                             color: 'rgba(255,255,255,0.25)',
                             lineHeight: 0.8,
@@ -74,13 +74,12 @@ export function PhotoQuoteSplit() {
                     </p>
                     <p
                         style={{
-                            fontFamily: "'Cormorant Garamond', serif",
-                            fontSize: '16px',
+                            fontFamily: "var(--font-quote-en)",
+                            fontSize: '14px',
                             color: 'rgba(255,255,255,0.9)',
                             lineHeight: 1.8,
                             textAlign: 'center',
-                            fontStyle: 'italic',
-                            fontWeight: 300,
+                            fontWeight: 500,
                         }}
                     >
                         {weddingConfig.quote.split}
@@ -89,7 +88,7 @@ export function PhotoQuoteSplit() {
                     <p
                         className="text-center mt-2"
                         style={{
-                            fontFamily: "'Monsieur La Doulaise', cursive",
+                            fontFamily: "var(--font-script-elegant)",
                             fontSize: '48px',
                             color: 'rgba(255,255,255,0.25)',
                             lineHeight: 0.5,

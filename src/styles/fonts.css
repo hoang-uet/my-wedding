@@ -1,20 +1,81 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Quicksand:wght@300;400;500;600;700&family=Monsieur+La+Doulaise&family=Great+Vibes&family=Dancing+Script:wght@400;500;600;700&family=Sacramento&family=Caveat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap');
+/* ═══════════════════════════════════════════════════════════════
+   Wedding Typography System
+   Font specs extracted from: cinelove.me/template/pc/thiep-cuoi-48
+   ═══════════════════════════════════════════════════════════════ */
 
+/* ── Google Fonts (Vietnamese subset) ── */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Monsieur+La+Doulaise&display=swap');
+
+/* ── Self-hosted Custom Fonts (woff2 from CineLove template) ── */
+
+/* Aquarelle — decorative script for "Save our date" */
 @font-face {
-    font-family: 'UVN Hoa Tay 1';
-    src: url('https://static.wfonts.com/data/2014/11/19/uvn-hoa-tay-1/UVN Hoa Tay 1.ttf')
-        format('ttf');
+    font-family: 'Aquarelle';
+    src: url('/fonts/aquarelle.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
     font-display: swap;
 }
 
-#preview-render {
-    font-family:
-        'UVN Hoa Tay 1',
-        system-ui,
-        -apple-system,
-        BlinkMacSystemFont,
-        'Segoe UI',
-        sans-serif;
-    font-size: 32px;
-    color: #373c44;
+/* Soul Note Display — bold display for couple names & ampersand */
+@font-face {
+    font-family: 'Soul Note Display';
+    src: url('/fonts/soul-note-display.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Scarlet Bradley — handwritten script for venue name, directions */
+@font-face {
+    font-family: 'Scarlet Bradley';
+    src: url('/fonts/scarlet-bradleyregular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* HoaTay1 — Vietnamese calligraphy for section titles, portrait names, hero quote */
+@font-face {
+    font-family: 'HoaTay1';
+    src: url('/fonts/hoatay1.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Summerfun — casual hand-lettered for labels (Chú rể/Cô dâu), calendar */
+@font-face {
+    font-family: 'Summerfun';
+    src: url('/fonts/summerfun.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Signora — elegant serif for envelope prompt text */
+@font-face {
+    font-family: 'Signora';
+    src: url('/fonts/signora.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Carlytte — decorative script for guest names on envelope */
+@font-face {
+    font-family: 'Carlytte';
+    src: url('/fonts/carlytte.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* The Artisan — handcrafted serif for English quotes */
+@font-face {
+    font-family: 'The Artisan';
+    src: url('/fonts/the-artisan.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
 }

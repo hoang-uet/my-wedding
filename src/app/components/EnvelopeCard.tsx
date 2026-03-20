@@ -127,8 +127,8 @@ export function EnvelopeCard() {
             <h1
                 className="text-center relative z-10"
                 style={{
-                    fontFamily: "'Monsieur La Doulaise', cursive",
-                    fontSize: '52px',
+                    fontFamily: "var(--font-script-hero)",
+                    fontSize: '46px',
                     color: '#4A5D3A',
                     lineHeight: 1.1,
                     marginBottom: '18px',
@@ -256,12 +256,12 @@ export function EnvelopeCard() {
                                 {/* Label */}
                                 <p
                                     style={{
-                                        fontFamily: "'Cormorant Garamond', serif",
+                                        fontFamily: "var(--font-formal)",
                                         fontSize: '13px',
                                         color: 'rgba(255,255,255,0.88)',
                                         letterSpacing: '0.28em',
                                         textTransform: 'uppercase',
-                                        fontWeight: 600,
+                                        fontWeight: 400,
                                     }}
                                 >
                                     Thiệp mời cưới
@@ -281,12 +281,13 @@ export function EnvelopeCard() {
                                 {/* Couple names */}
                                 <p
                                     style={{
-                                        fontFamily: "'Monsieur La Doulaise', cursive",
-                                        fontSize: '36px',
+                                        fontFamily: "var(--font-envelope-guest)",
+                                        fontSize: '33px',
                                         color: '#FFFFFF',
                                         textShadow: '0 2px 16px rgba(0,0,0,0.3)',
                                         lineHeight: 1.15,
                                         textAlign: 'center',
+                                        fontWeight: 700,
                                     }}
                                 >
                                     {weddingConfig.couple.groom.name} &{' '}
@@ -296,8 +297,8 @@ export function EnvelopeCard() {
                                 {/* Date */}
                                 <p
                                     style={{
-                                        fontFamily: "'Cormorant Garamond', serif",
-                                        fontSize: '18px',
+                                        fontFamily: "var(--font-primary)",
+                                        fontSize: '14px',
                                         color: 'rgba(255,255,255,0.93)',
                                         fontWeight: 400,
                                         marginTop: '6px',
@@ -310,8 +311,8 @@ export function EnvelopeCard() {
                                 {/* Invitation text */}
                                 <p
                                     style={{
-                                        fontFamily: "'Monsieur La Doulaise', cursive",
-                                        fontSize: '21px',
+                                        fontFamily: "var(--font-formal)",
+                                        fontSize: '15px',
                                         color: 'rgba(255,255,255,0.82)',
                                         marginTop: '14px',
                                     }}
@@ -476,8 +477,8 @@ export function EnvelopeCard() {
                     className="cursor-pointer select-none"
                     onClick={handleClick}
                     style={{
-                        fontFamily: "'Monsieur La Doulaise', cursive",
-                        fontSize: '26px',
+                        fontFamily: "var(--font-envelope-prompt)",
+                        fontSize: '18px',
                         color: '#4A5D3A',
                         opacity: isClosed ? 1 : isOpen ? 0.7 : 0.35,
                         transition: 'opacity 500ms ease',

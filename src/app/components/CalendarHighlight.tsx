@@ -75,17 +75,18 @@ export function CalendarHighlight() {
                 <h3
                     className="mb-1"
                     style={{
-                        fontFamily: "'Monsieur La Doulaise', cursive",
-                        fontSize: '42px',
+                        fontFamily: "var(--font-label-casual)",
+                        fontSize: '25px',
                         color: '#FFFFFF',
-                        fontWeight: 400,
+                        fontWeight: 500,
+                        lineHeight: 2.2,
                     }}
                 >
                     Tháng 4
                 </h3>
                 <p
                     style={{
-                        fontFamily: "'Cormorant Garamond', serif",
+                        fontFamily: "var(--font-primary)",
                         fontSize: '14px',
                         color: 'rgba(255,255,255,0.6)',
                         letterSpacing: '0.2em',
@@ -104,7 +105,7 @@ export function CalendarHighlight() {
                             style={{
                                 width: '38px',
                                 height: '28px',
-                                fontFamily: "'Quicksand', sans-serif",
+                                fontFamily: "var(--font-primary)",
                                 fontSize: '11px',
                                 color: 'rgba(255,255,255,0.5)',
                                 fontWeight: 600,
@@ -129,7 +130,7 @@ export function CalendarHighlight() {
                             style={{
                                 width: '38px',
                                 height: '36px',
-                                fontFamily: "'Cormorant Garamond', serif",
+                                fontFamily: "var(--font-primary)",
                                 fontSize: '15px',
                                 color: day === weddingDay ? '#FFFFFF' : 'rgba(255,255,255,0.75)',
                                 fontWeight: day === weddingDay ? 700 : 400,

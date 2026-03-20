@@ -1,6 +1,20 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+    /* ── Typography — font families from cinelove template ── */
+    --font-primary: 'Quicksand', sans-serif;
+    --font-display-serif: 'PlayfairDisplay', 'Playfair Display', serif;
+    --font-couple-names: 'Soul Note Display', serif;
+    --font-script-elegant: 'Monsieur La Doulaise', cursive;
+    --font-script-hero: 'Aquarelle', cursive;
+    --font-calligraphy-vn: 'HoaTay1', cursive;
+    --font-venue: 'Scarlet Bradley', cursive;
+    --font-label-casual: 'Summerfun', cursive;
+    --font-envelope-prompt: 'Signora', serif;
+    --font-envelope-guest: 'Carlytte', cursive;
+    --font-quote-en: 'The Artisan', serif;
+    --font-formal: 'Times New Roman', 'Times', serif;
+
     --font-size: 16px;
     --background: #ffffff;
     --foreground: oklch(0.145 0 0);
@@ -135,6 +149,9 @@
 
     html {
         font-size: var(--font-size);
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
     }
 
     h1 {

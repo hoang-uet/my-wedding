@@ -33,12 +33,13 @@ export function PhotoHero() {
             >
                 <p
                     style={{
-                        fontFamily: "'Monsieur La Doulaise', cursive",
-                        fontSize: '46px',
+                        fontFamily: "var(--font-calligraphy-vn)",
+                        fontSize: '38px',
                         color: '#FFFFFF',
                         textShadow: '0 2px 20px rgba(0,0,0,0.35)',
                         lineHeight: 1.25,
                         textAlign: 'center',
+                        fontWeight: 500,
                     }}
                 >
                     <span className="block" style={{ marginRight: '30px' }}>
@@ -52,7 +53,7 @@ export function PhotoHero() {
                 <p
                     className="mt-4"
                     style={{
-                        fontFamily: "'Cormorant Garamond', serif",
+                        fontFamily: "var(--font-primary)",
                         fontSize: '14px',
                         color: 'rgba(255,255,255,0.8)',
                         letterSpacing: '0.2em',

@@ -21,15 +21,14 @@ export function FamilyInfo() {
             <p
                 className="text-center mb-4"
                 style={{
-                    fontFamily: "'Cormorant Garamond', serif",
-                    fontSize: '13px',
+                    fontFamily: "var(--font-formal)",
+                    fontSize: '15px',
                     color: '#8B7355',
-                    letterSpacing: '0.2em',
-                    textTransform: 'uppercase',
-                    fontWeight: 500,
+                    letterSpacing: '0.1em',
+                    fontWeight: 400,
                 }}
             >
-                Trân trọng kính mời
+                trân trọng kính mời
             </p>
 
             <div ref={ref} className="flex gap-2">
@@ -37,19 +36,18 @@ export function FamilyInfo() {
                 <div className="flex-1 text-center">
                     <h3
                         style={{
-                            fontFamily: "'Cormorant Garamond', serif",
-                            fontSize: '20px',
-                            fontWeight: 600,
+                            fontFamily: "var(--font-primary)",
+                            fontSize: '18px',
+                            fontWeight: 700,
                             color: '#4A5D3A',
                             marginBottom: '14px',
-                            letterSpacing: '0.08em',
                         }}
                     >
                         Nhà Trai
                     </h3>
                     <p
                         style={{
-                            fontFamily: "'Cormorant Garamond', serif",
+                            fontFamily: "var(--font-primary)",
                             fontSize: '15px',
                             color: '#3A3A3A',
                             fontWeight: 500,
@@ -60,7 +58,7 @@ export function FamilyInfo() {
                     </p>
                     <p
                         style={{
-                            fontFamily: "'Cormorant Garamond', serif",
+                            fontFamily: "var(--font-primary)",
                             fontSize: '15px',
                             color: '#3A3A3A',
                             fontWeight: 500,
@@ -71,7 +69,7 @@ export function FamilyInfo() {
                     </p>
                     <p
                         style={{
-                            fontFamily: "'Quicksand', sans-serif",
+                            fontFamily: "var(--font-primary)",
                             fontSize: '12px',
                             color: '#8B7355',
                             fontStyle: 'italic',
@@ -107,19 +105,18 @@ export function FamilyInfo() {
                 <div className="flex-1 text-center">
                     <h3
                         style={{
-                            fontFamily: "'Cormorant Garamond', serif",
-                            fontSize: '20px',
-                            fontWeight: 600,
+                            fontFamily: "var(--font-primary)",
+                            fontSize: '18px',
+                            fontWeight: 700,
                             color: '#4A5D3A',
                             marginBottom: '14px',
-                            letterSpacing: '0.08em',
                         }}
                     >
                         Nhà Gái
                     </h3>
                     <p
                         style={{
-                            fontFamily: "'Cormorant Garamond', serif",
+                            fontFamily: "var(--font-primary)",
                             fontSize: '15px',
                             color: '#3A3A3A',
                             fontWeight: 500,
@@ -130,7 +127,7 @@ export function FamilyInfo() {
                     </p>
                     <p
                         style={{
-                            fontFamily: "'Cormorant Garamond', serif",
+                            fontFamily: "var(--font-primary)",
                             fontSize: '15px',
                             color: '#3A3A3A',
                             fontWeight: 500,
@@ -141,7 +138,7 @@ export function FamilyInfo() {
                     </p>
                     <p
                         style={{
-                            fontFamily: "'Quicksand', sans-serif",
+                            fontFamily: "var(--font-primary)",
                             fontSize: '12px',
                             color: '#8B7355',
                             fontStyle: 'italic',

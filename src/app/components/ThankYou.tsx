@@ -28,7 +28,7 @@ export function ThankYou() {
             >
                 <p
                     style={{
-                        fontFamily: "'Monsieur La Doulaise', cursive",
+                        fontFamily: "var(--font-script-elegant)",
                         fontSize: '52px',
                         color: '#FFFFFF',
                         textShadow: '0 2px 16px rgba(0,0,0,0.3)',
@@ -39,7 +39,7 @@ export function ThankYou() {
                 <p
                     className="mt-2"
                     style={{
-                        fontFamily: "'Cormorant Garamond', serif",
+                        fontFamily: "var(--font-primary)",
                         fontSize: '14px',
                         color: 'rgba(255,255,255,0.7)',
                         letterSpacing: '0.15em',
@@ -51,7 +51,7 @@ export function ThankYou() {
                 <p
                     className="mt-6"
                     style={{
-                        fontFamily: "'Quicksand', sans-serif",
+                        fontFamily: "var(--font-primary)",
                         fontSize: '10px',
                         color: 'rgba(255,255,255,0.35)',
                         letterSpacing: '0.1em',

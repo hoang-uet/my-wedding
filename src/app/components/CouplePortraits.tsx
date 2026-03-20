@@ -89,11 +89,11 @@ export function CouplePortraits() {
                 >
                     <p
                         style={{
-                            fontFamily: "'Quicksand', sans-serif",
-                            fontSize: '14px',
+                            fontFamily: "var(--font-label-casual)",
+                            fontSize: '18px',
                             color: '#8B7355',
                             fontWeight: 500,
-                            letterSpacing: '0.12em',
+                            lineHeight: 2,
                             marginBottom: '4px',
                         }}
                     >
@@ -101,7 +101,7 @@ export function CouplePortraits() {
                     </p>
                     <p
                         style={{
-                            fontFamily: "'HoaTay1', cursive",
+                            fontFamily: "var(--font-calligraphy-vn)",
                             fontSize: '30px',
                             color: '#4A5D3A',
                             lineHeight: 1.05,
@@ -187,11 +187,11 @@ export function CouplePortraits() {
                 >
                     <p
                         style={{
-                            fontFamily: "'Quicksand', sans-serif",
-                            fontSize: '14px',
+                            fontFamily: "var(--font-label-casual)",
+                            fontSize: '18px',
                             color: '#8B7355',
                             fontWeight: 500,
-                            letterSpacing: '0.12em',
+                            lineHeight: 2,
                             marginBottom: '4px',
                         }}
                     >
@@ -199,7 +199,7 @@ export function CouplePortraits() {
                     </p>
                     <p
                         style={{
-                            fontFamily: "'HoaTay1', cursive",
+                            fontFamily: "var(--font-calligraphy-vn)",
                             fontSize: '30px',
                             color: '#4A5D3A',
                             lineHeight: 1.05,

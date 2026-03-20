@@ -77,7 +77,7 @@ export function Gallery() {
                 <div className="flex items-baseline justify-center gap-4 flex-wrap">
                     <span
                         style={{
-                            fontFamily: "'Cormorant Garamond', serif",
+                            fontFamily: "var(--font-display-serif)",
                             fontSize: '32px',
                             fontWeight: 600,
                             color: '#3A3A3A',
@@ -88,7 +88,7 @@ export function Gallery() {
                     </span>
                     <span
                         style={{
-                            fontFamily: "'Monsieur La Doulaise', cursive",
+                            fontFamily: "var(--font-script-elegant)",
                             fontSize: '36px',
                             color: '#4A5D3A',
                         }}
@@ -97,7 +97,7 @@ export function Gallery() {
                     </span>
                     <span
                         style={{
-                            fontFamily: "'Cormorant Garamond', serif",
+                            fontFamily: "var(--font-display-serif)",
                             fontSize: '32px',
                             fontWeight: 600,
                             color: '#3A3A3A',
@@ -218,7 +218,7 @@ export function Gallery() {
                     <p
                         className="absolute bottom-6"
                         style={{
-                            fontFamily: "'Quicksand', sans-serif",
+                            fontFamily: "var(--font-primary)",
                             fontSize: '13px',
                             color: 'rgba(255,255,255,0.5)',
                             letterSpacing: '0.1em',

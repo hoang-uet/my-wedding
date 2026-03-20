@@ -75,7 +75,7 @@ export function EnvelopeIntro({ onOpen }: EnvelopeIntroProps) {
                 {/* Save our date */}
                 <h1
                     style={{
-                        fontFamily: "'Monsieur La Doulaise', cursive",
+                        fontFamily: "var(--font-script-elegant)",
                         fontSize: '54px',
                         color: '#4A5D3A',
                         animation: 'envelopeFadeSlide 1s ease-out',
@@ -143,7 +143,7 @@ export function EnvelopeIntro({ onOpen }: EnvelopeIntroProps) {
                             />
                             <p
                                 style={{
-                                    fontFamily: "'Cormorant Garamond', serif",
+                                    fontFamily: "var(--font-primary)",
                                     fontSize: '10px',
                                     color: '#8B7355',
                                     fontWeight: 500,
@@ -155,7 +155,7 @@ export function EnvelopeIntro({ onOpen }: EnvelopeIntroProps) {
                             </p>
                             <p
                                 style={{
-                                    fontFamily: "'Monsieur La Doulaise', cursive",
+                                    fontFamily: "var(--font-script-elegant)",
                                     fontSize: '22px',
                                     color: '#4A5D3A',
                                 }}
@@ -165,7 +165,7 @@ export function EnvelopeIntro({ onOpen }: EnvelopeIntroProps) {
                             </p>
                             <p
                                 style={{
-                                    fontFamily: "'Cormorant Garamond', serif",
+                                    fontFamily: "var(--font-primary)",
                                     fontSize: '13px',
                                     color: '#8B7355',
                                     fontWeight: 400,
@@ -175,7 +175,7 @@ export function EnvelopeIntro({ onOpen }: EnvelopeIntroProps) {
                             </p>
                             <p
                                 style={{
-                                    fontFamily: "'Quicksand', sans-serif",
+                                    fontFamily: "var(--font-primary)",
                                     fontSize: '9px',
                                     color: '#999',
                                     fontStyle: 'italic',
@@ -246,7 +246,7 @@ export function EnvelopeIntro({ onOpen }: EnvelopeIntroProps) {
                     >
                         <span
                             style={{
-                                fontFamily: "'Monsieur La Doulaise', cursive",
+                                fontFamily: "var(--font-script-elegant)",
                                 fontSize: '16px',
                                 color: '#F5E6D0',
                             }}
@@ -259,7 +259,7 @@ export function EnvelopeIntro({ onOpen }: EnvelopeIntroProps) {
                 {/* Touch prompt */}
                 <p
                     style={{
-                        fontFamily: "'Cormorant Garamond', serif",
+                        fontFamily: "var(--font-primary)",
                         fontSize: '18px',
                         color: '#8B7355',
                         animation: 'envelopePulse 2.5s ease-in-out infinite',

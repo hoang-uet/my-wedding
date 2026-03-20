@@ -23,34 +23,33 @@ export function EventDetails() {
                 <div className="mb-2">
                     <p
                         style={{
-                            fontFamily: "'Cormorant Garamond', serif",
-                            fontSize: '38px',
+                            fontFamily: "var(--font-couple-names)",
+                            fontSize: '34px',
                             color: '#3A3A3A',
-                            letterSpacing: '0.12em',
                             lineHeight: 1.15,
-                            fontWeight: 600,
+                            fontWeight: 700,
                         }}
                     >
                         {weddingConfig.couple.groom.displayName}
                     </p>
                     <p
                         style={{
-                            fontFamily: "'Monsieur La Doulaise', cursive",
-                            fontSize: '36px',
+                            fontFamily: "var(--font-couple-names)",
+                            fontSize: '38px',
                             color: '#9BAF88',
                             margin: '2px 0',
+                            fontWeight: 700,
                         }}
                     >
                         &
                     </p>
                     <p
                         style={{
-                            fontFamily: "'Cormorant Garamond', serif",
-                            fontSize: '38px',
+                            fontFamily: "var(--font-couple-names)",
+                            fontSize: '34px',
                             color: '#3A3A3A',
-                            letterSpacing: '0.12em',
                             lineHeight: 1.15,
-                            fontWeight: 600,
+                            fontWeight: 700,
                         }}
                     >
                         {weddingConfig.couple.bride.displayName}
@@ -72,13 +71,13 @@ export function EventDetails() {
                 <div className="mb-5">
                     <p
                         style={{
-                            fontFamily: "'Cormorant Garamond', serif",
-                            fontSize: '16px',
+                            fontFamily: "var(--font-display-serif)",
+                            fontSize: '18px',
                             color: '#4A5D3A',
-                            letterSpacing: '0.15em',
+                            letterSpacing: '0.1em',
                             lineHeight: 1.8,
-                            fontWeight: 500,
-                            textTransform: 'uppercase',
+                            fontWeight: 400,
+                            textTransform: 'lowercase',
                         }}
                     >
                         Tham dự tiệc chung vui
@@ -91,7 +90,7 @@ export function EventDetails() {
                 <div className="mb-3">
                     <p
                         style={{
-                            fontFamily: "'Cormorant Garamond', serif",
+                            fontFamily: "var(--font-primary)",
                             fontSize: '20px',
                             color: '#3A3A3A',
                             fontWeight: 500,
@@ -107,7 +106,7 @@ export function EventDetails() {
                     <div className="text-center">
                         <p
                             style={{
-                                fontFamily: "'Cormorant Garamond', serif",
+                                fontFamily: "var(--font-primary)",
                                 fontSize: '14px',
                                 color: '#8B7355',
                                 letterSpacing: '0.15em',
@@ -118,7 +117,7 @@ export function EventDetails() {
                         </p>
                         <p
                             style={{
-                                fontFamily: "'Cormorant Garamond', serif",
+                                fontFamily: "var(--font-primary)",
                                 fontSize: '22px',
                                 color: '#3A3A3A',
                                 fontWeight: 600,
@@ -136,7 +135,7 @@ export function EventDetails() {
                     />
                     <p
                         style={{
-                            fontFamily: "'Cormorant Garamond', serif",
+                            fontFamily: "var(--font-primary)",
                             fontSize: '72px',
                             color: '#4A5D3A',
                             fontWeight: 300,
@@ -155,7 +154,7 @@ export function EventDetails() {
                     <div className="text-center">
                         <p
                             style={{
-                                fontFamily: "'Cormorant Garamond', serif",
+                                fontFamily: "var(--font-primary)",
                                 fontSize: '14px',
                                 color: '#8B7355',
                                 letterSpacing: '0.15em',
@@ -166,7 +165,7 @@ export function EventDetails() {
                         </p>
                         <p
                             style={{
-                                fontFamily: "'Cormorant Garamond', serif",
+                                fontFamily: "var(--font-primary)",
                                 fontSize: '22px',
                                 color: '#3A3A3A',
                                 fontWeight: 600,
@@ -180,7 +179,7 @@ export function EventDetails() {
                 {/* Lunar date */}
                 <p
                     style={{
-                        fontFamily: "'Quicksand', sans-serif",
+                        fontFamily: "var(--font-primary)",
                         fontSize: '13px',
                         color: '#8B7355',
                         marginBottom: '24px',
@@ -210,7 +209,7 @@ export function EventDetails() {
                 <div className="mb-3">
                     <p
                         style={{
-                            fontFamily: "'Quicksand', sans-serif",
+                            fontFamily: "var(--font-primary)",
                             fontSize: '13px',
                             fontWeight: 500,
                             color: '#8B7355',
@@ -223,9 +222,10 @@ export function EventDetails() {
                     </p>
                     <p
                         style={{
-                            fontFamily: "'Monsieur La Doulaise', cursive",
-                            fontSize: '34px',
+                            fontFamily: "var(--font-venue)",
+                            fontSize: '30px',
                             color: '#4A5D3A',
+                            lineHeight: 1.4,
                         }}
                     >
                         {weddingConfig.event.venue}
@@ -235,7 +235,7 @@ export function EventDetails() {
                 {/* Address */}
                 <p
                     style={{
-                        fontFamily: "'Quicksand', sans-serif",
+                        fontFamily: "var(--font-primary)",
                         fontSize: '13px',
                         color: '#666',
                         lineHeight: 1.7,
@@ -253,14 +253,12 @@ export function EventDetails() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 no-underline"
                     style={{
-                        fontFamily: "'Cormorant Garamond', serif",
-                        fontSize: '16px',
+                        fontFamily: "var(--font-venue)",
+                        fontSize: '23px',
                         color: '#4A5D3A',
                         borderBottom: '1px solid #9BAF88',
                         paddingBottom: '2px',
-                        fontWeight: 600,
-                        letterSpacing: '0.1em',
-                        textTransform: 'uppercase',
+                        fontWeight: 400,
                     }}
                 >
                     <MapPin size={16} strokeWidth={1.5} />

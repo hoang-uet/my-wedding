@@ -14,8 +14,8 @@ export function WeddingTimeline() {
             <h2
                 className="text-center mb-2"
                 style={{
-                    fontFamily: "'Monsieur La Doulaise', cursive",
-                    fontSize: '48px',
+                    fontFamily: "var(--font-calligraphy-vn)",
+                    fontSize: '43px',
                     color: '#4A5D3A',
                     fontWeight: 400,
                 }}
@@ -53,7 +53,7 @@ export function WeddingTimeline() {
                         </div>
                         <p
                             style={{
-                                fontFamily: "'Cormorant Garamond', serif",
+                                fontFamily: "var(--font-primary)",
                                 fontSize: '20px',
                                 fontWeight: 600,
                                 color: '#4A5D3A',
@@ -64,7 +64,7 @@ export function WeddingTimeline() {
                         </p>
                         <p
                             style={{
-                                fontFamily: "'Quicksand', sans-serif",
+                                fontFamily: "var(--font-primary)",
                                 fontSize: '12px',
                                 color: '#8B7355',
                                 fontWeight: 500,
