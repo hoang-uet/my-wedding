@@ -10,7 +10,7 @@ import orchidSingle from '@/assets/orchid-single.png'
  *   closed → opening → open → closing → closed
  *
  * Z-index layers (inside envelope):
- *   0: body   1: side flaps   1-2: card (1 closed, 2 open)   3: pocket   1-5: flap (5 closed, 1 open)   10: seal   7: hearts
+ *   0: body   1: side flaps   1-2: card (1 closed/closing, 2 open)   3: pocket   1-5: flap (5 closed/closing, 1 open)   10: seal   7: hearts
  *
  * Animation timings matched exactly to cinelove.me/template/pc/thiep-cuoi-48:
  *   - Idle: float up/down 20px (3s ease-in-out infinite)
@@ -211,8 +211,8 @@ export function EnvelopeCard() {
                             bottom: '5%',
                             transform: `translateY(${cardY}px)`,
                             transition: isClosing
-                                ? 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s'
-                                : 'transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s',
+                                ? 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s, z-index 0.2s'
+                                : 'transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s, z-index 0.5s',
                             pointerEvents: isOpen ? 'auto' : 'none',
                         }}
                     >
@@ -350,8 +350,9 @@ export function EnvelopeCard() {
               Open: rotateX(180deg) 1.2s, Close: 0.8s with 0.8s delay */}
                     <div
                         className="absolute top-0 left-0"
+                        data-testid="envelope-flap"
                         style={{
-                            zIndex: isClosed ? 5 : 1,
+                            zIndex: (isClosed || isClosing) ? 5 : 1,
                             width: 0,
                             height: 0,
                             borderTop: `${FLAP_H}px solid #3C4E34`,
