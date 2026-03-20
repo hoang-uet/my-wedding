@@ -1,19 +1,21 @@
 import { useState, useCallback, useRef } from 'react'
 import { weddingConfig, weddingImages } from './wedding-config'
-import waxSeal from 'figma:asset/91e40b66f6d8b6ed8c595451dfa5272f0f98667d.png'
-import orchidBouquet from 'figma:asset/2ac02946802c8fa703bc243b25ace4cd4e75e9f9.png'
-import orchidSingle from 'figma:asset/0bee3b951be34c869dc95c68ee90702159a7a88b.png'
+import waxSeal from '@/assets/wax-seal.png'
+import orchidBouquet from '@/assets/orchid-bouquet.png'
+import orchidSingle from '@/assets/orchid-single.png'
 
 /**
  * Envelope + invitation card with 4 states:
  *   closed → opening → open → closing → closed
  *
  * Z-index layers (inside envelope):
- *   0: body   1: side flaps   3: card   4: pocket   5: top flap   6: seal
+ *   0: body   1: side flaps   3: card   4: pocket   5: top flap   6: seal   7: hearts
  *
  * The card starts inside the envelope (opacity 0, covered by pocket z:4).
- * On open, it slides UP so ~70% of the card is ABOVE the envelope top,
- * while the bottom ~30% overlaps behind the pocket — matching the reference.
+ * On open, it slides UP so the card is visible above the envelope top,
+ * while the bottom overlaps behind the pocket — matching the reference.
+ *
+ * After opening, 3 floating hearts animate upward (ref: cinelove.me/template/pc/thiep-cuoi-48)
  */
 type EnvelopeState = 'closed' | 'opening' | 'open' | 'closing'
 
@@ -22,10 +24,11 @@ const ENV_H = 215
 const FLAP_H = 108
 const POCKET_H = 105
 const CARD_H = 230
-const CARD_RISE = 195 // card rises this much when open
+const CARD_RISE = 120 // card rises this much when open (ref: ~116px)
 
 export function EnvelopeCard() {
     const [state, setState] = useState<EnvelopeState>('closed')
+    const [heartsKey, setHeartsKey] = useState(0)
     const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
     const handleClick = useCallback(() => {
@@ -34,7 +37,10 @@ export function EnvelopeCard() {
 
         if (state === 'closed') {
             setState('opening')
-            timerRef.current = setTimeout(() => setState('open'), 900)
+            timerRef.current = setTimeout(() => {
+                setState('open')
+                setHeartsKey((k) => k + 1)
+            }, 900)
         } else {
             setState('closing')
             timerRef.current = setTimeout(() => setState('closed'), 1000)
@@ -47,6 +53,7 @@ export function EnvelopeCard() {
     const isClosing = state === 'closing'
     const flapOpen = isOpening || isOpen
     const sealVisible = isClosed || isClosing
+    const showHearts = isOpen
 
     const cardY = isOpen ? -CARD_RISE : isOpening ? -CARD_RISE * 0.35 : 0
     const cardOpacity = isOpen ? 1 : isOpening ? 0.85 : isClosing ? 0.6 : 0
@@ -149,6 +156,7 @@ export function EnvelopeCard() {
                         height: `${ENV_H}px`,
                         perspective: '1200px',
                         animation: isClosed ? 'envelopeWobble 3s ease-in-out infinite' : 'none',
+                        overflow: 'visible',
                     }}
                     onClick={handleClick}
                 >
@@ -199,6 +207,7 @@ export function EnvelopeCard() {
               ─────────────────────────────────── */}
                     <div
                         className="absolute"
+                        data-testid="invitation-card"
                         style={{
                             zIndex: 3,
                             left: '8%',
@@ -332,7 +341,7 @@ export function EnvelopeCard() {
                             transform: flapOpen ? 'rotateX(-180deg)' : 'rotateX(0deg)',
                             transition: isClosing
                                 ? 'transform 600ms cubic-bezier(0.4, 0, 0.2, 1) 350ms'
-                                : 'transform 700ms cubic-bezier(0.4, 0, 0.2, 1)',
+                                : 'transform 700ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                             transformStyle: 'preserve-3d',
                         }}
                     >
@@ -389,6 +398,119 @@ export function EnvelopeCard() {
                             style={{ borderRadius: '50%' }}
                         />
                     </div>
+
+                    {/* ── Floating hearts — z:7
+                Appear after envelope opens, float upward and fade out
+                Ref: cinelove.me/template/pc/thiep-cuoi-48
+                3 hearts, staggered delays 1.2s / 1.4s / 1.6s
+                Sizes: small(0.6) / full(1.0) / medium(0.8)
+                ── */}
+                    {showHearts && (
+                        <div
+                            key={heartsKey}
+                            className="pointer-events-none"
+                            style={{
+                                position: 'absolute',
+                                inset: 0,
+                                overflow: 'visible',
+                                zIndex: 7,
+                            }}
+                            data-testid="hearts-container"
+                        >
+                            {/* Heart 1 — small, right side */}
+                            <div
+                                className="heart-wrap"
+                                style={
+                                    {
+                                        '--heart-size': '12px',
+                                        '--float-delay': '1.2s',
+                                        '--float-dur': '6s',
+                                        '--sway-dur': '3s',
+                                        '--sway-amount': '30px',
+                                        position: 'absolute',
+                                        bottom: '20px',
+                                        left: '65%',
+                                        animation:
+                                            'heartFloat var(--float-dur) cubic-bezier(0.25,0.46,0.45,0.94) var(--float-delay) forwards, sideSway var(--sway-dur) ease-in-out var(--float-delay) infinite',
+                                    } as React.CSSProperties
+                                }
+                                data-testid="heart-1"
+                            >
+                                <div
+                                    className="heart-shape"
+                                    style={
+                                        {
+                                            '--heart-size': '12px',
+                                            animation:
+                                                'heartScale 0.5s cubic-bezier(0.34,1.56,0.64,1) 1.2s both',
+                                        } as React.CSSProperties
+                                    }
+                                />
+                            </div>
+
+                            {/* Heart 2 — full size, center-right */}
+                            <div
+                                className="heart-wrap"
+                                style={
+                                    {
+                                        '--heart-size': '20px',
+                                        '--float-delay': '1.4s',
+                                        '--float-dur': '5s',
+                                        '--sway-dur': '2s',
+                                        '--sway-amount': '20px',
+                                        position: 'absolute',
+                                        bottom: '20px',
+                                        left: '55%',
+                                        animation:
+                                            'heartFloat var(--float-dur) cubic-bezier(0.25,0.46,0.45,0.94) var(--float-delay) forwards, sideSway var(--sway-dur) ease-in-out var(--float-delay) infinite',
+                                    } as React.CSSProperties
+                                }
+                                data-testid="heart-2"
+                            >
+                                <div
+                                    className="heart-shape"
+                                    style={
+                                        {
+                                            '--heart-size': '20px',
+                                            animation:
+                                                'heartScale 0.5s cubic-bezier(0.34,1.56,0.64,1) 1.4s both',
+                                        } as React.CSSProperties
+                                    }
+                                />
+                            </div>
+
+                            {/* Heart 3 — medium, far right */}
+                            <div
+                                className="heart-wrap"
+                                style={
+                                    {
+                                        '--heart-size': '16px',
+                                        '--float-delay': '1.6s',
+                                        '--float-dur': '7s',
+                                        '--sway-dur': '4s',
+                                        '--sway-amount': '40px',
+                                        position: 'absolute',
+                                        bottom: '20px',
+                                        left: '72%',
+                                        animation:
+                                            'heartFloat var(--float-dur) cubic-bezier(0.25,0.46,0.45,0.94) var(--float-delay) forwards, sideSway var(--sway-dur) ease-in-out var(--float-delay) infinite',
+                                    } as React.CSSProperties
+                                }
+                                data-testid="heart-3"
+                            >
+                                <div
+                                    className="heart-shape"
+                                    style={
+                                        {
+                                            '--heart-size': '16px',
+                                            animation:
+                                                'heartScale 0.5s cubic-bezier(0.34,1.56,0.64,1) 1.6s both',
+                                        } as React.CSSProperties
+                                    }
+                                />
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -430,6 +552,7 @@ export function EnvelopeCard() {
             </div>
 
             <style>{`
+        /* ── Envelope idle wobble ── */
         @keyframes envelopeWobble {
           0%, 100% { transform: rotate(0deg); }
           15% { transform: rotate(-1.5deg); }
@@ -437,6 +560,52 @@ export function EnvelopeCard() {
           45% { transform: rotate(-1deg); }
           55% { transform: rotate(0.5deg); }
           65% { transform: rotate(0deg); }
+        }
+
+        /* ── Heart CSS shape ── */
+        .heart-shape {
+          position: relative;
+          width: var(--heart-size, 16px);
+          height: var(--heart-size, 16px);
+          background: #d00000;
+          transform: rotate(-45deg) scale(0);
+          transform-origin: center;
+        }
+        .heart-shape::before,
+        .heart-shape::after {
+          content: '';
+          position: absolute;
+          background: #d00000;
+          border-radius: 50%;
+          width: var(--heart-size, 16px);
+          height: var(--heart-size, 16px);
+        }
+        .heart-shape::before {
+          top: calc(var(--heart-size, 16px) * -0.5);
+          left: 0;
+        }
+        .heart-shape::after {
+          top: 0;
+          left: calc(var(--heart-size, 16px) * 0.5);
+        }
+
+        /* ── Heart scale in ── */
+        @keyframes heartScale {
+          from { transform: rotate(-45deg) scale(0); }
+          to   { transform: rotate(-45deg) scale(1); }
+        }
+
+        /* ── Heart float upward + fade out ── */
+        @keyframes heartFloat {
+          0%   { transform: translateY(0);      opacity: 1; }
+          80%  { opacity: 0.6; }
+          100% { transform: translateY(-600px); opacity: 0; }
+        }
+
+        /* ── Heart sway side to side ── */
+        @keyframes sideSway {
+          0%, 100% { margin-left: 0; }
+          50%       { margin-left: var(--sway-amount, 30px); }
         }
       `}</style>
         </section>

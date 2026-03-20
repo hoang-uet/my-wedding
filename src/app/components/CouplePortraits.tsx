@@ -1,8 +1,8 @@
 import { weddingConfig, weddingImages } from './wedding-config'
 import { useScrollAnimation } from './useScrollAnimation'
-import orchidBouquet from 'figma:asset/2ac02946802c8fa703bc243b25ace4cd4e75e9f9.png'
-import orchidSingle from 'figma:asset/0bee3b951be34c869dc95c68ee90702159a7a88b.png'
-import orchidBranch from 'figma:asset/f4488b0b6856e505f1f4c7c09b04f9b54e683079.png'
+import orchidBouquet from '@/assets/orchid-bouquet.png'
+import orchidSingle from '@/assets/orchid-single.png'
+import orchidBranch from '@/assets/orchid-branch.png'
 
 /**
  * CouplePortraits – S3

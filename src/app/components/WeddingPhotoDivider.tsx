@@ -1,5 +1,5 @@
 import { useScrollAnimation } from './useScrollAnimation'
-import { weddingImages } from './wedding-config'
+import heroCouple from '@/assets/hero-couple.jpg'
 
 export function WeddingPhotoDivider() {
     const ref = useScrollAnimation({ threshold: 0.1 })
@@ -7,7 +7,7 @@ export function WeddingPhotoDivider() {
     return (
         <section ref={ref} className="relative" style={{ height: '380px' }}>
             <img
-                src={weddingImages.heroCouple}
+                src={heroCouple}
                 alt="Đôi uyên ương trên cánh đồng xanh"
                 className="absolute inset-0 w-full h-full object-cover"
                 loading="lazy"

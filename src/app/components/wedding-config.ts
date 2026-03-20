@@ -28,18 +28,18 @@ export const weddingConfig = {
             city: 'TP. Hưng Yên',
         },
         bride: {
-            father: 'Vũ Văn Thuận',
+            father: 'Vũ Văn Thuân',
             mother: 'Phan Thị Yến',
             city: 'TP. Hưng Yên',
         },
     },
     event: {
         time: '2026-04-05T09:00:00+07:00',
-        dayOfWeek: 'Thứ Tư',
-        lunarDate: 'Tức ngày 22 tháng 11 năm 2026',
+        dayOfWeek: 'Chủ Nhật',
+        lunarDate: 'Tức ngày 18 tháng 02 năm 2026',
         venue: 'Tư Gia Nhà Trai',
-        address: 'Số 59, ngõ 119 Nguyễn Viết Xuân, tổ 7c, phường Phú Ly, tỉnh Hưng Yên',
-        mapsUrl: 'https://maps.google.com/?q=So+59+ngo+119+Nguyen+Viet+Xuan+Hung+Yen',
+        address: 'xóm 2, thôn Thọ Bình, xã Triệt Việt Vương, tỉnh Hưng Yên',
+        mapsUrl: 'https://www.google.com/maps?q=20.8715,106.0168',
     },
     timeline: [
         { time: '09:30', label: 'Đón Khách', icon: 'camera' as const },
