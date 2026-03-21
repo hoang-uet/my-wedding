@@ -26,7 +26,7 @@ export const weddingConfig = {
     families: {
         groom: {
             father: 'Lê Đình Thuật',
-            mother: 'Lê Thị Thuỷ',
+            mother: 'Lê Thị Thúy',
             city: 'Tỉnh Hưng Yên',
         },
         bride: {

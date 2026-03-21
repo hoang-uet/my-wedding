@@ -4,11 +4,12 @@
 
 Website thiệp mời đám cưới dạng single-page application, thiết kế theo phong cách **mobile-first** (430px phone frame). Dự án tập trung vào trải nghiệm tương tác: phong bì mở animation, đếm ngược, gallery ảnh, timeline sự kiện, RSVP form, lời chúc từ khách mời.
 
-- **Loại dự án:** SPA với Supabase backend (lời chúc realtime)
+- **Loại dự án:** SPA với Supabase backend (lời chúc realtime, thiệp cá nhân hóa)
 - **Đối tượng:** Khách mời đám cưới, truy cập qua mobile
 - **Ngôn ngữ nội dung:** Tiếng Việt
 - **Package manager:** `yarn`
 - **Hosting:** Vercel
+- **Routing:** React Router v7 (`/`, `/thiep-moi/:hash`, `/thiep-cuoi`)
 
 ## 2. Tech Stack
 
@@ -22,7 +23,9 @@ Website thiệp mời đám cưới dạng single-page application, thiết kế
 | Icons | Lucide React | 0.487.x |
 | Animation | Motion.js | 12.23.x |
 | Forms | React Hook Form | 7.55.x |
-| Backend/DB | Supabase (`@supabase/supabase-js`) | 2.99.x (realtime wishes) |
+| Routing | React Router | 7.13.x |
+| Backend/DB | Supabase (`@supabase/supabase-js`) | 2.99.x (realtime wishes, invitations) |
+| ID Generation | nanoid | 5.1.x |
 | Image Processing | Sharp (build-time) | 0.34.x |
 | E2E Testing | Playwright | 1.58.x |
 | Carousel | Embla Carousel | 8.6.x |
@@ -48,6 +51,8 @@ Website thiệp mời đám cưới dạng single-page application, thiết kế
   - `useScrollAnimation()` - Intersection Observer animations
   - `useChildrenStagger()` - Staggered child animations
   - `useWishes()` - Supabase realtime wishes (fetch, subscribe, send, rate limit)
+  - `useInvitation()` - Fetch guest name by URL hash from Supabase
+  - `useInvitations()` - Admin CRUD for invitations + realtime subscription
 
 ### Key Components
 
@@ -60,6 +65,8 @@ Website thiệp mời đám cưới dạng single-page application, thiết kế
 | `Countdown` | Đếm ngược tới ngày cưới | THẤP |
 | `RSVPForm` | Form đăng ký tham dự | TRUNG BÌNH |
 | `WeddingGift` | Thông tin chuyển khoản | THẤP |
+| `AdminDashboard` | Quản lý thiệp mời: PIN gate + CRUD + search + realtime | CAO |
+| `CreateInvitationModal` | Modal tạo thiệp mới với preview realtime | TRUNG BÌNH |
 
 ### Hệ thống Styling
 - **Tailwind CSS v4** với custom theme tại `src/styles/theme.css`
@@ -80,6 +87,7 @@ Mỗi tính năng có spec riêng trong thư mục `specs/`. Đọc spec trướ
 |----|-----------|-----------|------|
 | 001 | Landing Page - Thiệp cưới chính | Đã triển khai | [`specs/001-wedding-landing-page/spec.md`](specs/001-wedding-landing-page/spec.md) |
 | 002 | Lời chúc từ khách mời (Guestbook) | Đã triển khai | [`specs/002-wishes-guestbook/spec.md`](specs/002-wishes-guestbook/spec.md) |
+| 003 | Thiệp mời cá nhân hóa (Personalized Invitations) | Đã triển khai (FE) | [`specs/003-personalized-invitations/spec.md`](specs/003-personalized-invitations/spec.md) |
 
 > **Quy ước thêm tính năng mới:**
 > 1. Tạo thư mục `specs/{ID}-{tên-tính-năng}/spec.md`
@@ -166,7 +174,8 @@ Khi chạy với `--dangerously-skip-permissions`, Agent **KHÔNG ĐƯỢC PHÉP
 
 ```
 src/
-  main.tsx                          # Entry point
+  main.tsx                          # Entry point (RouterProvider)
+  router.tsx                        # React Router config (3 routes)
   lib/
     supabase.ts                     # Supabase client singleton
   app/
@@ -198,6 +207,11 @@ src/
       image-manifest.ts             # Metadata ảnh (auto-generated)
       useAudioPlayer.ts             # Hook phát nhạc nền
       useScrollAnimation.ts         # Hook animation khi cuộn
+      useInvitation.ts              # Hook: fetch guest name by hash
+      admin/                        # Admin dashboard components
+        AdminDashboard.tsx           # PIN gate + quản lý thiệp mời
+        CreateInvitationModal.tsx    # Modal tạo thiệp mới với preview
+        useInvitations.ts            # Hook: CRUD invitations + realtime
   assets/
     music/golden-hour.mp3           # Nhạc nền
     wedding-images/                 # Ảnh gốc chưa tối ưu
@@ -213,4 +227,5 @@ public/
   images/                           # WebP đã tối ưu (KHÔNG SỬA)
   fonts/                            # Font tự host (woff2)
 specs/                              # Feature specs (xem bảng ở Section 4)
+vercel.json                         # SPA rewrites cho client-side routing
 ```

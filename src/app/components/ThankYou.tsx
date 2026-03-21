@@ -6,7 +6,7 @@ export function ThankYou() {
     const ref = useScrollAnimation()
 
     return (
-        <section className="relative" style={{ height: '320px' }}>
+        <section className="relative" style={{ height: '450px' }}>
             <WeddingImage
                 image={weddingImages.thankYou}
                 alt="Đôi uyên ương trong khung cảnh lãng mạn"
@@ -56,7 +56,7 @@ export function ThankYou() {
                     style={{
                         fontFamily: 'var(--font-primary)',
                         fontSize: '10px',
-                        color: 'rgba(255,255,255,0.55)',
+                        color: 'rgb(75, 83, 32)',
                         letterSpacing: '0.1em',
                         textShadow: '0 1px 6px rgba(0,0,0,0.3)',
                     }}

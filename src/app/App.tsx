@@ -1,9 +1,12 @@
 import { useRef, useCallback } from 'react'
+import { useParams } from 'react-router'
+import { useInvitation } from './components/useInvitation'
 import { EnvelopeCard } from './components/EnvelopeCard'
 import { MusicButton } from './components/MusicButton'
 import { useAudioPlayer } from './components/useAudioPlayer'
 import { WeddingPhotoDivider } from './components/WeddingPhotoDivider'
 import { FamilyInfo } from './components/FamilyInfo'
+import { InvitationInfo } from './components/InvitationInfo'
 import { EventDetails } from './components/EventDetails'
 import { PhotoHero } from './components/PhotoHero'
 import { CouplePortraits } from './components/CouplePortraits'
@@ -20,6 +23,8 @@ import { FloatingBar } from './components/FloatingBar'
 import { FloralAnimationStyles, OrchidBranchDivider } from './components/FloralOverlay'
 
 export default function App() {
+    const { hash } = useParams<{ hash?: string }>()
+    const { guestName } = useInvitation(hash)
     const { isPlaying, toggle, play } = useAudioPlayer()
     const musicStarted = useRef(false)
     const scrollContainerRef = useRef<HTMLDivElement>(null)
@@ -74,6 +79,7 @@ export default function App() {
                         <EnvelopeCard onOpen={handleEnvelopeOpen} />
                         <WeddingPhotoDivider />
                         <FamilyInfo />
+                        <InvitationInfo guestName={guestName} />
                         <EventDetails />
                         <PhotoHero />
                         <CouplePortraits />
@@ -85,7 +91,7 @@ export default function App() {
                         <PhotoQuoteSplit />
                         <Countdown />
                         <Gallery />
-                        <RSVPForm />
+                        {/* <RSVPForm /> */}
                         <WeddingGift />
                         <ThankYou />
                     </div>

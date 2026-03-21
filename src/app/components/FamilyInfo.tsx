@@ -1,6 +1,7 @@
 import { weddingConfig } from './wedding-config'
 import { useChildrenStagger } from './useScrollAnimation'
 import { CornerOrchidCluster } from './FloralOverlay'
+import chuHy from '@/assets/chu-hy.png'
 
 export function FamilyInfo() {
     const ref = useChildrenStagger(120)
@@ -20,20 +21,6 @@ export function FamilyInfo() {
             <div className="flex justify-center mb-6">
                 <FloralOrnament />
             </div>
-
-            {/* Section label */}
-            <p
-                className="text-center mb-4"
-                style={{
-                    fontFamily: 'var(--font-formal)',
-                    fontSize: '15px',
-                    color: '#8B7355',
-                    letterSpacing: '0.1em',
-                    fontWeight: 400,
-                }}
-            >
-                Trân trọng kính mời
-            </p>
 
             <div ref={ref} className="flex gap-2">
                 {/* Nhà Trai */}
@@ -84,21 +71,30 @@ export function FamilyInfo() {
                     </p>
                 </div>
 
-                {/* Center divider */}
-                <div className="flex flex-col items-center justify-center px-1">
+                {/* Center divider — Chữ Hỷ (囍) */}
+                <div className="flex flex-col items-center justify-center px-2">
                     <div
                         style={{
                             width: '1px',
-                            height: '40px',
+                            height: '32px',
                             background:
                                 'linear-gradient(180deg, transparent, #C8B99A, transparent)',
                         }}
                     />
-                    <DoubleLeavesIcon />
+                    <img
+                        src={chuHy}
+                        alt="Chữ Hỷ"
+                        style={{
+                            width: '36px',
+                            height: '36px',
+                            objectFit: 'contain',
+                            margin: '6px 0',
+                        }}
+                    />
                     <div
                         style={{
                             width: '1px',
-                            height: '40px',
+                            height: '32px',
                             background:
                                 'linear-gradient(180deg, transparent, #C8B99A, transparent)',
                         }}
@@ -154,51 +150,6 @@ export function FamilyInfo() {
                 </div>
             </div>
         </section>
-    )
-}
-
-function DoubleLeavesIcon() {
-    return (
-        <svg width="24" height="28" viewBox="0 0 24 28" className="my-2">
-            <path d="M12 2 Q8 8 8 14 Q8 20 12 26" stroke="#9BAF88" strokeWidth="1" fill="none" />
-            <path d="M12 2 Q16 8 16 14 Q16 20 12 26" stroke="#9BAF88" strokeWidth="1" fill="none" />
-            <ellipse
-                cx="8"
-                cy="10"
-                rx="4"
-                ry="2"
-                fill="#9BAF88"
-                opacity="0.35"
-                transform="rotate(-30 8 10)"
-            />
-            <ellipse
-                cx="16"
-                cy="10"
-                rx="4"
-                ry="2"
-                fill="#9BAF88"
-                opacity="0.35"
-                transform="rotate(30 16 10)"
-            />
-            <ellipse
-                cx="7"
-                cy="18"
-                rx="4"
-                ry="2"
-                fill="#9BAF88"
-                opacity="0.3"
-                transform="rotate(-20 7 18)"
-            />
-            <ellipse
-                cx="17"
-                cy="18"
-                rx="4"
-                ry="2"
-                fill="#9BAF88"
-                opacity="0.3"
-                transform="rotate(20 17 18)"
-            />
-        </svg>
     )
 }
 
