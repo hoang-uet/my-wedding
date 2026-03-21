@@ -7,17 +7,18 @@ export function CalendarHighlight() {
 
     // Wedding date: April 5, 2026
     const weddingDay = 5
-    const month = 3 // April (0-indexed)
+    const month = 3 // April (0-indexed: Jan=0, Feb=1, Mar=2, Apr=3)
     const year = 2026
 
-    const dayLabels = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7']
+    const dayLabels = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']
 
     const calendarData = useMemo(() => {
-        const firstDay = new Date(year, month, 1).getDay()
+        const firstDaySunBased = new Date(year, month, 1).getDay()
+        const mondayOffset = (firstDaySunBased - 1 + 7) % 7
         const daysInMonth = new Date(year, month + 1, 0).getDate()
         const cells: (number | null)[] = []
 
-        for (let i = 0; i < firstDay; i++) {
+        for (let i = 0; i < mondayOffset; i++) {
             cells.push(null)
         }
         for (let d = 1; d <= daysInMonth; d++) {
@@ -54,60 +55,64 @@ export function CalendarHighlight() {
     }, [])
 
     return (
-        <section className="relative" style={{ minHeight: '440px' }}>
+        <section
+            className="relative overflow-hidden"
+            style={{ height: '80vh', maxHeight: '720px' }}
+        >
+            {/* Scenic image — fills section, cropped to center (couple) */}
             <WeddingImage
                 image={weddingImages.scenic}
                 alt="Đôi uyên ương trong khung cảnh đẹp"
                 sizes="430px"
-                className="absolute inset-0 w-full h-full"
-                style={{ aspectRatio: 'unset' }}
-            />
-            <div
-                className="absolute inset-0"
                 style={{
+                    aspectRatio: 'unset',
+                    position: 'absolute',
+                    inset: 0,
+                    height: '100%',
+                }}
+                className="w-full h-full"
+            />
+
+            {/* Gradient overlay — bottom portion for calendar readability */}
+            <div
+                className="absolute inset-x-0 bottom-0"
+                style={{
+                    height: '60%',
                     background:
-                        'linear-gradient(180deg, rgba(58,74,48,0.55) 0%, rgba(42,56,34,0.65) 100%)',
+                        'linear-gradient(180deg, rgba(42,56,34,0) 0%, rgba(42,56,34,0.45) 35%, rgba(42,56,34,0.75) 100%)',
                 }}
             />
 
-            <div className="relative z-10 flex flex-col items-center justify-center h-full px-5 py-12">
-                {/* Month/Year title */}
+            {/* Calendar anchored to bottom-center, full width */}
+            <div
+                className="absolute bottom-0 inset-x-0 z-10 flex flex-col"
+                style={{ padding: '0 24px 28px 24px' }}
+            >
+                {/* Month title — right-aligned */}
                 <h3
-                    className="mb-1"
                     style={{
-                        fontFamily: "var(--font-label-casual)",
+                        fontFamily: 'var(--font-label-casual)',
                         fontSize: '25px',
                         color: '#FFFFFF',
                         fontWeight: 500,
                         lineHeight: 2.2,
+                        textAlign: 'right',
                     }}
                 >
                     Tháng 4
                 </h3>
-                <p
-                    style={{
-                        fontFamily: "var(--font-primary)",
-                        fontSize: '14px',
-                        color: 'rgba(255,255,255,0.6)',
-                        letterSpacing: '0.2em',
-                        marginBottom: '20px',
-                    }}
-                >
-                    2026
-                </p>
 
-                {/* Day labels */}
-                <div className="grid gap-0 mb-2" style={{ gridTemplateColumns: 'repeat(7, 38px)' }}>
+                {/* Day labels — spread evenly */}
+                <div className="grid" style={{ gridTemplateColumns: 'repeat(7, 1fr)' }}>
                     {dayLabels.map((day) => (
                         <div
                             key={day}
                             className="flex items-center justify-center"
                             style={{
-                                width: '38px',
                                 height: '28px',
-                                fontFamily: "var(--font-primary)",
-                                fontSize: '11px',
-                                color: 'rgba(255,255,255,0.5)',
+                                fontFamily: 'var(--font-primary)',
+                                fontSize: '12px',
+                                color: 'rgba(255,255,255,0.55)',
                                 fontWeight: 600,
                                 letterSpacing: '0.05em',
                             }}
@@ -117,20 +122,29 @@ export function CalendarHighlight() {
                     ))}
                 </div>
 
-                {/* Calendar grid */}
+                {/* Separator line */}
+                <div
+                    style={{
+                        width: '100%',
+                        height: '1px',
+                        background: 'rgba(255,255,255,0.25)',
+                        marginBottom: '4px',
+                    }}
+                />
+
+                {/* Calendar grid — spread evenly */}
                 <div
                     ref={ref}
-                    className="grid gap-0"
-                    style={{ gridTemplateColumns: 'repeat(7, 38px)' }}
+                    className="grid"
+                    style={{ gridTemplateColumns: 'repeat(7, 1fr)' }}
                 >
                     {calendarData.map((day, i) => (
                         <div
                             key={i}
                             className="cal-cell flex items-center justify-center relative"
                             style={{
-                                width: '38px',
-                                height: '36px',
-                                fontFamily: "var(--font-primary)",
+                                height: '40px',
+                                fontFamily: 'var(--font-primary)',
                                 fontSize: '15px',
                                 color: day === weddingDay ? '#FFFFFF' : 'rgba(255,255,255,0.75)',
                                 fontWeight: day === weddingDay ? 700 : 400,
@@ -142,21 +156,20 @@ export function CalendarHighlight() {
                             {day !== null && (
                                 <>
                                     {day === weddingDay && (
-                                        <div
-                                            className="absolute inset-0 flex items-center justify-center"
+                                        <img
+                                            src="/heart-highlight.png"
+                                            alt=""
+                                            className="absolute pointer-events-none"
                                             style={{
-                                                animation: 'calHeartPulse 2s ease-in-out infinite',
+                                                width: '42px',
+                                                height: 'auto',
+                                                top: '50%',
+                                                left: '50%',
+                                                transform: 'translate(-50%, -50%)',
+                                                animation:
+                                                    'calHeartPulse 2.5s ease-in-out infinite',
                                             }}
-                                        >
-                                            <svg
-                                                width="30"
-                                                height="28"
-                                                viewBox="0 0 24 24"
-                                                fill="#E87461"
-                                            >
-                                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                                            </svg>
-                                        </div>
+                                        />
                                     )}
                                     <span className="relative z-10">{day}</span>
                                 </>
@@ -168,8 +181,8 @@ export function CalendarHighlight() {
 
             <style>{`
         @keyframes calHeartPulse {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.12); }
+          0%, 100% { transform: translate(-50%, -50%) scale(1); }
+          50% { transform: translate(-50%, -50%) scale(1.15); }
         }
       `}</style>
         </section>

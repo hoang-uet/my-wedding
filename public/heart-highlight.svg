@@ -1,0 +1,8 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 54' width='60' height='54'>
+  <filter id='shadow'>
+    <feDropShadow dx='0' dy='1' stdDeviation='2' flood-color='rgba(0,0,0,0.3)'/>
+  </filter>
+  <path filter='url(#shadow)' fill='#D93025' d='M30 49 C30 49 5 33 5 18 C5 10 11 4 19 4 C23.5 4 27.5 6.5 30 10.5 C32.5 6.5 36.5 4 41 4 C49 4 55 10 55 18 C55 33 30 49 30 49Z'/>
+  <path fill='#E8453C' d='M30 47 C30 47 7 31.5 7 18 C7 11 12.5 6 19 6 C23.5 6 27.5 8.5 30 12.5 C32.5 8.5 36.5 6 41 6 C47.5 6 53 11 53 18 C53 31.5 30 47 30 47Z'/>
+  <path fill='rgba(255,255,255,0.2)' d='M17 10 C14 12 12 16 13 19 C13.5 17 15 14 18 12 Z'/>
+</svg>

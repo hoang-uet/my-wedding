@@ -14,12 +14,14 @@ export function ThankYou() {
                 className="absolute inset-0 w-full h-full"
                 style={{ aspectRatio: 'unset' }}
             />
-            {/* Gradient overlay */}
+            {/* Dark vignette overlay for text readability */}
             <div
                 className="absolute inset-0"
                 style={{
-                    background:
-                        'linear-gradient(180deg, rgba(74,93,58,0.2) 0%, rgba(58,74,48,0.5) 100%)',
+                    background: [
+                        'radial-gradient(ellipse at center, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.55) 100%)',
+                        'linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.45) 60%, rgba(0,0,0,0.6) 100%)',
+                    ].join(', '),
                 }}
             />
             <div
@@ -28,10 +30,10 @@ export function ThankYou() {
             >
                 <p
                     style={{
-                        fontFamily: "var(--font-script-elegant)",
+                        fontFamily: 'var(--font-script-elegant)',
                         fontSize: '52px',
-                        color: '#FFFFFF',
-                        textShadow: '0 2px 16px rgba(0,0,0,0.3)',
+                        color: 'rgb(75, 83, 32)',
+                        textShadow: '0 2px 24px rgba(0,0,0,0.5), 0 1px 4px rgba(0,0,0,0.3)',
                     }}
                 >
                     Thank you!
@@ -39,11 +41,12 @@ export function ThankYou() {
                 <p
                     className="mt-2"
                     style={{
-                        fontFamily: "var(--font-primary)",
+                        fontFamily: 'var(--font-primary)',
                         fontSize: '14px',
-                        color: 'rgba(255,255,255,0.7)',
+                        color: 'rgb(75, 83, 32)',
                         letterSpacing: '0.15em',
                         fontWeight: 400,
+                        textShadow: '0 1px 8px rgba(0,0,0,0.4)',
                     }}
                 >
                     {weddingConfig.couple.groom.name} & {weddingConfig.couple.bride.name}
@@ -51,10 +54,11 @@ export function ThankYou() {
                 <p
                     className="mt-6"
                     style={{
-                        fontFamily: "var(--font-primary)",
+                        fontFamily: 'var(--font-primary)',
                         fontSize: '10px',
-                        color: 'rgba(255,255,255,0.35)',
+                        color: 'rgba(255,255,255,0.55)',
                         letterSpacing: '0.1em',
+                        textShadow: '0 1px 6px rgba(0,0,0,0.3)',
                     }}
                 >
                     05 . 04 . 2026

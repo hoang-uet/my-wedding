@@ -1,14 +1,21 @@
+'use client'
+
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { X, ChevronLeft, ChevronRight } from 'lucide-react'
 import { weddingImages } from './wedding-config'
 import { WeddingImage } from './WeddingImage'
 import { FloatingPetals } from './FloralOverlay'
 
+// Số ảnh hiển thị ngoài grid (ảnh cuối sẽ có overlay mờ + nút xem thêm)
+const PREVIEW_COUNT = 6
+
 export function Gallery() {
     const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
     const gridRef = useRef<HTMLDivElement>(null)
 
     const images = weddingImages.gallery
+    const previewImages = images.slice(0, PREVIEW_COUNT)
+    const remainingCount = images.length - PREVIEW_COUNT
 
     // Scroll-triggered stagger
     useEffect(() => {
@@ -123,15 +130,16 @@ export function Gallery() {
                 </div>
             </div>
 
-            {/* Gallery grid - masonry-like with varied sizes */}
+            {/* Gallery grid — 6 ảnh preview, ảnh cuối có overlay mờ */}
             <div ref={gridRef} className="grid grid-cols-2 px-2" style={{ gap: '3px' }}>
-                {images.map((image, i) => {
-                    // Alternating layout: full-width for 0, 3
+                {previewImages.map((image, i) => {
                     const isFullWidth = i === 0 || i === 3
+                    const isLast = i === PREVIEW_COUNT - 1
+
                     return (
                         <div
                             key={`gallery-${i}`}
-                            className="gallery-item cursor-pointer overflow-hidden"
+                            className="gallery-item cursor-pointer overflow-hidden relative"
                             style={{
                                 gridColumn: isFullWidth ? 'span 2' : 'span 1',
                                 aspectRatio: isFullWidth ? '16/9' : '3/4',
@@ -146,12 +154,63 @@ export function Gallery() {
                                 className="w-full h-full"
                                 style={{ aspectRatio: 'unset' }}
                             />
+
+                            {/* Overlay mờ cho ảnh cuối */}
+                            {isLast && remainingCount > 0 && (
+                                <div
+                                    className="absolute inset-0 flex flex-col items-center justify-center"
+                                    style={{
+                                        background: 'rgba(12, 22, 8, 0.62)',
+                                        backdropFilter: 'blur(5px)',
+                                        WebkitBackdropFilter: 'blur(5px)',
+                                    }}
+                                >
+                                    <span
+                                        style={{
+                                            fontFamily: 'var(--font-display-serif)',
+                                            fontSize: '32px',
+                                            fontWeight: 700,
+                                            color: '#FFFFFF',
+                                            letterSpacing: '0.02em',
+                                            lineHeight: 1,
+                                        }}
+                                    >
+                                        +{remainingCount}
+                                    </span>
+                                    <span
+                                        style={{
+                                            fontFamily: 'var(--font-primary)',
+                                            fontSize: '11px',
+                                            color: 'rgba(255,255,255,0.7)',
+                                            letterSpacing: '0.18em',
+                                            marginTop: '8px',
+                                            textTransform: 'uppercase',
+                                        }}
+                                    >
+                                        Xem tất cả
+                                    </span>
+                                    <div
+                                        style={{
+                                            marginTop: '14px',
+                                            width: '32px',
+                                            height: '32px',
+                                            borderRadius: '50%',
+                                            border: '1.5px solid rgba(255,255,255,0.5)',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                        }}
+                                    >
+                                        <ChevronRight size={16} color="rgba(255,255,255,0.8)" />
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     )
                 })}
             </div>
 
-            {/* Lightbox */}
+            {/* Lightbox — hiển thị toàn bộ ảnh kể từ index được click */}
             {lightboxIndex !== null && (
                 <div
                     role="dialog"

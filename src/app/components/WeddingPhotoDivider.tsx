@@ -8,7 +8,7 @@ export function WeddingPhotoDivider() {
     return (
         <section ref={ref} className="relative" style={{ height: '380px' }}>
             <WeddingImage
-                image={weddingImages.heroCouple}
+                image={weddingImages.heroCouple2}
                 alt="Đôi uyên ương trên cánh đồng xanh"
                 sizes="430px"
                 className="absolute inset-0 w-full h-full"

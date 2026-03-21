@@ -129,7 +129,7 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift }: FloatingBarPr
                             >
                                 <span
                                     style={{
-                                        fontFamily: "var(--font-primary)",
+                                        fontFamily: 'var(--font-primary)',
                                         fontSize: '12px',
                                         fontWeight: 700,
                                         color: '#4A5D3A',
@@ -139,7 +139,7 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift }: FloatingBarPr
                                 </span>{' '}
                                 <span
                                     style={{
-                                        fontFamily: "var(--font-primary)",
+                                        fontFamily: 'var(--font-primary)',
                                         fontSize: '12px',
                                         color: '#4A4A4A',
                                     }}
@@ -210,7 +210,7 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift }: FloatingBarPr
                                 placeholder="Gửi lời chúc..."
                                 className="flex-1 bg-transparent outline-none border-none"
                                 style={{
-                                    fontFamily: "var(--font-primary)",
+                                    fontFamily: 'var(--font-primary)',
                                     fontSize: '13px',
                                     color: '#3A3A3A',
                                 }}
@@ -232,7 +232,7 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift }: FloatingBarPr
                         <>
                             <span
                                 style={{
-                                    fontFamily: "var(--font-primary)",
+                                    fontFamily: 'var(--font-primary)',
                                     fontSize: '12px',
                                     color: '#999',
                                 }}
@@ -260,7 +260,7 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift }: FloatingBarPr
                     </svg>
                     <span
                         style={{
-                            fontFamily: "var(--font-primary)",
+                            fontFamily: 'var(--font-primary)',
                             fontSize: '11px',
                             color: '#8B7355',
                             fontWeight: 600,
@@ -271,7 +271,7 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift }: FloatingBarPr
                 </button>
 
                 {/* Gift button */}
-                <button
+                {/* <button
                     onClick={onScrollToGift}
                     className="flex items-center justify-center shrink-0 cursor-pointer"
                     style={{
@@ -285,7 +285,7 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift }: FloatingBarPr
                     }}
                 >
                     <Gift size={15} strokeWidth={1.8} />
-                </button>
+                </button> */}
 
                 {/* Album button */}
                 <button
@@ -312,7 +312,7 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift }: FloatingBarPr
                             fontSize: '9px',
                             color: 'white',
                             fontWeight: 700,
-                            fontFamily: "var(--font-primary)",
+                            fontFamily: 'var(--font-primary)',
                         }}
                     >
                         6

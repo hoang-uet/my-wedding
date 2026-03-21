@@ -28,7 +28,7 @@ export function EventDetails() {
                 <div className="mb-2">
                     <p
                         style={{
-                            fontFamily: "var(--font-couple-names)",
+                            fontFamily: 'var(--font-couple-names)',
                             fontSize: '34px',
                             color: '#3A3A3A',
                             lineHeight: 1.15,
@@ -39,7 +39,7 @@ export function EventDetails() {
                     </p>
                     <p
                         style={{
-                            fontFamily: "var(--font-couple-names)",
+                            fontFamily: 'var(--font-couple-names)',
                             fontSize: '38px',
                             color: '#9BAF88',
                             margin: '2px 0',
@@ -50,7 +50,7 @@ export function EventDetails() {
                     </p>
                     <p
                         style={{
-                            fontFamily: "var(--font-couple-names)",
+                            fontFamily: 'var(--font-couple-names)',
                             fontSize: '34px',
                             color: '#3A3A3A',
                             lineHeight: 1.15,
@@ -76,7 +76,7 @@ export function EventDetails() {
                 <div className="mb-5">
                     <p
                         style={{
-                            fontFamily: "var(--font-display-serif)",
+                            fontFamily: 'var(--font-display-serif)',
                             fontSize: '18px',
                             color: '#4A5D3A',
                             letterSpacing: '0.1em',
@@ -95,14 +95,14 @@ export function EventDetails() {
                 <div className="mb-3">
                     <p
                         style={{
-                            fontFamily: "var(--font-primary)",
+                            fontFamily: 'var(--font-primary)',
                             fontSize: '20px',
                             color: '#3A3A3A',
                             fontWeight: 500,
                             letterSpacing: '0.1em',
                         }}
                     >
-                        09 : 00, {weddingConfig.event.dayOfWeek}
+                        13 : 00, {weddingConfig.event.dayOfWeek}
                     </p>
                 </div>
 
@@ -111,7 +111,7 @@ export function EventDetails() {
                     <div className="text-center">
                         <p
                             style={{
-                                fontFamily: "var(--font-primary)",
+                                fontFamily: 'var(--font-primary)',
                                 fontSize: '14px',
                                 color: '#8B7355',
                                 letterSpacing: '0.15em',
@@ -122,7 +122,7 @@ export function EventDetails() {
                         </p>
                         <p
                             style={{
-                                fontFamily: "var(--font-primary)",
+                                fontFamily: 'var(--font-primary)',
                                 fontSize: '22px',
                                 color: '#3A3A3A',
                                 fontWeight: 600,
@@ -140,7 +140,7 @@ export function EventDetails() {
                     />
                     <p
                         style={{
-                            fontFamily: "var(--font-primary)",
+                            fontFamily: 'var(--font-primary)',
                             fontSize: '72px',
                             color: '#4A5D3A',
                             fontWeight: 300,
@@ -159,7 +159,7 @@ export function EventDetails() {
                     <div className="text-center">
                         <p
                             style={{
-                                fontFamily: "var(--font-primary)",
+                                fontFamily: 'var(--font-primary)',
                                 fontSize: '14px',
                                 color: '#8B7355',
                                 letterSpacing: '0.15em',
@@ -170,7 +170,7 @@ export function EventDetails() {
                         </p>
                         <p
                             style={{
-                                fontFamily: "var(--font-primary)",
+                                fontFamily: 'var(--font-primary)',
                                 fontSize: '22px',
                                 color: '#3A3A3A',
                                 fontWeight: 600,
@@ -184,7 +184,7 @@ export function EventDetails() {
                 {/* Lunar date */}
                 <p
                     style={{
-                        fontFamily: "var(--font-primary)",
+                        fontFamily: 'var(--font-primary)',
                         fontSize: '13px',
                         color: '#8B7355',
                         marginBottom: '24px',
@@ -210,65 +210,49 @@ export function EventDetails() {
                     </svg>
                 </div>
 
-                {/* Venue */}
-                <div className="mb-3">
-                    <p
-                        style={{
-                            fontFamily: "var(--font-primary)",
-                            fontSize: '13px',
-                            fontWeight: 500,
-                            color: '#8B7355',
-                            marginBottom: '4px',
-                            letterSpacing: '0.1em',
-                            textTransform: 'uppercase',
-                        }}
-                    >
-                        Hôn lễ được tổ chức tại
-                    </p>
-                    <p
-                        style={{
-                            fontFamily: "var(--font-venue)",
-                            fontSize: '30px',
-                            color: '#4A5D3A',
-                            lineHeight: 1.4,
-                        }}
-                    >
-                        {weddingConfig.event.venue}
-                    </p>
+                {/* Venue cards */}
+                <div className="flex flex-col gap-6">
+                    <VenueCard
+                        label="Lễ Thành Hôn"
+                        side="Nhà Trai"
+                        venue={weddingConfig.event.groom.venue}
+                        address={weddingConfig.event.groom.address}
+                        mapsUrl={weddingConfig.event.groom.mapsUrl}
+                    />
+
+                    {/* Connecting ornament */}
+                    <div className="flex items-center justify-center gap-3">
+                        <div
+                            style={{
+                                width: '40px',
+                                height: '1px',
+                                background: 'linear-gradient(90deg, transparent, #C8B99A)',
+                            }}
+                        />
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path
+                                d="M8 2C8 2 3 6 3 9C3 11.5 5.2 13.5 8 14C10.8 13.5 13 11.5 13 9C13 6 8 2 8 2Z"
+                                fill="#9BAF88"
+                                opacity="0.35"
+                            />
+                        </svg>
+                        <div
+                            style={{
+                                width: '40px',
+                                height: '1px',
+                                background: 'linear-gradient(90deg, #C8B99A, transparent)',
+                            }}
+                        />
+                    </div>
+
+                    <VenueCard
+                        label="Lễ Vu Quy"
+                        side="Nhà Gái"
+                        venue={weddingConfig.event.bride.venue}
+                        address={weddingConfig.event.bride.address}
+                        mapsUrl={weddingConfig.event.bride.mapsUrl}
+                    />
                 </div>
-
-                {/* Address */}
-                <p
-                    style={{
-                        fontFamily: "var(--font-primary)",
-                        fontSize: '13px',
-                        color: '#666',
-                        lineHeight: 1.7,
-                        marginBottom: '20px',
-                        padding: '0 16px',
-                    }}
-                >
-                    {weddingConfig.event.address}
-                </p>
-
-                {/* Directions button */}
-                <a
-                    href={weddingConfig.event.mapsUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 no-underline"
-                    style={{
-                        fontFamily: "var(--font-venue)",
-                        fontSize: '23px',
-                        color: '#4A5D3A',
-                        borderBottom: '1px solid #9BAF88',
-                        paddingBottom: '2px',
-                        fontWeight: 400,
-                    }}
-                >
-                    <MapPin size={16} strokeWidth={1.5} />
-                    Chỉ Đường
-                </a>
             </div>
 
             {/* Left bottom floral */}
@@ -279,6 +263,104 @@ export function EventDetails() {
                 <FloralBranch />
             </div>
         </section>
+    )
+}
+
+function VenueCard({
+    label,
+    side,
+    venue,
+    address,
+    mapsUrl,
+}: {
+    label: string
+    side: string
+    venue: string
+    address: string
+    mapsUrl: string
+}) {
+    return (
+        <div
+            style={{
+                background: 'rgba(255,255,255,0.45)',
+                borderRadius: '12px',
+                padding: '20px 16px 18px',
+                border: '1px solid rgba(200,185,154,0.3)',
+            }}
+        >
+            {/* Side label */}
+            <p
+                style={{
+                    fontFamily: 'var(--font-primary)',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    color: '#9BAF88',
+                    letterSpacing: '0.18em',
+                    textTransform: 'uppercase',
+                    marginBottom: '2px',
+                }}
+            >
+                {label}
+            </p>
+
+            {/* Venue name */}
+            <p
+                style={{
+                    fontFamily: 'var(--font-venue)',
+                    fontSize: '26px',
+                    color: '#4A5D3A',
+                    lineHeight: 1.4,
+                    marginBottom: '2px',
+                }}
+            >
+                {venue}
+            </p>
+
+            {/* Side tag */}
+            <p
+                style={{
+                    fontFamily: 'var(--font-primary)',
+                    fontSize: '12px',
+                    color: '#8B7355',
+                    fontStyle: 'italic',
+                    marginBottom: '8px',
+                }}
+            >
+                {side}
+            </p>
+
+            {/* Address */}
+            <p
+                style={{
+                    fontFamily: 'var(--font-primary)',
+                    fontSize: '13px',
+                    color: '#666',
+                    lineHeight: 1.6,
+                    marginBottom: '12px',
+                }}
+            >
+                {address}
+            </p>
+
+            {/* Map link */}
+            <a
+                href={mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 no-underline"
+                style={{
+                    fontFamily: 'var(--font-primary)',
+                    fontSize: '13px',
+                    color: '#4A5D3A',
+                    fontWeight: 500,
+                    borderBottom: '1px solid rgba(155,175,136,0.5)',
+                    paddingBottom: '1px',
+                }}
+            >
+                <MapPin size={14} strokeWidth={1.5} />
+                Xem bản đồ
+            </a>
+        </div>
     )
 }
 

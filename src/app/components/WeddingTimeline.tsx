@@ -14,13 +14,13 @@ export function WeddingTimeline() {
             <h2
                 className="text-center mb-2"
                 style={{
-                    fontFamily: "var(--font-calligraphy-vn)",
+                    fontFamily: 'var(--font-calligraphy-vn)',
                     fontSize: '43px',
                     color: '#4A5D3A',
                     fontWeight: 400,
                 }}
             >
-                Timeline
+                Timeline 04-04-2026
             </h2>
 
             {/* Ornamental line */}
@@ -53,7 +53,7 @@ export function WeddingTimeline() {
                         </div>
                         <p
                             style={{
-                                fontFamily: "var(--font-primary)",
+                                fontFamily: 'var(--font-primary)',
                                 fontSize: '20px',
                                 fontWeight: 600,
                                 color: '#4A5D3A',
@@ -64,7 +64,7 @@ export function WeddingTimeline() {
                         </p>
                         <p
                             style={{
-                                fontFamily: "var(--font-primary)",
+                                fontFamily: 'var(--font-primary)',
                                 fontSize: '12px',
                                 color: '#8B7355',
                                 fontWeight: 500,
