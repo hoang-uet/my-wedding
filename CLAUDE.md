@@ -22,7 +22,7 @@ Website thiệp mời đám cưới dạng single-page application, thiết kế
 | Icons | Lucide React | 0.487.x |
 | Animation | Motion.js | 12.23.x |
 | Forms | React Hook Form | 7.55.x |
-| Backend/DB | Supabase | (tích hợp tương lai) |
+| Backend/DB | Supabase (`@supabase/supabase-js`) | 2.99.x (realtime wishes) |
 | Image Processing | Sharp (build-time) | 0.34.x |
 | E2E Testing | Playwright | 1.58.x |
 | Carousel | Embla Carousel | 8.6.x |
@@ -47,6 +47,7 @@ Website thiệp mời đám cưới dạng single-page application, thiết kế
   - `useAudioPlayer()` - Audio lazy-load, fade in/out
   - `useScrollAnimation()` - Intersection Observer animations
   - `useChildrenStagger()` - Staggered child animations
+  - `useWishes()` - Supabase realtime wishes (fetch, subscribe, send, rate limit)
 
 ### Key Components
 
@@ -54,7 +55,8 @@ Website thiệp mời đám cưới dạng single-page application, thiết kế
 |-----------|----------|-------------|
 | `EnvelopeCard` | Phong bì tương tác, 4 states animation, trigger nhạc | CAO |
 | `Gallery` | Masonry grid + lightbox overlay + keyboard nav | CAO |
-| `FloatingBar` | Fixed bottom nav, smooth scroll | TRUNG BÌNH |
+| `FloatingBar` | Bottom bar + Peek Mode + Full Messages Overlay + realtime wishes | CAO |
+| `NameModal` | Modal nhập tên lần đầu cho guestbook | THẤP |
 | `Countdown` | Đếm ngược tới ngày cưới | THẤP |
 | `RSVPForm` | Form đăng ký tham dự | TRUNG BÌNH |
 | `WeddingGift` | Thông tin chuyển khoản | THẤP |
@@ -77,7 +79,7 @@ Mỗi tính năng có spec riêng trong thư mục `specs/`. Đọc spec trướ
 | ID | Tính năng | Trạng thái | Spec |
 |----|-----------|-----------|------|
 | 001 | Landing Page - Thiệp cưới chính | Đã triển khai | [`specs/001-wedding-landing-page/spec.md`](specs/001-wedding-landing-page/spec.md) |
-| 002 | Lời chúc từ khách mời (Guestbook) | Chưa triển khai | [`specs/002-wishes-guestbook/spec.md`](specs/002-wishes-guestbook/spec.md) |
+| 002 | Lời chúc từ khách mời (Guestbook) | Đã triển khai | [`specs/002-wishes-guestbook/spec.md`](specs/002-wishes-guestbook/spec.md) |
 
 > **Quy ước thêm tính năng mới:**
 > 1. Tạo thư mục `specs/{ID}-{tên-tính-năng}/spec.md`
@@ -165,6 +167,8 @@ Khi chạy với `--dangerously-skip-permissions`, Agent **KHÔNG ĐƯỢC PHÉP
 ```
 src/
   main.tsx                          # Entry point
+  lib/
+    supabase.ts                     # Supabase client singleton
   app/
     App.tsx                         # Root component (phone frame wrapper)
     components/
@@ -175,7 +179,9 @@ src/
       Gallery.tsx                   # Gallery ảnh + lightbox
       EventDetails.tsx              # Địa điểm & thời gian
       FamilyInfo.tsx                # Thông tin gia đình
-      FloatingBar.tsx               # Thanh điều hướng cố định
+      FloatingBar.tsx               # Bottom bar + wishes peek/full overlay (phức tạp)
+      NameModal.tsx                 # Modal nhập tên lần đầu
+      useWishes.ts                  # Hook: fetch, subscribe, send wishes via Supabase
       RSVPForm.tsx                  # Form xác nhận tham dự
       WeddingGift.tsx               # Thông tin mừng cưới
       ThankYou.tsx                  # Phần kết thúc

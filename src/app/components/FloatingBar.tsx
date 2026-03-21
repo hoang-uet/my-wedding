@@ -1,5 +1,10 @@
-import { useState, useCallback, useRef, useEffect } from 'react'
-import { X, Gift, Camera, Smile, Send } from 'lucide-react'
+import { useState, useCallback, useRef, useEffect, useMemo } from 'react'
+import { AnimatePresence, motion } from 'motion/react'
+import { X, Camera, Smile, Send, ChevronDown, Loader2 } from 'lucide-react'
+import { formatDistanceToNow } from 'date-fns'
+import { vi } from 'date-fns/locale'
+import { useWishes } from './useWishes'
+import { NameModal } from './NameModal'
 
 interface FloatingBarProps {
     onScrollToGallery: () => void
@@ -8,43 +13,184 @@ interface FloatingBarProps {
 
 const heartColors = ['#E87461', '#F5A3A3', '#E8B4A0', '#D4856A', '#F0C0C0']
 
-const MOCK_MESSAGES = [
-    { id: 1, name: 'Thanh', emoji: '🌸', text: 'Chúc mừng hạnh phúc lứa đôi!' },
-    {
-        id: 2,
-        name: 'Ngọc',
-        emoji: '🎉',
-        text: 'May your love story be beautiful and endless!',
-    },
-    {
-        id: 3,
-        name: 'Erik',
-        emoji: '💕',
-        text: 'Mãi mãi hạnh phúc bên nhau!',
-    },
-    {
-        id: 4,
-        name: 'Phương',
-        emoji: '🎊',
-        text: 'Chúc hai bạn luôn vui vẻ, thấu hiểu và nâng đỡ nhau!',
-    },
-    {
-        id: 5,
-        name: 'Ngọc',
-        emoji: '💐',
-        text: 'Trăm năm hạnh phúc!',
-    },
-]
+/** Small presentational component for peek wish items (avoids duplication) */
+function PeekWishItem({ wish }: { wish: import('./useWishes').Wish }) {
+    return (
+        <div
+            className="mb-1.5"
+            style={{
+                maxWidth: '90%',
+                background: 'rgba(255,255,255,0.5)',
+                borderRadius: '10px',
+                padding: '5px 10px',
+                border: '1px solid rgba(212,204,190,0.3)',
+            }}
+        >
+            <span
+                style={{
+                    fontFamily: 'var(--font-primary)',
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    color: '#4A5D3A',
+                }}
+            >
+                {wish.guest_name}:
+            </span>{' '}
+            <span
+                style={{
+                    fontFamily: 'var(--font-primary)',
+                    fontSize: '11px',
+                    color: '#4A4A4A',
+                }}
+            >
+                {wish.message}
+            </span>
+        </div>
+    )
+}
+
+/** Format relative time in Vietnamese */
+function timeAgo(dateStr: string): string {
+    try {
+        return formatDistanceToNow(new Date(dateStr), { addSuffix: true, locale: vi })
+    } catch {
+        return ''
+    }
+}
 
 export function FloatingBar({ onScrollToGallery, onScrollToGift }: FloatingBarProps) {
+    // --- Wishes state ---
+    const { wishes, isLoading, sendWish, isSending, error, clearError, cooldownRemaining } =
+        useWishes()
+
+    // --- UI state ---
     const [showMessages, setShowMessages] = useState(false)
-    const [messages, setMessages] = useState(MOCK_MESSAGES)
+    const [peekDismissed, setPeekDismissed] = useState(false)
+    const [nameModalOpen, setNameModalOpen] = useState(false)
     const [newMessage, setNewMessage] = useState('')
+
+    // --- Hearts animation (kept from original) ---
     const [hearts, setHearts] = useState<
         { id: number; x: number; size: number; rotation: number; color: string }[]
     >([])
     const heartIdRef = useRef(0)
 
+    // --- Auto-scroll state ---
+    const messagesListRef = useRef<HTMLDivElement>(null)
+    const messagesEndRef = useRef<HTMLDivElement>(null)
+    const [isUserScrolling, setIsUserScrolling] = useState(false)
+    const [hasNewMessages, setHasNewMessages] = useState(false)
+    const prevWishCountRef = useRef(wishes.length)
+
+    // --- Peek mode: last 5 wishes ---
+    const peekWishes = useMemo(() => wishes.slice(-5), [wishes])
+    const showPeek = !showMessages && !peekDismissed && peekWishes.length > 0
+
+    // --- Peek auto-scroll loop (CSS animation driven, duplicated content for seamless loop) ---
+    const peekScrollRef = useRef<HTMLDivElement>(null)
+    const [peekScrollDuration, setPeekScrollDuration] = useState(12)
+
+    // Measure peek content height to calculate animation duration
+    useEffect(() => {
+        if (!showPeek || !peekScrollRef.current) return
+        const el = peekScrollRef.current
+        // Each "copy" is half the total scrollHeight (since content is duplicated)
+        const singleHeight = el.scrollHeight / 2
+        // ~30px/s scroll speed — adjust for content amount
+        const speed = 30
+        const duration = Math.max(6, singleHeight / speed)
+        setPeekScrollDuration(duration)
+    }, [showPeek, peekWishes])
+
+    // --- Detect new messages for auto-scroll ---
+    useEffect(() => {
+        if (wishes.length > prevWishCountRef.current) {
+            if (isUserScrolling) {
+                setHasNewMessages(true)
+            } else {
+                // Auto-scroll to bottom
+                messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+            }
+        }
+        prevWishCountRef.current = wishes.length
+    }, [wishes.length, isUserScrolling])
+
+    // --- Scroll detection: pause auto-scroll when user scrolls up ---
+    const handleMessagesScroll = useCallback(() => {
+        const el = messagesListRef.current
+        if (!el) return
+        const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight
+        // Consider "at bottom" if within 60px
+        if (distanceFromBottom < 60) {
+            setIsUserScrolling(false)
+            setHasNewMessages(false)
+        } else {
+            setIsUserScrolling(true)
+        }
+    }, [])
+
+    // --- Scroll to bottom helper ---
+    const scrollToBottom = useCallback(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+        setIsUserScrolling(false)
+        setHasNewMessages(false)
+    }, [])
+
+    // --- Initial scroll to bottom when overlay opens ---
+    useEffect(() => {
+        if (showMessages) {
+            // Double rAF to ensure DOM has fully laid out before scrolling
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    const el = messagesListRef.current
+                    if (el) {
+                        el.scrollTop = el.scrollHeight
+                    }
+                    setIsUserScrolling(false)
+                    setHasNewMessages(false)
+                })
+            })
+        }
+    }, [showMessages])
+
+    // --- Handle "Gửi lời chúc..." click ---
+    const handleInputAreaClick = useCallback(() => {
+        if (showMessages) return // Already open
+
+        const guestName = localStorage.getItem('guest_name')
+        if (!guestName) {
+            setNameModalOpen(true)
+        } else {
+            setPeekDismissed(false) // Reset so peek shows when closing overlay
+            setShowMessages(true)
+        }
+    }, [showMessages])
+
+    // --- Handle name confirmation ---
+    const handleNameConfirm = useCallback((name: string) => {
+        localStorage.setItem('guest_name', name)
+        setNameModalOpen(false)
+        setShowMessages(true)
+    }, [])
+
+    // --- Handle send ---
+    const handleSend = useCallback(async () => {
+        if (!newMessage.trim() || isSending || cooldownRemaining > 0) return
+        clearError()
+        await sendWish(newMessage)
+        if (!error) {
+            setNewMessage('')
+        }
+    }, [newMessage, isSending, cooldownRemaining, sendWish, clearError, error])
+
+    // --- Close full overlay ---
+    const handleCloseOverlay = useCallback(() => {
+        setShowMessages(false)
+        setNewMessage('')
+        clearError()
+    }, [clearError])
+
+    // --- Hearts animation (unchanged) ---
     const shootHearts = useCallback(() => {
         const newHearts = Array.from({ length: 7 }, () => ({
             id: heartIdRef.current++,
@@ -60,100 +206,269 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift }: FloatingBarPr
         }, 1000)
     }, [])
 
-    const sendMessage = useCallback(() => {
-        if (!newMessage.trim()) return
-        setMessages((prev) => [
-            ...prev,
-            {
-                id: Date.now(),
-                name: 'Bạn',
-                emoji: '❤️',
-                text: newMessage.trim(),
-            },
-        ])
-        setNewMessage('')
-    }, [newMessage])
-
-    const messagesEndRef = useRef<HTMLDivElement>(null)
-    useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-    }, [messages.length])
-
     return (
         <>
-            {/* Messages overlay */}
-            {showMessages && (
-                <div
-                    className="absolute bottom-[56px] left-0 right-0 z-[800]"
-                    style={{
-                        maxHeight: '55vh',
-                        overflow: 'hidden',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        background:
-                            'linear-gradient(180deg, transparent 0%, rgba(240,235,226,0.95) 15%)',
-                    }}
-                >
-                    {/* Close button */}
-                    <div className="flex justify-end px-3 pt-6 pb-1">
+            {/* ===== PEEK MODE ===== */}
+            <AnimatePresence>
+                {showPeek && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 20 }}
+                        transition={{ duration: 0.4, ease: 'easeOut' }}
+                        className="absolute bottom-[56px] left-0 right-0 z-[790]"
+                        style={{ pointerEvents: 'auto' }}
+                    >
+                        {/* Close peek button */}
                         <button
-                            onClick={() => setShowMessages(false)}
-                            className="flex items-center justify-center cursor-pointer"
+                            onClick={() => setPeekDismissed(true)}
+                            className="absolute top-1 right-2 flex items-center justify-center cursor-pointer z-10"
                             style={{
-                                width: '30px',
-                                height: '30px',
+                                width: '22px',
+                                height: '22px',
                                 borderRadius: '50%',
-                                background: 'rgba(74,93,58,0.2)',
+                                background: 'rgba(74,93,58,0.25)',
                                 border: 'none',
                                 color: '#4A5D3A',
                             }}
                         >
-                            <X size={14} />
+                            <X size={10} />
                         </button>
-                    </div>
 
-                    {/* Messages list */}
-                    <div className="flex-1 overflow-y-auto px-3 pb-2" style={{ maxHeight: '45vh' }}>
-                        {messages.map((msg) => (
+                        {/* Peek messages with gradient fade + auto-scroll loop */}
+                        <div
+                            style={{
+                                maxHeight: '140px',
+                                overflow: 'hidden',
+                                position: 'relative',
+                                padding: '8px 12px 4px',
+                            }}
+                        >
+                            {/* Top gradient fade */}
                             <div
-                                key={msg.id}
-                                className="mb-2"
                                 style={{
-                                    maxWidth: '88%',
-                                    background: 'rgba(255,255,255,0.7)',
-                                    borderRadius: '12px',
-                                    padding: '8px 12px',
-                                    boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
-                                    border: '1px solid rgba(212,204,190,0.4)',
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: 0,
+                                    right: 0,
+                                    height: '24px',
+                                    background:
+                                        'linear-gradient(180deg, rgba(240,235,226,1) 0%, transparent 100%)',
+                                    zIndex: 1,
+                                    pointerEvents: 'none',
+                                }}
+                            />
+                            {/* Bottom gradient fade */}
+                            <div
+                                style={{
+                                    position: 'absolute',
+                                    bottom: 0,
+                                    left: 0,
+                                    right: 0,
+                                    height: '24px',
+                                    background:
+                                        'linear-gradient(0deg, rgba(240,235,226,1) 0%, transparent 100%)',
+                                    zIndex: 1,
+                                    pointerEvents: 'none',
+                                }}
+                            />
+
+                            {/* Scrolling peek messages — duplicated for seamless loop */}
+                            <div
+                                ref={peekScrollRef}
+                                className="peek-scroll-container"
+                                style={{
+                                    opacity: 0.7,
+                                    animation: `peekScrollLoop ${peekScrollDuration}s linear infinite`,
                                 }}
                             >
-                                <span
-                                    style={{
-                                        fontFamily: 'var(--font-primary)',
-                                        fontSize: '12px',
-                                        fontWeight: 700,
-                                        color: '#4A5D3A',
-                                    }}
-                                >
-                                    {msg.name}:
-                                </span>{' '}
-                                <span
-                                    style={{
-                                        fontFamily: 'var(--font-primary)',
-                                        fontSize: '12px',
-                                        color: '#4A4A4A',
-                                    }}
-                                >
-                                    {msg.emoji} {msg.text}
-                                </span>
+                                {/* First copy */}
+                                {peekWishes.map((wish) => (
+                                    <PeekWishItem key={wish.id} wish={wish} />
+                                ))}
+                                {/* Second copy for seamless loop */}
+                                {peekWishes.map((wish) => (
+                                    <PeekWishItem key={`dup-${wish.id}`} wish={wish} />
+                                ))}
                             </div>
-                        ))}
-                        <div ref={messagesEndRef} />
-                    </div>
-                </div>
-            )}
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
-            {/* Floating hearts animation */}
+            {/* ===== FULL MESSAGES OVERLAY ===== */}
+            <AnimatePresence>
+                {showMessages && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 40 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 40 }}
+                        transition={{ duration: 0.3, ease: 'easeOut' }}
+                        className="absolute bottom-[56px] left-0 right-0 z-[800]"
+                        style={{
+                            maxHeight: '55vh',
+                            overflow: 'hidden',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            background:
+                                'linear-gradient(180deg, transparent 0%, rgba(240,235,226,0.95) 15%)',
+                        }}
+                    >
+                        {/* Close button */}
+                        <div className="flex justify-end px-3 pt-6 pb-1">
+                            <button
+                                onClick={handleCloseOverlay}
+                                className="flex items-center justify-center cursor-pointer"
+                                style={{
+                                    width: '30px',
+                                    height: '30px',
+                                    borderRadius: '50%',
+                                    background: 'rgba(74,93,58,0.2)',
+                                    border: 'none',
+                                    color: '#4A5D3A',
+                                }}
+                            >
+                                <X size={14} />
+                            </button>
+                        </div>
+
+                        {/* Messages list */}
+                        <div
+                            ref={messagesListRef}
+                            onScroll={handleMessagesScroll}
+                            className="flex-1 overflow-y-auto px-3 pb-2"
+                            style={{ maxHeight: '45vh', position: 'relative' }}
+                        >
+                            {isLoading ? (
+                                <div className="flex items-center justify-center py-8">
+                                    <Loader2
+                                        size={20}
+                                        className="animate-spin"
+                                        color="#8B7355"
+                                    />
+                                </div>
+                            ) : wishes.length === 0 ? (
+                                <div
+                                    className="flex items-center justify-center py-8"
+                                    style={{
+                                        fontFamily: 'var(--font-primary)',
+                                        fontSize: '13px',
+                                        color: '#8B7355',
+                                    }}
+                                >
+                                    Hãy là người đầu tiên gửi lời chúc! 💌
+                                </div>
+                            ) : (
+                                wishes.map((wish) => (
+                                    <motion.div
+                                        key={wish.id}
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.25 }}
+                                        className="mb-2"
+                                        style={{
+                                            maxWidth: '88%',
+                                            background: 'rgba(255,255,255,0.7)',
+                                            borderRadius: '12px',
+                                            padding: '8px 12px',
+                                            boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+                                            border: '1px solid rgba(212,204,190,0.4)',
+                                        }}
+                                    >
+                                        <div className="flex items-baseline gap-1">
+                                            <span
+                                                style={{
+                                                    fontFamily: 'var(--font-primary)',
+                                                    fontSize: '12px',
+                                                    fontWeight: 700,
+                                                    color: '#4A5D3A',
+                                                }}
+                                            >
+                                                {wish.guest_name}
+                                            </span>
+                                            <span
+                                                style={{
+                                                    fontFamily: 'var(--font-primary)',
+                                                    fontSize: '10px',
+                                                    color: '#B0A08C',
+                                                }}
+                                            >
+                                                {timeAgo(wish.created_at)}
+                                            </span>
+                                        </div>
+                                        <p
+                                            style={{
+                                                fontFamily: 'var(--font-primary)',
+                                                fontSize: '12px',
+                                                color: '#4A4A4A',
+                                                margin: '2px 0 0',
+                                                lineHeight: 1.4,
+                                                wordBreak: 'break-word',
+                                            }}
+                                        >
+                                            {wish.message}
+                                        </p>
+                                    </motion.div>
+                                ))
+                            )}
+                            <div ref={messagesEndRef} />
+                        </div>
+
+                        {/* New messages indicator */}
+                        <AnimatePresence>
+                            {hasNewMessages && (
+                                <motion.button
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: 10 }}
+                                    onClick={scrollToBottom}
+                                    className="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1 cursor-pointer z-10"
+                                    style={{
+                                        background: 'rgba(74,93,58,0.9)',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '16px',
+                                        padding: '4px 12px',
+                                        fontFamily: 'var(--font-primary)',
+                                        fontSize: '11px',
+                                        fontWeight: 600,
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                                    }}
+                                >
+                                    <ChevronDown size={12} />
+                                    Lời chúc mới
+                                </motion.button>
+                            )}
+                        </AnimatePresence>
+
+                        {/* Error message */}
+                        <AnimatePresence>
+                            {error && (
+                                <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: 'auto' }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    className="px-3 pb-1"
+                                >
+                                    <p
+                                        style={{
+                                            fontFamily: 'var(--font-primary)',
+                                            fontSize: '11px',
+                                            color: '#E87461',
+                                            margin: 0,
+                                            padding: '4px 0',
+                                        }}
+                                    >
+                                        {error}
+                                    </p>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* ===== FLOATING HEARTS ANIMATION ===== */}
             <div className="absolute bottom-[56px] left-1/2 -translate-x-1/2 pointer-events-none z-[850]">
                 {hearts.map((heart) => (
                     <div
@@ -177,7 +492,7 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift }: FloatingBarPr
                 ))}
             </div>
 
-            {/* Bottom bar */}
+            {/* ===== BOTTOM BAR ===== */}
             <div
                 className="absolute bottom-0 left-0 right-0 z-[800] flex items-center gap-2"
                 style={{
@@ -196,18 +511,20 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift }: FloatingBarPr
                         padding: '7px 12px',
                         border: '1px solid rgba(212,204,190,0.3)',
                     }}
-                    onClick={() => {
-                        setShowMessages(true)
-                    }}
+                    onClick={handleInputAreaClick}
                 >
                     {showMessages ? (
                         <div className="flex items-center gap-1 flex-1">
                             <input
                                 type="text"
                                 value={newMessage}
-                                onChange={(e) => setNewMessage(e.target.value)}
-                                onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+                                onChange={(e) => {
+                                    setNewMessage(e.target.value)
+                                    if (error) clearError()
+                                }}
+                                onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                                 placeholder="Gửi lời chúc..."
+                                maxLength={1000}
                                 className="flex-1 bg-transparent outline-none border-none"
                                 style={{
                                     fontFamily: 'var(--font-primary)',
@@ -217,16 +534,41 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift }: FloatingBarPr
                                 autoFocus
                                 onClick={(e) => e.stopPropagation()}
                             />
-                            <button
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    sendMessage()
-                                }}
-                                className="cursor-pointer"
-                                style={{ background: 'none', border: 'none', padding: '2px' }}
-                            >
-                                <Send size={14} color="#4A5D3A" />
-                            </button>
+                            {/* Send button / Cooldown / Sending spinner */}
+                            {isSending ? (
+                                <Loader2
+                                    size={14}
+                                    className="animate-spin"
+                                    color="#8B7355"
+                                />
+                            ) : cooldownRemaining > 0 ? (
+                                <span
+                                    style={{
+                                        fontFamily: 'var(--font-primary)',
+                                        fontSize: '11px',
+                                        color: '#B0A08C',
+                                        minWidth: '20px',
+                                        textAlign: 'center',
+                                    }}
+                                >
+                                    {cooldownRemaining}s
+                                </span>
+                            ) : (
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        handleSend()
+                                    }}
+                                    className="cursor-pointer"
+                                    style={{
+                                        background: 'none',
+                                        border: 'none',
+                                        padding: '2px',
+                                    }}
+                                >
+                                    <Send size={14} color="#4A5D3A" />
+                                </button>
+                            )}
                         </div>
                     ) : (
                         <>
@@ -270,23 +612,6 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift }: FloatingBarPr
                     </span>
                 </button>
 
-                {/* Gift button */}
-                {/* <button
-                    onClick={onScrollToGift}
-                    className="flex items-center justify-center shrink-0 cursor-pointer"
-                    style={{
-                        width: '34px',
-                        height: '34px',
-                        borderRadius: '50%',
-                        background: '#E87461',
-                        border: 'none',
-                        color: 'white',
-                        boxShadow: '0 2px 8px rgba(232,116,97,0.35)',
-                    }}
-                >
-                    <Gift size={15} strokeWidth={1.8} />
-                </button> */}
-
                 {/* Album button */}
                 <button
                     onClick={onScrollToGallery}
@@ -320,13 +645,24 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift }: FloatingBarPr
                 </button>
             </div>
 
+            {/* ===== NAME MODAL ===== */}
+            <NameModal
+                open={nameModalOpen}
+                onConfirm={handleNameConfirm}
+                onClose={() => setNameModalOpen(false)}
+            />
+
             <style>{`
-        @keyframes floatingHeart {
-          0% { opacity: 1; transform: translateY(0) scale(1); }
-          50% { opacity: 0.8; }
-          100% { opacity: 0; transform: translateY(-130px) scale(0.6); }
-        }
-      `}</style>
+                @keyframes floatingHeart {
+                    0% { opacity: 1; transform: translateY(0) scale(1); }
+                    50% { opacity: 0.8; }
+                    100% { opacity: 0; transform: translateY(-130px) scale(0.6); }
+                }
+                @keyframes peekScrollLoop {
+                    0% { transform: translateY(0); }
+                    100% { transform: translateY(-50%); }
+                }
+            `}</style>
         </>
     )
 }
