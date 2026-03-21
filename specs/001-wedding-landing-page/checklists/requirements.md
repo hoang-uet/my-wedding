@@ -1,36 +1,49 @@
-# Specification Quality Checklist: Trang Landing Page Thiệp Cưới Online
+# Requirements Checklist — 001 Wedding Landing Page
 
-**Purpose**: Xác nhận spec hoàn chỉnh và đạt chất lượng trước khi chuyển sang giai đoạn lập kế hoạch
-**Created**: 2026-03-11
-**Feature**: [spec.md](../spec.md)
+**Cập nhật**: 2026-03-21
 
-## Chất lượng Nội dung
+## Phong bì & Nhạc nền
+- [x] FR-001: Phong bì hiển thị, click thủ công để mở
+- [x] FR-002: Animation mở ~1.7s (flap + card + hearts)
+- [x] FR-003: Nhạc nền phát khi mở phong bì lần đầu
+- [x] FR-004: Tôn trọng prefers-reduced-motion
 
-- [x] Không có implementation details (ngôn ngữ, framework, API cụ thể)
-- [x] Tập trung vào giá trị người dùng và nhu cầu nghiệp vụ
-- [x] Viết cho stakeholder phi kỹ thuật có thể hiểu được
-- [x] Tất cả section bắt buộc đã hoàn thiện (User Scenarios, Requirements, Success Criteria)
+## Thông tin gia đình & Sự kiện
+- [x] FR-005: FamilyInfo 2 cột (Nhà Trai / Nhà Gái)
+- [x] FR-006: Ngày dương, ngày âm, giờ, thứ
+- [x] FR-007: 2 VenueCard với tên nhà hàng, địa chỉ
+- [x] FR-008: Link "Xem bản đồ" → Google Maps
 
-## Độ hoàn chỉnh của Requirements
+## Nội dung cảm xúc
+- [x] FR-009: PhotoHero full-width + quote
+- [x] FR-010: CouplePortraits polaroid
+- [x] FR-011: OurStory 3 đoạn
+- [x] FR-012: CalendarHighlight tháng 4, ngày 5 highlight
+- [x] FR-013: WeddingTimeline 3 sự kiện
+- [x] FR-014: PhotoQuoteSplit chia đôi
+- [x] FR-015: Countdown flip clock
 
-- [x] Không còn marker [NEEDS CLARIFICATION] nào trong spec
-- [x] Các requirement có thể kiểm thử và không mơ hồ
-- [x] Success criteria đo lường được (có con số cụ thể: 2 giây, 3MB, 60 giây...)
-- [x] Success criteria không chứa implementation details
-- [x] Tất cả acceptance scenario cho 4 user story đã được định nghĩa
-- [x] Edge cases đã được xác định (6 edge case)
-- [x] Scope được giới hạn rõ ràng (5 section, không thêm tính năng ngoài phạm vi)
-- [x] Dependencies và assumptions đã ghi chép (section Assumptions cuối spec)
+## Gallery
+- [x] FR-016: Grid 2 cột, 6 preview
+- [x] FR-017: Lightbox 19 ảnh + bộ đếm
+- [x] FR-018: Keyboard navigation
+- [x] FR-019: Lazy-load + blur placeholder
+- [ ] FR-020: Swipe/touch trên mobile
 
-## Sẵn sàng Triển khai
+## RSVP (Bỏ qua phần này vì không muốn khách mời phải điền form nữa, chỉ muốn họ xem thông tin thôi)
 
-- [x] Tất cả functional requirements (FR-001 → FR-023) có acceptance criteria rõ ràng
-- [x] User scenarios bao phủ các luồng chính (mở thiệp, xem gallery, RSVP, guestbook)
-- [x] Feature đáp ứng các kết quả đo lường trong Success Criteria (SC-001 → SC-008)
-- [x] Không có implementation details lọt vào spec
+## Mừng cưới
+- [x] FR-025: WeddingGift minh họa + text
+- [ ] FR-026: Hiển thị thông tin ngân hàng -> Skip (không cần nữa vì không muốn mọi người chuyển khoản nữa)
 
-## Ghi chú
+## FloatingBar
+- [x] FR-027: Sticky bottom bar
+- [x] FR-028: Bắn hearts animation
+- [x] FR-029: Nút camera scroll Gallery
+- [ ] FR-030: Kết nối lời chúc với backend
 
-- Spec đã vượt qua tất cả 16 mục kiểm tra — sẵn sàng cho `/speckit.plan`.
-- Ảnh cưới thực tế cần được cung cấp trước khi triển khai (xem Assumptions trong spec).
-- Tính năng cá nhân hóa tên khách (FR-009) là optional — cần xác nhận có triển khai không khi lập kế hoạch.
+## Layout & Config
+- [x] FR-031: Phone frame 430px
+- [x] FR-032: Custom scrollbar
+- [x] FR-033: Dữ liệu tập trung wedding-config.ts
+- [ ] FR-034: Cá nhân hóa tên khách qua URL

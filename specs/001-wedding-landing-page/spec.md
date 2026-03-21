@@ -1,156 +1,373 @@
 # Feature Specification: Trang Landing Page Thiệp Cưới Online
 
-**Feature Branch**: `001-wedding-landing-page`
+**Feature ID**: 001-wedding-landing-page
 **Created**: 2026-03-11
-**Status**: Draft
-**Input**: Trang Landing Page Thiệp Cưới Online với hiệu ứng mở thiệp, thông tin sự kiện 2 lễ (Vu Quy & Tân Hôn), album ảnh cưới, form RSVP và guestbook gửi lời chúc
+**Updated**: 2026-03-21
+**Status**: Đã triển khai (frontend hoàn chỉnh, chưa có backend)
 
-## User Scenarios & Testing *(mandatory)*
+## Tổng quan
 
-### User Story 1 — Khách mời mở thiệp và xem thông tin hôn lễ (Priority: P1)
-
-Khách mời truy cập đường link thiệp cưới, được chào đón bởi hiệu ứng phong bì từ từ mở ra. Sau khi animation hoàn tất, trang hiện ra với ảnh cô dâu chú rể, tên hai người và ngày cưới. Khách cuộn xuống để đọc đầy đủ thông tin sự kiện: hai lễ Vu Quy và Tân Hôn với địa điểm, thời gian và nút chỉ đường.
-
-**Why this priority**: Đây là trải nghiệm cốt lõi — mọi khách mời đều cần xem thông tin này. Nếu chỉ triển khai duy nhất story này, trang đã có thể dùng được như một thiệp cưới điện tử hoàn chỉnh.
-
-**Independent Test**: Mở trang trên trình duyệt, xem animation mở thiệp, kiểm tra ảnh và tên hiện đúng, cuộn xuống kiểm tra thông tin 2 lễ và nút chỉ đường hoạt động.
-
-**Acceptance Scenarios**:
-
-1. **Given** khách mời mở đường link thiệp cưới lần đầu, **When** trang tải xong, **Then** hiệu ứng phong bì tự động bắt đầu mở và hoàn tất trong vòng 3 giây.
-2. **Given** animation mở thiệp hoàn tất, **When** khách nhìn vào màn hình, **Then** ảnh nổi bật của cô dâu chú rể, tên hai người và ngày cưới hiển thị rõ ràng.
-3. **Given** khách cuộn xuống phần thông tin sự kiện, **When** nhìn vào bố cục, **Then** thấy rõ 2 cột: Lễ Vu Quy (bên trái) và Lễ Tân Hôn (bên phải), mỗi bên có địa điểm, thời gian và nút "Chỉ đường".
-4. **Given** khách nhấn nút "Chỉ đường" của bất kỳ lễ nào, **When** thao tác được xử lý, **Then** Google Maps mở ra (hoặc chuyển hướng) với địa chỉ tượng ứng đã điền sẵn.
-5. **Given** khách xem trang trên điện thoại di động, **When** trang hiển thị, **Then** bố cục 2 cột tự động chuyển thành bố cục 1 cột dọc, không bị tràn ngang.
+Single-page application thiệp cưới online với layout **phone frame** (max 430px, center trên desktop). Trải nghiệm bắt đầu từ phong bì mở bằng tay → nội dung cuộn dọc qua các section → gallery ảnh → RSVP → lời cảm ơn. Nhạc nền tự động phát khi mở phong bì.
 
 ---
 
-### User Story 2 — Khách mời xem album ảnh cưới (Priority: P2)
+## User Scenarios & Testing
 
-Khách mời cuộn đến phần album, thấy các ảnh cưới xếp dạng lưới (grid) hoặc slider hiện đại. Họ bấm vào một ảnh để xem phóng to toàn màn hình (lightbox), có thể vuốt/nhấn để chuyển ảnh.
+### User Story 1 — Mở phong bì và nghe nhạc nền (Priority: P1)
 
-**Why this priority**: Album ảnh là yếu tố cảm xúc quan trọng, giúp khách kết nối và chia sẻ niềm vui. Có thể triển khai và kiểm tra độc lập với các section khác.
+Khách mời truy cập link, thấy phong bì với wax seal và hoa lan trang trí. Khách **chạm/click** vào phong bì để mở. Flap lật lên, card trượt ra kèm trái tim bay. Nhạc nền "Golden Hour" bắt đầu phát với fade-in. Sau khi mở, khách cuộn xuống xem nội dung.
 
-**Independent Test**: Cuộn đến section Gallery, kiểm tra ảnh hiện đúng dạng grid/slider, bấm vào ảnh để xem lightbox, kiểm tra điều hướng giữa các ảnh và nút đóng.
+**Acceptance Scenarios:**
 
-**Acceptance Scenarios**:
+1. **Given** khách mở link lần đầu, **When** trang tải xong, **Then** phong bì hiển thị ở trạng thái `closed` với animation float lên xuống (20px, 3s).
+2. **Given** phong bì đang `closed`, **When** khách click/tap, **Then** flap xoay rotateX(180deg) trong 1.2s, card trượt lên trong 1s (delay 0.5s), 3 trái tim bay lên — tổng animation ~1.7s.
+3. **Given** phong bì mở lần đầu, **When** animation bắt đầu, **Then** nhạc nền phát với fade-in 800ms tới volume 0.6, loop vô hạn.
+4. **Given** phong bì đang `open`, **When** khách click lần nữa, **Then** phong bì đóng lại (flap close 0.8s, card hạ 0.6s) — tổng ~1.6s.
+5. **Given** thiết bị bật `prefers-reduced-motion`, **When** trang load, **Then** tất cả animation bị tắt, nội dung hiển thị trực tiếp.
 
-1. **Given** khách cuộn đến phần Gallery, **When** trang hiển thị, **Then** các ảnh cưới xếp dạng grid với tối thiểu 6 ảnh, mỗi ảnh có tỉ lệ đồng đều và hiển thị rõ.
-2. **Given** khách bấm vào một ảnh trong gallery, **When** thao tác được ghi nhận, **Then** lightbox mở ra hiển thị ảnh phóng to toàn màn hình với nút đóng và điều hướng trái/phải.
-3. **Given** lightbox đang mở, **When** khách bấm nút đóng hoặc nhấn phím Escape, **Then** lightbox đóng lại và trang trở về trạng thái bình thường.
-4. **Given** khách xem gallery trên điện thoại, **When** trang hiển thị, **Then** grid tự điều chỉnh số cột phù hợp (ví dụ: 2 cột trên mobile) và lightbox hỗ trợ thao tác vuốt (swipe).
-
----
-
-### User Story 3 — Khách mời xác nhận tham dự (RSVP) (Priority: P3)
-
-Khách mời tìm đến form RSVP, điền tên, chọn có/không tham dự và số lượng người đi kèm. Sau khi gửi, họ nhận được thông báo xác nhận thành công.
-
-**Why this priority**: RSVP giúp gia đình cô dâu chú rể lên kế hoạch. Đây là tính năng interactive quan trọng nhưng không ảnh hưởng đến việc xem thông tin cơ bản.
-
-**Independent Test**: Điền đầy đủ form RSVP, gửi đi, kiểm tra thông báo xác nhận hiện ra. Thử gửi form thiếu thông tin để kiểm tra validation.
-
-**Acceptance Scenarios**:
-
-1. **Given** khách cuộn đến phần RSVP, **When** trang hiển thị, **Then** form gọn gàng với 3 trường: tên khách mời (text), tham dự hay không (Yes/No toggle hoặc radio), số người đi cùng (số nguyên ≥ 0).
-2. **Given** khách điền đầy đủ thông tin hợp lệ và bấm gửi, **When** form được xử lý, **Then** thông báo xác nhận thành công hiện ra trong vòng 3 giây.
-3. **Given** khách bấm gửi mà chưa điền tên, **When** form được kiểm tra, **Then** thông báo lỗi validation hiển thị ngay tại trường bị thiếu, form không được gửi.
-4. **Given** khách chọn "Không tham dự", **When** nhìn vào form, **Then** trường số người đi cùng bị ẩn hoặc vô hiệu hóa tự động.
+**Chi tiết kỹ thuật:**
+- State machine: `closed` → `opening` → `open` → `closing` → `closed`
+- Z-index layers: body(0), card(1-2), pocket(3), flap(5), hearts(7), wax-seal(10)
+- Hearts: 3 CSS hearts với float/sway/scale khác nhau (4-7s duration)
+- Trang trí: orchid-bouquet (top-right), orchid-single (left) animate khi flap mở
+- Card content: Tên cặp đôi, ngày "05.04.2026", text "Trân trọng kính mời..."
 
 ---
 
-### User Story 4 — Khách mời gửi và đọc lời chúc (Guestbook) (Priority: P4)
+### User Story 2 — Xem thông tin gia đình và sự kiện (Priority: P1)
 
-Khách mời gõ lời chúc mừng vào ô nhập liệu và gửi đi. Lời chúc hiện ra ngay trong danh sách bên dưới dạng bong bóng chat, cùng với tên và thời gian gửi. Khách có thể đọc tất cả lời chúc đã được gửi trước đó.
+Sau khi mở phong bì, khách cuộn xuống qua ảnh divider, thấy thông tin hai họ (Nhà Trai / Nhà Gái) với tên cha mẹ và tỉnh thành. Tiếp theo là thông tin 2 lễ cưới với địa điểm, ngày giờ, ngày âm lịch và link Google Maps.
 
-**Why this priority**: Guestbook tạo không khí vui vẻ và cộng đồng cho thiệp cưới. Là tính năng tương tác bổ trợ, được triển khai sau khi các tính năng thiết yếu hoàn thành.
+**Acceptance Scenarios:**
 
-**Independent Test**: Nhập lời chúc và tên, gửi đi, kiểm tra lời chúc xuất hiện trong danh sách với tên và thời gian đúng. Kiểm tra danh sách hiển thị những lời chúc đã gửi trước đó.
+1. **Given** khách cuộn qua WeddingPhotoDivider, **When** FamilyInfo vào viewport, **Then** 2 cột Nhà Trai / Nhà Gái fade-in stagger, mỗi cột hiển thị: Ông (tên cha), Bà (tên mẹ), tỉnh thành.
+2. **Given** khách cuộn đến EventDetails, **When** section vào viewport, **Then** hiển thị ngày dương lịch (04/05/2026), ngày âm lịch ("Tức ngày 18 tháng 02 năm 2026"), giờ ("13:00, Chủ Nhật").
+3. **Given** EventDetails hiển thị, **When** khách nhìn 2 VenueCard, **Then** thấy: Lễ Thành Hôn (Nhà Trai) và Lễ Vu Quy (Nhà Gái), mỗi card có tên nhà hàng, địa chỉ, link "Xem bản đồ".
+4. **Given** khách nhấn "Xem bản đồ", **When** trình duyệt xử lý, **Then** Google Maps mở ra với địa chỉ tương ứng (mapsUrl từ config).
 
-**Acceptance Scenarios**:
-
-1. **Given** khách cuộn đến phần Guestbook, **When** trang hiển thị, **Then** thấy ô nhập tên, ô nhập lời chúc, nút gửi và danh sách các lời chúc đã có.
-2. **Given** khách điền tên, nhập lời chúc và bấm gửi, **When** thao tác được xử lý, **Then** lời chúc xuất hiện ngay trong danh sách với tên người gửi và thời gian gửi, ô nhập được xóa sạch.
-3. **Given** khách bấm gửi mà ô lời chúc trống, **When** form được kiểm tra, **Then** thông báo yêu cầu nhập lời chúc hiện ra, không gửi được.
-4. **Given** nhiều lời chúc đã được gửi, **When** khách xem danh sách, **Then** lời chúc mới nhất hiển thị trên cùng (hoặc cuộn tự động xuống cuối), mỗi lời chúc có giao diện rõ ràng như bong bóng chat.
-5. **Given** khách tải lại trang, **When** trang hiển thị phần Guestbook, **Then** các lời chúc đã gửi trước đó vẫn còn hiển thị (dữ liệu được lưu trữ).
+**Chi tiết kỹ thuật:**
+- FamilyInfo: 2-column grid, DoubleLeavesIcon divider giữa
+- EventDetails: FloralBranch SVG ở góc, VineFrame top-left, CornerOrchidCluster bottom-right
+- Ornamental dividers bằng SVG (lines & circles)
+- Scroll animation: stagger 150ms giữa các children
 
 ---
 
-### Edge Cases
+### User Story 3 — Xem ảnh đôi, câu chuyện tình yêu và lịch cưới (Priority: P2)
 
-- Khách truy cập trang khi mạng chậm: skeleton loader hoặc ảnh placeholder hiển thị trong khi ảnh tải.
-- Tên khách mời hoặc lời chúc quá dài (>200 ký tự): nội dung bị cắt ngắn hoặc tự xuống dòng, không phá vỡ layout.
-- Thiết bị không hỗ trợ CSS animation: trang hiển thị trực tiếp nội dung sau thiệp (bỏ qua animation), không bị kẹt màn hình trắng.
-- Khách tắt JavaScript: toàn bộ nội dung tĩnh (Hero, thông tin sự kiện, gallery) hiển thị bình thường; RSVP và Guestbook hiển thị thông báo yêu cầu bật JavaScript.
-- Số người đi cùng nhập giá trị âm hoặc ký tự chữ: validation từ chối và yêu cầu nhập số nguyên không âm.
-- Guestbook bị spam (nhiều lời chúc liên tiếp từ một người): giới hạn tốc độ gửi ở phía client (ví dụ: tối thiểu 10 giây giữa 2 lần gửi).
+Khách tiếp tục cuộn qua các section cảm xúc: ảnh hero với quote tiếng Anh, ảnh polaroid cặp đôi, câu chuyện tình yêu 3 đoạn, lịch tháng 4 với ngày cưới highlight, timeline sự kiện và đếm ngược.
 
-## Requirements *(mandatory)*
+**Acceptance Scenarios:**
+
+1. **Given** khách cuộn đến PhotoHero, **When** section vào viewport, **Then** ảnh hero full-width (480px height) với overlay gradient, quote "All of me loves All of you" (font calligraphy-vn 38px) fade-in từ dưới lên.
+2. **Given** khách cuộn đến CouplePortraits, **When** ảnh vào viewport, **Then** 2 ảnh polaroid chồng lên nhau (groom: rotated -5deg, bride: rotated +4deg) với float animation nhẹ, hoa lan trang trí xung quanh.
+3. **Given** khách cuộn đến OurStory, **When** section vào viewport, **Then** tiêu đề "Our story" (55px, script-elegant) và 3 đoạn văn tiếng Việt fade-in stagger 150ms, trang trí leaf sprig ornaments.
+4. **Given** khách cuộn đến CalendarHighlight, **When** section vào viewport, **Then** lịch tháng 4/2026 hiển thị trên nền ảnh cưới, ngày 5 được highlight bằng heart-highlight.png với pulsing animation, các ô stagger 25ms.
+5. **Given** khách cuộn đến WeddingTimeline, **When** section vào viewport, **Then** 3 sự kiện hiển thị dạng grid: 17:00 Đón Khách (camera), 17:30 Khai Tiệc (champagne), 19:00 Văn Nghệ (rings). Icon trong circle 72px.
+6. **Given** khách cuộn đến PhotoQuoteSplit, **When** section vào viewport, **Then** layout chia đôi: trái là ảnh, phải là nền gradient xanh olive (#5A7247→#3C4E30) với quote tiếng Việt, dấu ngoặc kép lớn, red heart icon ở mép giữa.
+7. **Given** khách cuộn đến Countdown, **When** section vào viewport, **Then** flip clock hiển thị Ngày:Giờ:Phút:Giây đếm ngược tới 2026-04-05T13:15+07:00. Mỗi unit là card 72×82px (olive #4E6440/#435838), flip animation 500ms. Nếu đã qua ngày cưới: hiển thị "Hôm nay là ngày trọng đại!".
+
+---
+
+### User Story 4 — Xem album ảnh cưới (Priority: P2)
+
+Khách cuộn đến Gallery, thấy 6 ảnh preview dạng grid 2 cột. Ảnh cuối hiển thị overlay "+N" (số ảnh còn lại). Click vào ảnh bất kỳ mở lightbox xem toàn bộ 19 ảnh.
+
+**Acceptance Scenarios:**
+
+1. **Given** khách cuộn đến Gallery, **When** section vào viewport, **Then** 6 ảnh preview hiển thị dạng grid 2 cột với stagger animation 100ms. Ảnh thứ 1 và 4 chiếm full-width (16:9), còn lại tỷ lệ 3:4.
+2. **Given** gallery hiển thị, **When** khách click vào ảnh bất kỳ, **Then** lightbox mở full-screen hiển thị ảnh phóng to, bộ đếm ảnh ở dưới (VD: "3/19").
+3. **Given** lightbox đang mở, **When** khách nhấn phím Arrow Left/Right, **Then** chuyển ảnh trước/sau. Nhấn Escape đóng lightbox.
+4. **Given** lightbox đang mở, **When** khách click nút Previous/Next, **Then** chuyển ảnh tương ứng.
+5. **Given** ảnh preview thứ 6 (cuối), **When** hiển thị, **Then** overlay tối với text "+13" (19 tổng - 6 preview).
+
+**Hạn chế hiện tại:**
+- Chưa hỗ trợ swipe/touch gesture trên mobile trong lightbox
+- FloatingPetals (5 cánh hoa) hiển thị trong Gallery với opacity rất thấp (0.15-0.25)
+
+---
+
+### User Story 5 — Xác nhận tham dự RSVP (Priority: P3)
+
+Khách điền form RSVP gồm tên, xác nhận tham dự, số người đi kèm (điều kiện) và lời chúc (tùy chọn).
+
+**Acceptance Scenarios:**
+
+1. **Given** khách cuộn đến RSVPForm, **When** form hiển thị, **Then** thấy 4 trường: Họ tên (text, bắt buộc), Tham dự (Yes/No radio), Số người (chỉ hiện khi chọn Yes), Lời chúc (textarea, tùy chọn).
+2. **Given** khách điền đầy đủ và nhấn gửi, **When** form xử lý, **Then** button loading 1s rồi hiển thị "Cảm ơn bạn! Chúng mình mong gặp bạn nhé ♡".
+3. **Given** khách nhấn gửi mà tên trống hoặc < 2 ký tự, **When** validation chạy, **Then** border đỏ + message "Vui lòng nhập họ tên (ít nhất 2 ký tự)".
+4. **Given** khách chọn "Không tham dự", **When** form cập nhật, **Then** trường số người ẩn đi.
+
+**Hạn chế hiện tại:**
+- **KHÔNG có backend thật** — form chỉ simulate delay 1s rồi hiển thị success
+- Dữ liệu RSVP không được gửi đi hay lưu trữ
+
+---
+
+### User Story 6 — Thanh điều hướng cố định và tương tác (Priority: P2)
+
+FloatingBar cố định ở bottom màn hình cho phép gửi lời chúc nhanh, bắn trái tim và nhảy tới gallery.
+
+**Acceptance Scenarios:**
+
+1. **Given** trang đã scroll qua phong bì, **When** FloatingBar hiển thị, **Then** thấy: ô "Gửi lời chúc..." (trái), nút trái tim (giữa), nút camera với badge đỏ "6" (phải).
+2. **Given** khách nhấn vào ô lời chúc, **When** panel mở, **Then** hiển thị danh sách lời chúc mẫu (5 mock messages) và ô nhập + nút gửi. Nút X để đóng.
+3. **Given** khách nhấn nút trái tim, **When** animation chạy, **Then** 7 trái tim bay lên với kích thước ngẫu nhiên (14-26px), màu sắc khác nhau, spread ngang -40→+40px, fade-out trong 900ms.
+4. **Given** khách nhấn nút camera, **When** trang xử lý, **Then** smooth scroll xuống section Gallery.
+
+**Hạn chế hiện tại:**
+- Danh sách lời chúc là **MOCK_MESSAGES hardcoded** — chưa kết nối Supabase
+- Badge "6" trên nút camera là hardcoded, không lấy từ số ảnh thật
+- Nút Gift đã bị comment out trong code
+
+---
+
+### User Story 7 — Mừng cưới và lời cảm ơn (Priority: P3)
+
+Khách cuộn đến phần mừng cưới và kết thúc bằng lời cảm ơn.
+
+**Acceptance Scenarios:**
+
+1. **Given** khách cuộn đến WeddingGift, **When** section hiển thị, **Then** thấy minh họa hộp quà SVG, text cảm ơn và trang trí hoa.
+2. **Given** khách cuộn đến ThankYou, **When** section hiển thị, **Then** ảnh cưới full-width (320px height) với text "Thank you!" (52px, script-elegant), tên cặp đôi và ngày "05 . 04 . 2026".
+
+**Hạn chế hiện tại:**
+- **WeddingGift KHÔNG hiển thị thông tin ngân hàng** mặc dù config có đầy đủ: bankName (Vietcombank), accountNumber, accountHolder. Đây là gap cần bổ sung.
+
+---
+
+### User Story 8 — Nhạc nền (Priority: P2)
+
+MusicButton (vinyl disc) ở góc trên phải cho phép bật/tắt nhạc.
+
+**Acceptance Scenarios:**
+
+1. **Given** nhạc đang phát, **When** khách nhìn MusicButton, **Then** vinyl disc xoay (3s/vòng) với gradient xanh đậm và groove rings.
+2. **Given** nhạc đang phát, **When** khách click MusicButton, **Then** volume fade-out trong 800ms rồi pause. Disc dừng xoay, chuyển sang frosted white.
+3. **Given** nhạc đang tắt, **When** khách click MusicButton, **Then** play với fade-in 800ms tới volume 0.6.
+
+**Chi tiết kỹ thuật:**
+- Audio: `golden-hour.mp3`, preload: 'none' (lazy load)
+- Fade: requestAnimationFrame, ease-in-out quadratic, 800ms
+- Target volume: 0.6, loop: true
+- Xử lý autoplay policy: catch play() error im lặng
+
+---
+
+## Edge Cases (đã xử lý)
+
+| Case | Xử lý |
+|------|-------|
+| `prefers-reduced-motion` | Tất cả animation bị disable ngay lập tức (useScrollAnimation, floral, hearts) |
+| Ảnh chưa tải xong | Blur placeholder hiển thị, ảnh thật fade-in khi load xong (WeddingImage) |
+| Autoplay bị chặn | `play()` error bị catch, không crash. Khách dùng MusicButton để bật thủ công |
+| Đã qua ngày cưới | Countdown hiển thị "Hôm nay là ngày trọng đại!" thay vì số âm |
+| Gallery lightbox keyboard | Arrow keys + Escape hoạt động khi lightbox mở |
+
+## Edge Cases (chưa xử lý)
+
+| Case | Tình trạng |
+|------|-----------|
+| Tên/lời chúc quá dài | Không có giới hạn ký tự trên RSVP form |
+| Gallery swipe trên mobile | Lightbox chưa hỗ trợ touch/swipe |
+| JavaScript bị tắt | Trang trắng (SPA, không có SSR/fallback) |
+| Guestbook spam | Chưa có rate limit (FloatingBar dùng mock data) |
+| URL parameter cá nhân hóa tên khách | Chưa triển khai |
+
+---
+
+## Requirements
 
 ### Functional Requirements
 
-**Hero Section**
-- **FR-001**: Trang PHẢI hiển thị hiệu ứng phong bì mở ra (envelope animation) tự động khi tải xong.
-- **FR-002**: Sau khi animation hoàn tất, trang PHẢI hiển thị ảnh nổi bật của cô dâu và chú rể.
-- **FR-003**: Tên cô dâu, tên chú rể và ngày cưới PHẢI hiển thị rõ ràng trên Hero section.
-- **FR-004**: Animation PHẢI có static fallback khi thiết bị bật `prefers-reduced-motion`.
+**Phong bì & Nhạc nền**
+- **FR-001**: ✅ Phong bì hiển thị khi tải xong, yêu cầu **click thủ công** để mở (không auto-open).
+- **FR-002**: ✅ Animation mở: flap xoay 1.2s + card trượt 1s + hearts bay — tổng ~1.7s.
+- **FR-003**: ✅ Nhạc nền phát tự động khi phong bì mở lần đầu, fade-in 800ms.
+- **FR-004**: ✅ `prefers-reduced-motion` được tôn trọng — tắt toàn bộ animation.
 
-**Thông tin Sự kiện**
-- **FR-005**: Trang PHẢI hiển thị thông tin Lễ Vu Quy gồm: địa điểm, ngày và giờ tổ chức.
-- **FR-006**: Trang PHẢI hiển thị thông tin Lễ Tân Hôn gồm: địa điểm, ngày và giờ tổ chức.
-- **FR-007**: Mỗi lễ PHẢI có nút "Chỉ đường" mở Google Maps với địa chỉ tương ứng đã điền sẵn.
-- **FR-008**: Bố cục hai lễ PHẢI chia thành 2 cột trên desktop và chuyển thành 1 cột dọc trên mobile.
-- **FR-009**: Trang CÓ THỂ hiển thị tên khách mời được cá nhân hóa thông qua URL parameter (ví dụ: `?guest=Nguyễn Văn A`).
+**Thông tin gia đình & Sự kiện**
+- **FR-005**: ✅ FamilyInfo hiển thị 2 cột Nhà Trai / Nhà Gái (cha, mẹ, tỉnh thành).
+- **FR-006**: ✅ EventDetails hiển thị ngày dương lịch, ngày âm lịch, giờ, thứ.
+- **FR-007**: ✅ 2 VenueCard: Lễ Thành Hôn (Nhà Trai) và Lễ Vu Quy (Nhà Gái) với tên nhà hàng, địa chỉ.
+- **FR-008**: ✅ Link "Xem bản đồ" mở Google Maps với mapsUrl từ config.
+
+**Nội dung cảm xúc**
+- **FR-009**: ✅ PhotoHero full-width với quote "All of me loves All of you".
+- **FR-010**: ✅ CouplePortraits dạng polaroid chồng lên nhau, hoa lan trang trí.
+- **FR-011**: ✅ OurStory: tiêu đề + 3 đoạn văn từ config.story.
+- **FR-012**: ✅ CalendarHighlight: lịch tháng 4/2026, ngày 5 highlight với heart pulsing.
+- **FR-013**: ✅ WeddingTimeline: 3 sự kiện (17:00, 17:30, 19:00) với icon SVG.
+- **FR-014**: ✅ PhotoQuoteSplit: chia đôi ảnh + quote trên nền gradient xanh olive.
+- **FR-015**: ✅ Countdown flip clock đếm ngược tới ngày cưới.
 
 **Gallery**
-- **FR-010**: Trang PHẢI hiển thị ít nhất 6 ảnh cưới theo dạng grid hoặc slider.
-- **FR-011**: Khách mời PHẢI có thể bấm vào ảnh để xem lightbox phóng to toàn màn hình.
-- **FR-012**: Lightbox PHẢI có nút đóng, nút chuyển ảnh trái/phải và hỗ trợ phím Escape.
-- **FR-013**: Ảnh trong gallery PHẢI được lazy load khi cuộn đến.
+- **FR-016**: ✅ Grid 2 cột, 6 ảnh preview (ảnh 1 & 4 full-width 16:9, còn lại 3:4).
+- **FR-017**: ✅ Lightbox full-screen với 19 ảnh, bộ đếm, nút prev/next.
+- **FR-018**: ✅ Keyboard navigation (Arrow keys, Escape).
+- **FR-019**: ✅ Ảnh lazy-load với blur placeholder (WeddingImage component).
+- **FR-020**: ⚠️ Chưa hỗ trợ swipe/touch trên mobile.
 
 **RSVP**
-- **FR-014**: Trang PHẢI có form RSVP với các trường: tên khách mời (bắt buộc), xác nhận tham dự (Yes/No, bắt buộc), số người đi kèm (không bắt buộc, mặc định 0).
-- **FR-015**: Form PHẢI validate trước khi gửi và hiển thị lỗi rõ ràng tại từng trường nếu thiếu thông tin bắt buộc.
-- **FR-016**: Sau khi gửi thành công, trang PHẢI hiển thị thông báo xác nhận.
-- **FR-017**: Trường số người đi kèm PHẢI bị ẩn hoặc vô hiệu hóa khi khách chọn "Không tham dự".
+- **FR-021**: ✅ Form: tên (bắt buộc), tham dự (Yes/No), số người (điều kiện), lời chúc (tùy chọn).
+- **FR-022**: ✅ Validation: tên ≥ 2 ký tự, hiển thị lỗi tại trường.
+- **FR-023**: ✅ Số người ẩn khi chọn "Không tham dự".
+- **FR-024**: ⚠️ Chỉ simulate — **chưa có backend** lưu trữ dữ liệu.
 
-**Guestbook**
-- **FR-018**: Trang PHẢI có ô nhập tên người gửi và ô nhập lời chúc.
-- **FR-019**: Sau khi gửi thành công, lời chúc PHẢI hiển thị ngay trong danh sách kèm tên và thời gian gửi.
-- **FR-020**: Danh sách lời chúc PHẢI được lưu trữ và vẫn hiển thị khi tải lại trang.
-- **FR-021**: Giao diện lời chúc PHẢI hiển thị theo dạng bong bóng chat hoặc thẻ (card) dễ đọc.
+**Mừng cưới**
+- **FR-025**: ✅ WeddingGift hiển thị minh họa và text cảm ơn.
+- **FR-026**: ❌ **Thông tin ngân hàng KHÔNG được render** (config có data nhưng component bỏ qua).
 
-**Toàn trang**
-- **FR-022**: Toàn bộ trang PHẢI hiển thị hoàn hảo (không tràn ngang, không vỡ layout) trên mobile (<768px), tablet (768px–1024px) và desktop (>1024px).
-- **FR-023**: Tất cả dữ liệu nội dung (tên, ngày, địa điểm, ảnh) PHẢI được tập trung trong một file data/config duy nhất.
+**FloatingBar**
+- **FR-027**: ✅ Sticky bottom bar: ô lời chúc, nút hearts, nút camera.
+- **FR-028**: ✅ Bắn 7 hearts ngẫu nhiên khi nhấn nút.
+- **FR-029**: ✅ Nút camera scroll đến Gallery.
+- **FR-030**: ⚠️ Danh sách lời chúc là **mock data hardcoded** — chưa kết nối backend.
 
-### Key Entities
+**Layout & Config**
+- **FR-031**: ✅ Phone frame 430px max, rounded 36px trên desktop, full-width trên mobile (<768px).
+- **FR-032**: ✅ Thin scrollbar custom (2px width).
+- **FR-033**: ✅ Tất cả dữ liệu nội dung tập trung trong `wedding-config.ts`.
+- **FR-034**: ❌ Chưa hỗ trợ cá nhân hóa tên khách qua URL parameter.
 
-- **WeddingConfig**: Toàn bộ thông tin đám cưới — tên cô dâu, tên chú rể, ngày cưới, ảnh nổi bật, URL ảnh cô dâu/chú rể.
-- **CeremonyEvent**: Đại diện cho một lễ (Vu Quy hoặc Tân Hôn) — tên lễ, địa điểm, giờ tổ chức, URL Google Maps.
-- **GalleryImage**: Một ảnh trong album — URL ảnh gốc, URL thumbnail, alt text mô tả.
-- **RSVPSubmission**: Phản hồi xác nhận tham dự của một khách — tên khách, trạng thái tham dự (Yes/No), số người đi kèm, thời gian gửi.
-- **GuestMessage**: Một lời chúc — tên người gửi, nội dung lời chúc, thời gian gửi.
+### Hệ thống trang trí (Floral Overlay)
 
-## Success Criteria *(mandatory)*
+5 module trang trí dùng xuyên suốt trang:
 
-### Measurable Outcomes
+| Module | Kích thước | Animation | Dùng tại |
+|--------|-----------|-----------|----------|
+| CornerOrchidCluster | 85-100px | floralSway 7s | EventDetails, RSVPForm |
+| OrchidBranchDivider | 140px wide | floralFloat 10s | Giữa OurStory và Calendar |
+| BouquetAccent | 130-160px | floralSway 8s | RSVPForm, OurStory |
+| VineFrame | 100×100px SVG | vineGrow 1.5s | Countdown, EventDetails |
+| FloatingPetals | 5 cánh hoa | petalDrift 9-17s | Gallery (opacity 0.15-0.25) |
 
-- **SC-001**: Khách mời có thể xem đầy đủ thông tin hôn lễ (tên, ngày, địa điểm 2 lễ) trong vòng 10 giây kể từ khi mở đường link.
-- **SC-002**: Trang tải xong và hiển thị First Contentful Paint trong dưới 2 giây trên kết nối 4G mobile.
-- **SC-003**: Tổng dung lượng trang (không tính gallery lazy load) dưới 3MB.
-- **SC-004**: 100% tính năng tương tác (RSVP, Guestbook, lightbox, chỉ đường) hoạt động bình thường trên iOS Safari và Android Chrome.
-- **SC-005**: Khách mời hoàn tất việc điền và gửi form RSVP trong dưới 60 giây.
-- **SC-006**: Lời chúc guestbook xuất hiện trong danh sách trong vòng 2 giây sau khi gửi.
-- **SC-007**: Trang hiển thị đúng bố cục và không có lỗi ngang trên tất cả màn hình từ 320px đến 2560px chiều rộng.
-- **SC-008**: Thay đổi tên, ngày cưới hoặc địa điểm chỉ cần sửa 1 file data/config, không cần sửa bất kỳ file giao diện nào.
+Tất cả có `aria-hidden="true"` và tôn trọng `prefers-reduced-motion`.
 
-## Assumptions
+---
 
-- Ảnh cưới thực tế sẽ được cung cấp và tối ưu trước khi triển khai; trong quá trình phát triển dùng ảnh placeholder cùng tỉ lệ.
-- Ngày, tên và địa điểm cụ thể sẽ được điền vào file data/config — spec này dùng giá trị mẫu.
-- Dữ liệu RSVP và Guestbook được lưu trữ qua dịch vụ bên thứ ba (ví dụ: Firebase Firestore hoặc dịch vụ form tương đương); không yêu cầu backend riêng.
-- Thiệp cưới không yêu cầu tính năng đăng nhập hay xác thực khách mời (trang công khai).
-- Tính năng cá nhân hóa tên khách mời (FR-009) là phần bổ sung — nếu không có URL parameter, phần chào tên khách được ẩn.
-- Phong cách thiết kế: màu sắc chủ đạo là tông màu pastel ấm (hồng nhạt, kem, vàng champagne), font chữ serif lãng mạn cho tiêu đề và sans-serif cho nội dung.
+## Key Entities (cấu trúc thực tế)
+
+```typescript
+// wedding-config.ts
+WeddingConfig {
+  couple: {
+    groom: { name, displayName, fullName }
+    bride: { name, displayName, fullName }
+    weddingDate: string // ISO 8601
+  }
+  quote: { hero: string, split: string }
+  story: string[] // 3 đoạn
+  families: {
+    groom: { father, mother, city }
+    bride: { father, mother, city }
+  }
+  event: {
+    time: string // ISO 8601
+    dayOfWeek, lunarDate: string
+    groom: { venue, address, mapsUrl }
+    bride: { venue, address, mapsUrl }
+  }
+  timeline: Array<{ time, label, icon }>
+  gift: { bankName, accountNumber, accountHolder }
+}
+
+// image-manifest.ts (auto-generated)
+ImageData {
+  blur: string    // base64 blur placeholder
+  srcSet: string  // responsive srcSet (320w, 640w, 960w, 1280w WebP)
+  src: string     // fallback src
+  width: number
+  height: number
+}
+```
+
+---
+
+## Thứ tự sections trong App.tsx
+
+| # | Component | Mô tả |
+|---|-----------|-------|
+| 1 | EnvelopeCard | Phong bì tương tác, trigger nhạc |
+| 2 | WeddingPhotoDivider | Ảnh divider full-width (380px) |
+| 3 | FamilyInfo | Thông tin 2 họ |
+| 4 | EventDetails | 2 VenueCard + ngày giờ |
+| 5 | PhotoHero | Ảnh hero + quote tiếng Anh |
+| 6 | CouplePortraits | Ảnh polaroid chồng |
+| 7 | OrchidBranchDivider | Hoa lan phân cách |
+| 8 | OurStory | 3 đoạn câu chuyện |
+| 9 | CalendarHighlight | Lịch tháng 4 + heart ngày 5 |
+| 10 | WeddingTimeline | 3 sự kiện timeline |
+| 11 | PhotoQuoteSplit | Ảnh + quote chia đôi |
+| 12 | Countdown | Flip clock đếm ngược |
+| 13 | Gallery | 6 preview + lightbox 19 ảnh |
+| 14 | RSVPForm | Form xác nhận tham dự |
+| 15 | WeddingGift | Phần mừng cưới (thiếu bank info) |
+| 16 | ThankYou | Ảnh + "Thank you!" kết thúc |
+
+**Overlay cố định:** MusicButton (top-right, z:900), FloatingBar (bottom, z:800)
+
+---
+
+## Thiết kế trực quan
+
+### Bảng màu
+| Vai trò | Màu | Hex |
+|---------|-----|-----|
+| Background chính | Cream/beige | #F0EBE2 |
+| Envelope body | Xanh olive đậm | #3C4E34 |
+| Countdown cards | Olive | #4E6440 / #435838 |
+| Quote background | Gradient olive | #5A7247 → #4A5D3A → #3C4E30 |
+| Text chính | Đậm gần đen | #030213 |
+
+### Hệ thống font (11 custom fonts)
+| Font | Vai trò | Ví dụ |
+|------|---------|-------|
+| Quicksand | Body text | Nội dung đoạn văn |
+| Playfair Display | Heading | Tiêu đề section |
+| Soul Note Display | Tên cặp đôi | "Minh Hoàng & Thanh Thư" |
+| Aquarelle | Save the date | Hero text |
+| Monsieur La Doulaise | Script lãng mạn | Ornamental text |
+| HoaTay1 | Thư pháp Việt | Decorative Vietnamese |
+| Scarlet Bradley | Tên nhà hàng | Venue names |
+| Summerfun | Label vui | Casual labels |
+| Signora | Lời mời phong bì | Envelope prompt |
+| Carlytte | Tên khách mời | Guest names |
+| The Artisan | Quote tiếng Anh | English quotes |
+
+---
+
+## Success Criteria
+
+- **SC-001**: ✅ Khách xem đầy đủ thông tin trong vòng 10s sau khi mở phong bì.
+- **SC-002**: Trang FCP < 2s trên 4G mobile (cần đo thực tế).
+- **SC-003**: ✅ Ảnh responsive 4 kích thước WebP + blur placeholder giúp tối ưu dung lượng.
+- **SC-004**: ⚠️ Gallery lightbox chưa hỗ trợ swipe trên mobile.
+- **SC-005**: ✅ RSVP form hoàn tất < 60s (4 trường đơn giản).
+- **SC-006**: ⚠️ Guestbook chưa triển khai thật (xem spec 002).
+- **SC-007**: ✅ Phone frame 430px đảm bảo layout nhất quán (không responsive truyền thống).
+- **SC-008**: ✅ Thay đổi nội dung chỉ cần sửa `wedding-config.ts`.
+
+---
+
+## Assumptions (cập nhật)
+
+- ~~Ảnh placeholder~~ → Ảnh thật đã có, đã tối ưu thành 4 kích thước WebP.
+- ~~Firebase Firestore~~ → Sẽ dùng **Supabase** cho backend (xem spec 002).
+- Layout không phải responsive truyền thống mà là **phone frame cố định 430px** center trên desktop.
+- Thiết kế: tông **xanh olive + cream**, **không phải** pastel hồng như dự kiến ban đầu.
+- Font: 11 custom fonts (không phải chỉ serif + sans-serif).
+- Phong bì: **click thủ công** để mở (không auto-open) — do autoplay policy.
+
+---
+
+## Việc cần làm (backlog)
+
+| Ưu tiên | Việc | Ghi chú |
+|---------|------|---------|
+| CAO | Hiển thị thông tin ngân hàng trong WeddingGift | Config có data, component chưa render |
+| CAO | Backend RSVP thật | Hiện tại chỉ simulate |
+| TRUNG BÌNH | Swipe gesture cho Gallery lightbox | Cần touch handler |
+| TRUNG BÌNH | Thay mock messages trong FloatingBar bằng Supabase | Xem spec 002 |
+| THẤP | Badge camera động (số ảnh thật thay vì hardcode "6") | Lấy từ image manifest |
+| THẤP | URL parameter cá nhân hóa tên khách | ?guest=Tên |

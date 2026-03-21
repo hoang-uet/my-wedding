@@ -1,0 +1,93 @@
+# ============================================================
+# .claudeignore - Wedding Invitation Project
+# Loai bo cac file/thu muc khong can thiet cho AI Agent context
+# ============================================================
+
+# --- Dependencies ---
+node_modules/
+.pnp/
+.pnp.js
+
+# --- Build Artifacts ---
+dist/
+dist-ssr/
+build/
+out/
+.next/
+.cache/
+
+# --- Environment Variables (nhay cam) ---
+.env
+.env.*
+.env.local
+.env.*.local
+
+# --- Logs ---
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# --- IDE & Editor ---
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# --- OS Files ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Testing Artifacts ---
+coverage/
+test-results/
+playwright-report/
+.playwright-mcp/
+.playwright-cli/
+blob-report/
+
+# --- Lock Files (khong can doc, chi can biet package.json) ---
+yarn.lock
+pnpm-lock.yaml
+package-lock.json
+
+# --- Binary & Media Files (khong the doc duoc) ---
+*.mp3
+*.wav
+*.mp4
+*.mov
+*.avi
+*.woff
+*.woff2
+*.ttf
+*.otf
+*.eot
+*.ico
+*.icns
+
+# --- Image Files (binary, khong co gia tri doc) ---
+public/images/
+src/assets/wedding-images/
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+*.svg
+*.bmp
+*.tiff
+
+# --- Generated Files ---
+src/app/components/image-manifest.ts
+
+# --- Shadcn UI Library (boilerplate, khong can doc toan bo) ---
+src/app/components/ui/
+
+# --- Misc ---
+*.local
+*.tsbuildinfo
