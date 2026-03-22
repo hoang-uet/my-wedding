@@ -102,8 +102,8 @@ export function PhotoQuoteSplit() {
                         </p>
                         <p
                             style={{
-                                fontFamily: 'var(--font-quote-en)',
-                                fontSize: '14px',
+                                fontFamily: 'var(--font-envelope-guest)',
+                                fontSize: '28px',
                                 color: 'rgba(255,255,255,0.88)',
                                 lineHeight: 1.9,
                                 textAlign: 'center',
