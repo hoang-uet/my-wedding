@@ -187,6 +187,7 @@ export function CouplePortraits() {
                         left: '14px',
                         zIndex: 4,
                         textAlign: 'left',
+                        paddingLeft: '4px',
                     }}
                 >
                     <p

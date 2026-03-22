@@ -161,10 +161,10 @@ export function CalendarHighlight() {
                                             className="absolute pointer-events-none"
                                             style={{
                                                 width: '36px',
-                                                height: 'auto',
-                                                top: '50%',
-                                                left: '50%',
-                                                transform: 'translate(-50%, -50%)',
+                                                height: '36px',
+                                                objectFit: 'contain',
+                                                inset: 0,
+                                                margin: 'auto',
                                                 animation:
                                                     'calHeartPulse 2.5s ease-in-out infinite',
                                             }}
@@ -180,8 +180,8 @@ export function CalendarHighlight() {
 
             <style>{`
         @keyframes calHeartPulse {
-          0%, 100% { transform: translate(-50%, -50%) scale(1); }
-          50% { transform: translate(-50%, -50%) scale(1.15); }
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.15); }
         }
       `}</style>
         </section>
