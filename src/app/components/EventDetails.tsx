@@ -35,7 +35,7 @@ export function EventDetails() {
                             letterSpacing: '0.1em',
                         }}
                     >
-                        13 : 00, {weddingConfig.event.dayOfWeek}
+                        17 : 00, {weddingConfig.event.dayOfWeek}
                     </p>
                 </div>
 
@@ -74,13 +74,13 @@ export function EventDetails() {
                     <p
                         style={{
                             fontFamily: 'var(--font-primary)',
-                            fontSize: '72px',
+                            fontSize: 'var(--text-date-large)',
                             color: '#4A5D3A',
                             fontWeight: 300,
                             lineHeight: 1,
                         }}
                     >
-                        05
+                        04
                     </p>
                     <div
                         style={{

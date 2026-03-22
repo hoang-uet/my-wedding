@@ -26,7 +26,7 @@ export function OurStory() {
                     className="text-center mb-3"
                     style={{
                         fontFamily: "var(--font-script-elegant)",
-                        fontSize: '55px',
+                        fontSize: 'var(--text-display)',
                         color: '#4A5D3A',
                         fontWeight: 400,
                         lineHeight: 1.1,
@@ -52,7 +52,7 @@ export function OurStory() {
                         className="text-center mb-5"
                         style={{
                             fontFamily: "var(--font-primary)",
-                            fontSize: '13px',
+                            fontSize: 'var(--text-body)',
                             fontWeight: 500,
                             color: '#4A4A4A',
                             lineHeight: 1.82,

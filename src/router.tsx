@@ -12,7 +12,7 @@ export const router = createBrowserRouter([
         element: <App />,
     },
     {
-        path: '/thiep-cuoi',
+        path: '/tao-thiep',
         element: <AdminDashboard />,
     },
 ])

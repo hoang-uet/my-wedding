@@ -241,7 +241,7 @@ export function EnvelopeCard({ onOpen, guestName }: EnvelopeCardProps) {
                 className="text-center relative z-10"
                 style={{
                     fontFamily: 'var(--font-script-hero)',
-                    fontSize: '46px',
+                    fontSize: 'var(--text-section-title)',
                     color: '#4A5D3A',
                     lineHeight: 1.1,
                     marginBottom: '18px',
@@ -383,7 +383,7 @@ export function EnvelopeCard({ onOpen, guestName }: EnvelopeCardProps) {
                                 <p
                                     style={{
                                         fontFamily: 'var(--font-envelope-guest)',
-                                        fontSize: '28px',
+                                        fontSize: 'var(--text-couple-names)',
                                         color: '#FFFFFF',
                                         textShadow: '0 2px 16px rgba(0,0,0,0.3)',
                                         lineHeight: 1.15,
@@ -406,7 +406,7 @@ export function EnvelopeCard({ onOpen, guestName }: EnvelopeCardProps) {
                                         letterSpacing: '0.15em',
                                     }}
                                 >
-                                    05.04.2026
+                                    04.04.2026
                                 </p>
 
                                 {/* Decorative line 2 */}
@@ -482,7 +482,7 @@ export function EnvelopeCard({ onOpen, guestName }: EnvelopeCardProps) {
               border-left/right: transparent.
               Open: rotateX(180deg) 1.2s, Close: 0.8s with 0.8s delay */}
                     <div
-                        className="absolute top-0 left-0 mt-0.5"
+                        className="absolute top-0 left-0 mt-[3px]"
                         data-testid="envelope-flap"
                         style={{
                             zIndex: isClosed || isClosingFlap ? 5 : 1,

@@ -125,8 +125,8 @@ test.describe('Task 2 — Guest Name Display Verification', () => {
 // ─────────────────────────────────────────
 
 test.describe('Admin Dashboard — PIN Gate', () => {
-    test('AC-6: Shows PIN form on first visit to /thiep-cuoi', async ({ page }) => {
-        await page.goto('/thiep-cuoi')
+    test('AC-6: Shows PIN form on first visit to /tao-thiep', async ({ page }) => {
+        await page.goto('/tao-thiep')
         await page.evaluate(() => sessionStorage.clear())
         await page.reload()
 
@@ -136,7 +136,7 @@ test.describe('Admin Dashboard — PIN Gate', () => {
     })
 
     test('AC-6: Wrong PIN shows error message', async ({ page }) => {
-        await page.goto('/thiep-cuoi')
+        await page.goto('/tao-thiep')
         await page.evaluate(() => sessionStorage.clear())
         await page.reload()
 
@@ -149,7 +149,7 @@ test.describe('Admin Dashboard — PIN Gate', () => {
     })
 
     test('AC-6: Correct PIN grants access to dashboard', async ({ page }) => {
-        await page.goto('/thiep-cuoi')
+        await page.goto('/tao-thiep')
         await page.evaluate(() => sessionStorage.clear())
         await page.reload()
 
@@ -164,7 +164,7 @@ test.describe('Admin Dashboard — PIN Gate', () => {
 
 test.describe('Admin Dashboard — CRUD Operations', () => {
     async function authenticateAdmin(page: import('@playwright/test').Page) {
-        await page.goto('/thiep-cuoi')
+        await page.goto('/tao-thiep')
         await page.evaluate(() => {
             sessionStorage.setItem('admin_authenticated', '1')
         })
@@ -261,8 +261,8 @@ test.describe('SPA Routing', () => {
         await expect(page.locator('[data-testid="invitation-info"]')).toBeVisible()
     })
 
-    test('/thiep-cuoi renders the admin page', async ({ page }) => {
-        await page.goto('/thiep-cuoi')
+    test('/tao-thiep renders the admin page', async ({ page }) => {
+        await page.goto('/tao-thiep')
         await expect(page.locator('text=Quản Lý Thiệp Mời')).toBeVisible()
     })
 })

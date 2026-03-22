@@ -9,7 +9,7 @@ Website thiệp mời đám cưới dạng single-page application, thiết kế
 - **Ngôn ngữ nội dung:** Tiếng Việt
 - **Package manager:** `yarn`
 - **Hosting:** Vercel
-- **Routing:** React Router v7 (`/`, `/thiep-moi/:hash`, `/thiep-cuoi`)
+- **Routing:** React Router v7 (`/`, `/thiep-moi/:hash`, `/tao-thiep`)
 
 ## 2. Tech Stack
 

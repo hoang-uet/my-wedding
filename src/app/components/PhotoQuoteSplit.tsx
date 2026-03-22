@@ -4,7 +4,7 @@ import { WeddingImage } from './WeddingImage'
 import orchidBouquet from '../../assets/orchid-bouquet.png'
 
 export function PhotoQuoteSplit() {
-    const ref = useScrollAnimation()
+    const ref = useScrollAnimation({ variant: 'fadeInScale' })
 
     return (
         <section ref={ref} className="relative" style={{ zIndex: 2 }}>

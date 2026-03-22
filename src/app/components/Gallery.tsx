@@ -26,7 +26,9 @@ export function Gallery() {
         items.forEach((item) => {
             ;(item as HTMLElement).style.opacity = '0'
             ;(item as HTMLElement).style.transform = 'scale(0.95)'
-            ;(item as HTMLElement).style.transition = 'opacity 500ms ease, transform 500ms ease'
+            ;(item as HTMLElement).style.willChange = 'transform, opacity'
+            ;(item as HTMLElement).style.transition =
+                'opacity 800ms cubic-bezier(0.16, 1, 0.3, 1), transform 800ms cubic-bezier(0.16, 1, 0.3, 1)'
         })
 
         const observer = new IntersectionObserver(
@@ -37,6 +39,10 @@ export function Gallery() {
                             setTimeout(() => {
                                 ;(item as HTMLElement).style.opacity = '1'
                                 ;(item as HTMLElement).style.transform = 'scale(1)'
+                                // Clean up will-change after animation
+                                setTimeout(() => {
+                                    ;(item as HTMLElement).style.willChange = 'auto'
+                                }, 800)
                             }, i * 100)
                         })
                         observer.unobserve(entry.target)

@@ -1,12 +1,14 @@
 import { useMemo, useRef, useEffect } from 'react'
 import { weddingImages } from './wedding-config'
 import { WeddingImage } from './WeddingImage'
+import { useScrollAnimation } from './useScrollAnimation'
 
 export function CalendarHighlight() {
     const ref = useRef<HTMLDivElement>(null)
+    const titleRef = useScrollAnimation({ variant: 'fadeInUp' })
 
     // Wedding date: April 5, 2026
-    const weddingDay = 5
+    const weddingDay = 4
     const month = 3 // April (0-indexed: Jan=0, Feb=1, Mar=2, Apr=3)
     const year = 2026
 
@@ -90,6 +92,7 @@ export function CalendarHighlight() {
             >
                 {/* Month title — right-aligned */}
                 <h3
+                    ref={titleRef}
                     style={{
                         fontFamily: 'var(--font-label-casual)',
                         fontSize: '25px',
@@ -133,11 +136,7 @@ export function CalendarHighlight() {
                 />
 
                 {/* Calendar grid — spread evenly */}
-                <div
-                    ref={ref}
-                    className="grid"
-                    style={{ gridTemplateColumns: 'repeat(7, 1fr)' }}
-                >
+                <div ref={ref} className="grid" style={{ gridTemplateColumns: 'repeat(7, 1fr)' }}>
                     {calendarData.map((day, i) => (
                         <div
                             key={i}
@@ -157,11 +156,11 @@ export function CalendarHighlight() {
                                 <>
                                     {day === weddingDay && (
                                         <img
-                                            src="/heart-highlight.png"
+                                            src="/calen_heart.png"
                                             alt=""
                                             className="absolute pointer-events-none"
                                             style={{
-                                                width: '42px',
+                                                width: '36px',
                                                 height: 'auto',
                                                 top: '50%',
                                                 left: '50%',

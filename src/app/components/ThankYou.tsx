@@ -6,7 +6,7 @@ export function ThankYou() {
     const ref = useScrollAnimation()
 
     return (
-        <section className="relative" style={{ height: '450px' }}>
+        <section className="relative" style={{ height: '420px' }}>
             <WeddingImage
                 image={weddingImages.thankYou}
                 alt="Đôi uyên ương trong khung cảnh lãng mạn"
@@ -31,7 +31,7 @@ export function ThankYou() {
                 <p
                     style={{
                         fontFamily: 'var(--font-script-elegant)',
-                        fontSize: '52px',
+                        fontSize: 'var(--text-hero)',
                         color: 'rgb(75, 83, 32)',
                         textShadow: '0 2px 24px rgba(0,0,0,0.5), 0 1px 4px rgba(0,0,0,0.3)',
                     }}
@@ -61,7 +61,7 @@ export function ThankYou() {
                         textShadow: '0 1px 6px rgba(0,0,0,0.3)',
                     }}
                 >
-                    05 . 04 . 2026
+                    04 . 04 . 2026
                 </p>
             </div>
         </section>

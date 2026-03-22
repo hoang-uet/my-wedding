@@ -123,7 +123,7 @@ File `vercel.json` hiện tại đã đủ:
 Rewrite này đảm bảo React Router hoạt động cho cả 3 routes:
 - `/` — Landing page
 - `/thiep-moi/:hash` — Thiệp cá nhân hóa
-- `/thiep-cuoi` — Admin dashboard
+- `/tao-thiep` — Admin dashboard
 
 ### Bước 3: Cấu hình Environment Variables
 
@@ -284,7 +284,7 @@ Vercel tự cấp SSL certificate (Let's Encrypt). Nếu chỉ dùng 1 tháng, s
 - [ ] Gửi lời chúc thành công (test trên Supabase)
 - [ ] Lời chúc realtime hiển thị (mở 2 tab test)
 - [ ] Thiệp cá nhân hóa (`/thiep-moi/:hash`) hiển thị đúng tên
-- [ ] Admin dashboard (`/thiep-cuoi`) accessible với đúng PIN
+- [ ] Admin dashboard (`/tao-thiep`) accessible với đúng PIN
 - [ ] RSVP form submit thành công
 
 ### Hiệu năng

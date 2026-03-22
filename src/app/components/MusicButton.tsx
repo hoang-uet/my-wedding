@@ -22,18 +22,18 @@ export function MusicButton({ isPlaying, onClick }: MusicButtonProps) {
                 aria-label={isPlaying ? 'Tắt nhạc' : 'Bật nhạc'}
                 style={{
                     position: 'absolute',
-                    top: '16px',
-                    right: '16px',
+                    top: '7px',
+                    right: '7px',
                     zIndex: 900,
-                    width: '26px',
-                    height: '26px',
+                    width: '44px',
+                    height: '44px',
                     borderRadius: '50%',
                     border: 'none',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    padding: 0,
+                    padding: '9px',
                     // Vinyl disc: green gradient with inset groove rings
                     background: isPlaying
                         ? 'linear-gradient(135deg, #252b23 0%, #000000 50%, #3C4E34 100%)'

@@ -1,5 +1,6 @@
 import { weddingConfig, weddingImages } from './wedding-config'
 import { useScrollAnimation } from './useScrollAnimation'
+import { useParallax } from './useParallax'
 import { WeddingImage } from './WeddingImage'
 import orchidBouquet from '@/assets/orchid-bouquet.png'
 import orchidSingle from '@/assets/orchid-single.png'
@@ -12,7 +13,9 @@ import orchidBranch from '@/assets/orchid-branch.png'
  * Gentle wobble animation on each photo.
  */
 export function CouplePortraits() {
-    const sectionRef = useScrollAnimation({ stagger: 0 })
+    const sectionRef = useScrollAnimation({ variant: 'fadeInScale' })
+    const orchidParallax = useParallax({ speed: 0.15, maxOffset: 20, direction: 'up' })
+    const branchParallax = useParallax({ speed: 0.1, maxOffset: 15, direction: 'down' })
 
     return (
         <section
@@ -127,8 +130,9 @@ export function CouplePortraits() {
                     <img src={orchidSingle} alt="" className="w-full h-full object-contain" />
                 </div>
 
-                {/* ── CENTER ORCHID BOUQUET — connecting element ── */}
+                {/* ── CENTER ORCHID BOUQUET — connecting element with parallax ── */}
                 <div
+                    ref={orchidParallax}
                     className="absolute pointer-events-none"
                     style={{
                         top: '180px',
@@ -225,8 +229,9 @@ export function CouplePortraits() {
                     <img src={orchidBouquet} alt="" className="w-full h-full object-contain" />
                 </div>
 
-                {/* ── Small orchid branch — decorative between photos ── */}
+                {/* ── Small orchid branch — decorative with parallax ── */}
                 <div
+                    ref={branchParallax}
                     className="absolute pointer-events-none"
                     style={{
                         top: '140px',

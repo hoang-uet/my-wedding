@@ -16,6 +16,29 @@
     --font-formal: 'Times New Roman', 'Times', serif;
 
     --font-size: 16px;
+
+    /* ── Fluid Typography — clamp(min@320px, preferred, max@430px) ── */
+    --text-hero: clamp(2.625rem, 10vw + 0.5rem, 3.25rem);
+    --text-display: clamp(2.75rem, 11vw + 0.25rem, 3.4375rem);
+    --text-section-title: clamp(2.25rem, 9vw + 0.25rem, 2.875rem);
+    --text-date-large: clamp(3.5rem, 14vw + 0.25rem, 4.5rem);
+    --text-couple-names: clamp(1.375rem, 5.5vw + 0.15rem, 1.75rem);
+    --text-quote: clamp(1.875rem, 7.5vw + 0.15rem, 2.375rem);
+    --text-countdown: clamp(1.75rem, 7vw + 0.15rem, 2.25rem);
+    --text-body: clamp(0.8125rem, 3vw + 0.1rem, 0.9375rem);
+    --text-label: clamp(0.6875rem, 2.5vw + 0.1rem, 0.8125rem);
+
+    /* ── Fluid Spacing ── */
+    --space-section-y: clamp(2.5rem, 8vw + 0.5rem, 3.25rem);
+    --space-section-x: clamp(1rem, 4vw + 0.15rem, 1.75rem);
+    --space-quote-x: clamp(1.25rem, 5vw + 0.1rem, 1.875rem);
+
+    /* ── Easing Curves — Elegant Reveal ── */
+    --ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);
+    --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+
     --background: #ffffff;
     --foreground: oklch(0.145 0 0);
     --card: #ffffff;

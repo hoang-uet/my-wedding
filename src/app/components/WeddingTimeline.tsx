@@ -20,7 +20,7 @@ export function WeddingTimeline() {
                     fontWeight: 400,
                 }}
             >
-                Timeline 04-04-2026
+                Timeline
             </h2>
 
             {/* Ornamental line */}

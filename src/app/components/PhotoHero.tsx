@@ -3,10 +3,10 @@ import { useScrollAnimation } from './useScrollAnimation'
 import { WeddingImage } from './WeddingImage'
 
 export function PhotoHero() {
-    const textRef = useScrollAnimation()
+    const textRef = useScrollAnimation({ variant: 'fadeInUp', delay: 200 })
 
     return (
-        <section className="relative" style={{ height: '480px' }}>
+        <section className="relative" style={{ minHeight: 'clamp(400px, 65vh, 520px)' }}>
             <WeddingImage
                 image={weddingImages.heroCouple}
                 alt="Đôi uyên ương đi trên cánh đồng xanh"
@@ -34,7 +34,7 @@ export function PhotoHero() {
                 <p
                     style={{
                         fontFamily: "var(--font-calligraphy-vn)",
-                        fontSize: '38px',
+                        fontSize: 'var(--text-quote)',
                         color: '#FFFFFF',
                         textShadow: '0 2px 20px rgba(0,0,0,0.35)',
                         lineHeight: 1.25,
@@ -42,10 +42,10 @@ export function PhotoHero() {
                         fontWeight: 500,
                     }}
                 >
-                    <span className="block" style={{ marginRight: '30px' }}>
+                    <span className="block" style={{ marginRight: 'var(--space-quote-x)' }}>
                         All of me loves
                     </span>
-                    <span className="block" style={{ marginLeft: '30px' }}>
+                    <span className="block" style={{ marginLeft: 'var(--space-quote-x)' }}>
                         All of you
                     </span>
                 </p>

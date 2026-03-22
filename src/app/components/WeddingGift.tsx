@@ -2,12 +2,12 @@ import { useScrollAnimation } from './useScrollAnimation'
 import { CornerOrchidCluster } from './FloralOverlay'
 
 export function WeddingGift() {
-    const ref = useScrollAnimation()
+    const illustrationRef = useScrollAnimation({ variant: 'fadeInScale' })
+    const textRef = useScrollAnimation({ variant: 'fadeInUp', delay: 150 })
 
     return (
         <section
             id="gift-section"
-            ref={ref}
             className="relative overflow-hidden"
             style={{ background: '#F0EBE2', padding: '48px 24px' }}
         >
@@ -25,12 +25,13 @@ export function WeddingGift() {
             </div>
 
             {/* Gift box illustration */}
-            <div className="flex justify-center mb-6 relative z-10">
+            <div ref={illustrationRef} className="flex justify-center mb-6 relative z-10">
                 <GiftBoxIllustration />
             </div>
 
             {/* Thank you text */}
             <p
+                ref={textRef}
                 className="text-center mb-3 relative z-10"
                 style={{
                     fontFamily: 'var(--font-primary)',
