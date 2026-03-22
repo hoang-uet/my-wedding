@@ -202,6 +202,9 @@ export const HeartCanvas = memo(function HeartCanvas({
         const w = canvas.width / dpr
         const h = canvas.height / dpr
 
+        // Re-apply DPR transform every frame (canvas.width/height resets clear it)
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+
         // Clear
         ctx.clearRect(0, 0, w, h)
 
@@ -270,10 +273,14 @@ export const HeartCanvas = memo(function HeartCanvas({
 
         const canvas = canvasRef.current
         if (!canvas) return
+
+        // Ensure canvas dimensions are synced before spawning
+        syncSize()
+
         const dpr = window.devicePixelRatio || 1
         const w = canvas.width / dpr
         const h = canvas.height / dpr
-        if (w === 0 || h === 0) return
+        if (w < 10 || h < 10) return
 
         const pool = poolRef.current
         const count = Math.min(spawnSignal, MAX_PARTICLES - pool.activeCount)
@@ -283,7 +290,7 @@ export const HeartCanvas = memo(function HeartCanvas({
 
         startLoop()
         onSpawnConsumed?.()
-    }, [spawnSignal, onSpawnConsumed, startLoop])
+    }, [spawnSignal, onSpawnConsumed, startLoop, syncSize])
 
     // ── Cleanup on unmount ──
     useEffect(() => {
