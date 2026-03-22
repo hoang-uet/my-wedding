@@ -53,6 +53,7 @@ Website thiệp mời đám cưới dạng single-page application, thiết kế
   - `useWishes()` - Supabase realtime wishes (fetch, subscribe, send, rate limit)
   - `useInvitation()` - Fetch guest name by URL hash from Supabase
   - `useInvitations()` - Admin CRUD for invitations + realtime subscription
+  - `useHeartBroadcast()` - Supabase Broadcast for realtime heart animations (throttle + batch)
 
 ### Key Components
 
@@ -60,6 +61,7 @@ Website thiệp mời đám cưới dạng single-page application, thiết kế
 |-----------|----------|-------------|
 | `EnvelopeCard` | Phong bì tương tác, 4 states animation, trigger nhạc | CAO |
 | `Gallery` | Masonry grid + lightbox overlay + keyboard nav | CAO |
+| `HeartCanvas` | Canvas 2D particle system cho TikTok-style heart animation, object pool, idle stop | CAO |
 | `FloatingBar` | Bottom bar + Peek Mode + Full Messages Overlay + realtime wishes | CAO |
 | `NameModal` | Modal nhập tên lần đầu cho guestbook | THẤP |
 | `Countdown` | Đếm ngược tới ngày cưới | THẤP |
@@ -88,6 +90,8 @@ Mỗi tính năng có spec riêng trong thư mục `specs/`. Đọc spec trướ
 | 001 | Landing Page - Thiệp cưới chính | Đã triển khai | [`specs/001-wedding-landing-page/spec.md`](specs/001-wedding-landing-page/spec.md) |
 | 002 | Lời chúc từ khách mời (Guestbook) | Đã triển khai | [`specs/002-wishes-guestbook/spec.md`](specs/002-wishes-guestbook/spec.md) |
 | 003 | Thiệp mời cá nhân hóa (Personalized Invitations) | Đã triển khai (FE) | [`specs/003-personalized-invitations/spec.md`](specs/003-personalized-invitations/spec.md) |
+| 004 | EnvelopeCard Animation States | Đã triển khai | [`specs/004-envelopecard-animation/spec.md`](specs/004-envelopecard-animation/spec.md) |
+| 005 | Real-time Heart Blessings Animation | Đã triển khai | [`specs/005-heart-animation-v2/spec.md`](specs/005-heart-animation-v2/spec.md) |
 
 > **Quy ước thêm tính năng mới:**
 > 1. Tạo thư mục `specs/{ID}-{tên-tính-năng}/spec.md`
@@ -153,8 +157,9 @@ yarn optimize-images  # Tạo WebP từ src/assets/wedding-images/ -> public/ima
 
 ### Hướng dẫn Animation
 - Sử dụng `motion` library cho complex animations
-- Tôn trọng `prefers-reduced-motion` (đã implement trong useScrollAnimation)
+- Tôn trọng `prefers-reduced-motion` (đã implement trong useScrollAnimation, HeartCanvas)
 - EnvelopeCard có 4 states: `closed` → `opening` → `open` → `closing` (KHÔNG thay đổi state machine)
+- HeartCanvas sử dụng Canvas 2D API + object pool cho particle system (KHÔNG dùng DOM nodes cho hearts)
 
 ### Giao thức An toàn (Safety Protocol)
 Khi chạy với `--dangerously-skip-permissions`, Agent **KHÔNG ĐƯỢC PHÉP:**
@@ -188,9 +193,11 @@ src/
       Gallery.tsx                   # Gallery ảnh + lightbox
       EventDetails.tsx              # Địa điểm & thời gian
       FamilyInfo.tsx                # Thông tin gia đình
+      HeartCanvas.tsx               # Canvas 2D particle system cho heart animation (phức tạp)
       FloatingBar.tsx               # Bottom bar + wishes peek/full overlay (phức tạp)
       NameModal.tsx                 # Modal nhập tên lần đầu
       useWishes.ts                  # Hook: fetch, subscribe, send wishes via Supabase
+      useHeartBroadcast.ts          # Hook: Supabase Broadcast realtime hearts (throttle + batch)
       RSVPForm.tsx                  # Form xác nhận tham dự
       WeddingGift.tsx               # Thông tin mừng cưới
       ThankYou.tsx                  # Phần kết thúc

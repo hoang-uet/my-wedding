@@ -1,6 +1,8 @@
-import { useRef, useCallback } from 'react'
+import { useRef, useState, useCallback } from 'react'
 import { useParams } from 'react-router'
 import { useInvitation } from './components/useInvitation'
+import { HeartCanvas } from './components/HeartCanvas'
+import { useHeartBroadcast } from './components/useHeartBroadcast'
 import { EnvelopeCard } from './components/EnvelopeCard'
 import { MusicButton } from './components/MusicButton'
 import { useAudioPlayer } from './components/useAudioPlayer'
@@ -28,6 +30,22 @@ export default function App() {
     const { isPlaying, toggle, play } = useAudioPlayer()
     const musicStarted = useRef(false)
     const scrollContainerRef = useRef<HTMLDivElement>(null)
+
+    // ── Heart animation (Canvas + Supabase Broadcast) ──
+    const { shootHearts, remoteSpawnCount, clearRemoteSpawn } = useHeartBroadcast()
+    const [localSpawn, setLocalSpawn] = useState(0)
+
+    const handleShootHearts = useCallback(() => {
+        const count = shootHearts()
+        if (count > 0) setLocalSpawn((prev) => prev + count)
+    }, [shootHearts])
+
+    const spawnSignal = localSpawn + remoteSpawnCount
+
+    const handleSpawnConsumed = useCallback(() => {
+        setLocalSpawn(0)
+        clearRemoteSpawn()
+    }, [clearRemoteSpawn])
 
     // Start music on first envelope open (once only — respects manual toggle after)
     const handleEnvelopeOpen = useCallback(() => {
@@ -97,10 +115,17 @@ export default function App() {
                     </div>
                 </div>
 
+                {/* Canvas heart particle system (z-100, pointer-events: none) */}
+                <HeartCanvas
+                    spawnSignal={spawnSignal}
+                    onSpawnConsumed={handleSpawnConsumed}
+                />
+
                 {/* Floating bottom bar */}
                 <FloatingBar
                     onScrollToGallery={() => scrollToSection('gallery-section')}
                     onScrollToGift={() => scrollToSection('gift-section')}
+                    onShootHearts={handleShootHearts}
                 />
             </div>
 

@@ -9,9 +9,9 @@ import { NameModal } from './NameModal'
 interface FloatingBarProps {
     onScrollToGallery: () => void
     onScrollToGift: () => void
+    /** Called when user clicks "Bắn tim". Replaces old DOM-based heart animation. */
+    onShootHearts?: () => void
 }
-
-const heartColors = ['#E87461', '#F5A3A3', '#E8B4A0', '#D4856A', '#F0C0C0']
 
 /** Small presentational component for peek wish items (avoids duplication) */
 function PeekWishItem({ wish }: { wish: import('./useWishes').Wish }) {
@@ -58,7 +58,7 @@ function timeAgo(dateStr: string): string {
     }
 }
 
-export function FloatingBar({ onScrollToGallery, onScrollToGift }: FloatingBarProps) {
+export function FloatingBar({ onScrollToGallery, onScrollToGift, onShootHearts }: FloatingBarProps) {
     // --- Wishes state ---
     const { wishes, isLoading, sendWish, isSending, error, clearError, cooldownRemaining } =
         useWishes()
@@ -68,12 +68,6 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift }: FloatingBarPr
     const [peekDismissed, setPeekDismissed] = useState(false)
     const [nameModalOpen, setNameModalOpen] = useState(false)
     const [newMessage, setNewMessage] = useState('')
-
-    // --- Hearts animation (kept from original) ---
-    const [hearts, setHearts] = useState<
-        { id: number; x: number; size: number; rotation: number; color: string }[]
-    >([])
-    const heartIdRef = useRef(0)
 
     // --- Auto-scroll state ---
     const messagesListRef = useRef<HTMLDivElement>(null)
@@ -189,22 +183,6 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift }: FloatingBarPr
         setNewMessage('')
         clearError()
     }, [clearError])
-
-    // --- Hearts animation (unchanged) ---
-    const shootHearts = useCallback(() => {
-        const newHearts = Array.from({ length: 7 }, () => ({
-            id: heartIdRef.current++,
-            x: Math.random() * 80 - 40,
-            size: 14 + Math.random() * 12,
-            rotation: Math.random() * 50 - 25,
-            color: heartColors[Math.floor(Math.random() * heartColors.length)],
-        }))
-        setHearts((prev) => [...prev, ...newHearts])
-
-        setTimeout(() => {
-            setHearts((prev) => prev.filter((h) => !newHearts.find((nh) => nh.id === h.id)))
-        }, 1000)
-    }, [])
 
     return (
         <>
@@ -464,30 +442,6 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift }: FloatingBarPr
                 )}
             </AnimatePresence>
 
-            {/* ===== FLOATING HEARTS ANIMATION ===== */}
-            <div className="absolute bottom-[56px] left-1/2 -translate-x-1/2 pointer-events-none z-[850]">
-                {hearts.map((heart) => (
-                    <div
-                        key={heart.id}
-                        className="absolute"
-                        style={{
-                            left: `${heart.x}px`,
-                            animation: 'floatingHeart 900ms ease-out forwards',
-                            transform: `rotate(${heart.rotation}deg)`,
-                        }}
-                    >
-                        <svg
-                            width={heart.size}
-                            height={heart.size}
-                            viewBox="0 0 24 24"
-                            fill={heart.color}
-                        >
-                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                        </svg>
-                    </div>
-                ))}
-            </div>
-
             {/* ===== BOTTOM BAR ===== */}
             <div
                 className="absolute bottom-0 left-0 right-0 z-[800] flex items-center gap-2"
@@ -580,7 +534,7 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift }: FloatingBarPr
 
                 {/* Shoot hearts button */}
                 <button
-                    onClick={shootHearts}
+                    onClick={onShootHearts}
                     className="flex items-center gap-1 shrink-0 cursor-pointer"
                     style={{
                         background: 'rgba(232,180,160,0.25)',
@@ -630,11 +584,6 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift }: FloatingBarPr
             />
 
             <style>{`
-                @keyframes floatingHeart {
-                    0% { opacity: 1; transform: translateY(0) scale(1); }
-                    50% { opacity: 0.8; }
-                    100% { opacity: 0; transform: translateY(-130px) scale(0.6); }
-                }
                 @keyframes peekScrollLoop {
                     0% { transform: translateY(0); }
                     100% { transform: translateY(-50%); }
