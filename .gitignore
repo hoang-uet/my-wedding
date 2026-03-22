@@ -33,6 +33,7 @@ pnpm-debug.log*
 
 # Testing
 coverage/
+test-results/
 .playwright-mcp/
 .playwright-cli/
 
