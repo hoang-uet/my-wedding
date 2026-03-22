@@ -341,11 +341,7 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift }: FloatingBarPr
                         >
                             {isLoading ? (
                                 <div className="flex items-center justify-center py-8">
-                                    <Loader2
-                                        size={20}
-                                        className="animate-spin"
-                                        color="#8B7355"
-                                    />
+                                    <Loader2 size={20} className="animate-spin" color="#8B7355" />
                                 </div>
                             ) : wishes.length === 0 ? (
                                 <div
@@ -536,11 +532,7 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift }: FloatingBarPr
                             />
                             {/* Send button / Cooldown / Sending spinner */}
                             {isSending ? (
-                                <Loader2
-                                    size={14}
-                                    className="animate-spin"
-                                    color="#8B7355"
-                                />
+                                <Loader2 size={14} className="animate-spin" color="#8B7355" />
                             ) : cooldownRemaining > 0 ? (
                                 <span
                                     style={{
@@ -627,21 +619,6 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift }: FloatingBarPr
                     }}
                 >
                     <Camera size={15} strokeWidth={1.8} />
-                    <span
-                        className="absolute -top-1 -right-1 flex items-center justify-center"
-                        style={{
-                            width: '16px',
-                            height: '16px',
-                            borderRadius: '50%',
-                            background: '#E87461',
-                            fontSize: '9px',
-                            color: 'white',
-                            fontWeight: 700,
-                            fontFamily: 'var(--font-primary)',
-                        }}
-                    >
-                        6
-                    </span>
                 </button>
             </div>
 

@@ -65,7 +65,7 @@ export function EnvelopeCard({ onOpen }: EnvelopeCardProps) {
     const showHearts = isOpen
 
     // Card position: CSS transition handles the smooth animation
-    const cardY = (isOpen || isOpening) ? -CARD_RISE : 0
+    const cardY = isOpen || isOpening ? -CARD_RISE : 0
 
     // Wrapper grows to accommodate the card rising above.
     // During closing, keep expanded briefly so layout doesn't jump while card descends.
@@ -133,7 +133,7 @@ export function EnvelopeCard({ onOpen }: EnvelopeCardProps) {
             <h1
                 className="text-center relative z-10"
                 style={{
-                    fontFamily: "var(--font-script-hero)",
+                    fontFamily: 'var(--font-script-hero)',
                     fontSize: '46px',
                     color: '#4A5D3A',
                     lineHeight: 1.1,
@@ -210,7 +210,7 @@ export function EnvelopeCard({ onOpen }: EnvelopeCardProps) {
                         className="absolute"
                         data-testid="invitation-card"
                         style={{
-                            zIndex: (isOpen || isOpening) ? 2 : 1,
+                            zIndex: isOpen || isOpening ? 2 : 1,
                             left: '5%',
                             right: '5%',
                             top: '5%',
@@ -262,7 +262,7 @@ export function EnvelopeCard({ onOpen }: EnvelopeCardProps) {
                                 {/* Label */}
                                 <p
                                     style={{
-                                        fontFamily: "var(--font-formal)",
+                                        fontFamily: 'var(--font-formal)',
                                         fontSize: '13px',
                                         color: 'rgba(255,255,255,0.88)',
                                         letterSpacing: '0.28em',
@@ -287,7 +287,7 @@ export function EnvelopeCard({ onOpen }: EnvelopeCardProps) {
                                 {/* Couple names */}
                                 <p
                                     style={{
-                                        fontFamily: "var(--font-envelope-guest)",
+                                        fontFamily: 'var(--font-envelope-guest)',
                                         fontSize: '33px',
                                         color: '#FFFFFF',
                                         textShadow: '0 2px 16px rgba(0,0,0,0.3)',
@@ -303,7 +303,7 @@ export function EnvelopeCard({ onOpen }: EnvelopeCardProps) {
                                 {/* Date */}
                                 <p
                                     style={{
-                                        fontFamily: "var(--font-primary)",
+                                        fontFamily: 'var(--font-primary)',
                                         fontSize: '14px',
                                         color: 'rgba(255,255,255,0.93)',
                                         fontWeight: 400,
@@ -317,7 +317,7 @@ export function EnvelopeCard({ onOpen }: EnvelopeCardProps) {
                                 {/* Invitation text */}
                                 <p
                                     style={{
-                                        fontFamily: "var(--font-formal)",
+                                        fontFamily: 'var(--font-formal)',
                                         fontSize: '15px',
                                         color: 'rgba(255,255,255,0.82)',
                                         marginTop: '14px',
@@ -355,10 +355,10 @@ export function EnvelopeCard({ onOpen }: EnvelopeCardProps) {
               border-left/right: transparent.
               Open: rotateX(180deg) 1.2s, Close: 0.8s with 0.8s delay */}
                     <div
-                        className="absolute top-0 left-0"
+                        className="absolute top-0 left-0 mt-0.5"
                         data-testid="envelope-flap"
                         style={{
-                            zIndex: (isClosed || isClosing) ? 5 : 1,
+                            zIndex: isClosed || isClosing ? 5 : 1,
                             width: 0,
                             height: 0,
                             borderTop: `${FLAP_H}px solid #3C4E34`,
@@ -428,7 +428,10 @@ export function EnvelopeCard({ onOpen }: EnvelopeCardProps) {
                                 }}
                                 data-testid="heart-1"
                             >
-                                <div className="heart-shape" style={{ '--heart-scale': '0.6' } as React.CSSProperties} />
+                                <div
+                                    className="heart-shape"
+                                    style={{ '--heart-scale': '0.6' } as React.CSSProperties}
+                                />
                             </div>
 
                             {/* Heart 2 — full size, center */}
@@ -443,7 +446,10 @@ export function EnvelopeCard({ onOpen }: EnvelopeCardProps) {
                                 }}
                                 data-testid="heart-2"
                             >
-                                <div className="heart-shape" style={{ '--heart-scale': '1' } as React.CSSProperties} />
+                                <div
+                                    className="heart-shape"
+                                    style={{ '--heart-scale': '1' } as React.CSSProperties}
+                                />
                             </div>
 
                             {/* Heart 3 — medium, far left */}
@@ -458,7 +464,10 @@ export function EnvelopeCard({ onOpen }: EnvelopeCardProps) {
                                 }}
                                 data-testid="heart-3"
                             >
-                                <div className="heart-shape" style={{ '--heart-scale': '0.8' } as React.CSSProperties} />
+                                <div
+                                    className="heart-shape"
+                                    style={{ '--heart-scale': '0.8' } as React.CSSProperties}
+                                />
                             </div>
                         </div>
                     )}
@@ -484,7 +493,7 @@ export function EnvelopeCard({ onOpen }: EnvelopeCardProps) {
                     className="cursor-pointer select-none"
                     onClick={handleClick}
                     style={{
-                        fontFamily: "var(--font-envelope-prompt)",
+                        fontFamily: 'var(--font-envelope-prompt)',
                         fontSize: '18px',
                         color: '#4A5D3A',
                         opacity: isClosed ? 1 : isOpen ? 0.7 : 0.35,
