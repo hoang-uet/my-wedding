@@ -114,28 +114,28 @@ export const imageManifest: Record<string, ImageData> = {
         width: 5464,
         height: 8192,
     },
-    'Z72_5967': {
+    Z72_5967: {
         blur: 'data:image/webp;base64,UklGRroAAABXRUJQVlA4IK4AAACQBQCdASoUAB4APuVgpE2pJaMiMAwBIByJZQC+SdwLhUZMyMjnYWZP4zz50EOLjZJBAPo+AAD+3S3bjZj3813spptpayZVCnCwdAmryj6Mm5uGjDBYjBuOAqwFhluP44vFBA96I4Y3Z0tJ6qd/6iQzFyprjqeXqvIiupRk2vos4w/kIl9CD1v8ARP2XtFJ4tWbcHtZcUmgszb+6kqDISibxeJcJADFfGE6ztiAAAA=',
         srcSet: '/images/Z72_5967/Z72_5967-320w.webp 320w, /images/Z72_5967/Z72_5967-640w.webp 640w, /images/Z72_5967/Z72_5967-960w.webp 960w, /images/Z72_5967/Z72_5967-1280w.webp 1280w',
         src: '/images/Z72_5967/Z72_5967-1280w.webp',
         width: 5504,
         height: 8256,
     },
-    'Z72_6163': {
+    Z72_6163: {
         blur: 'data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAADwBACdASoUAB4APu1mpU2ppaMiMBgMATAdiWkAzfwQ75fQ1HSU4toSBJAV9lFeloAA/tWN71oNaORzmOcLHjsnrArtIEhISDrdjqptXfpoaQYVGikZkHQA',
         srcSet: '/images/Z72_6163/Z72_6163-320w.webp 320w, /images/Z72_6163/Z72_6163-640w.webp 640w, /images/Z72_6163/Z72_6163-960w.webp 960w, /images/Z72_6163/Z72_6163-1280w.webp 1280w',
         src: '/images/Z72_6163/Z72_6163-1280w.webp',
         width: 5333,
         height: 7999,
     },
-    'Z72_6221': {
+    Z72_6221: {
         blur: 'data:image/webp;base64,UklGRooAAABXRUJQVlA4IH4AAADQBACdASoUAB4APu1mqU4ppaOiMAgBMB2JZwAAUqUaJVWeLklu2hec9b5TN52QoAD+4TwCTuNK50Lra8NOxFLSUqUVUitZq2JJWnzUzh431ixxmyChLoSuknr/INdysbin42efcd28PxSvsIxwCzWnzH6Eioli7b8niAjMBAA=',
         srcSet: '/images/Z72_6221/Z72_6221-320w.webp 320w, /images/Z72_6221/Z72_6221-640w.webp 640w, /images/Z72_6221/Z72_6221-960w.webp 960w, /images/Z72_6221/Z72_6221-1280w.webp 1280w',
         src: '/images/Z72_6221/Z72_6221-1280w.webp',
         width: 5504,
         height: 8256,
     },
-    'Z72_6229': {
+    Z72_6229: {
         blur: 'data:image/webp;base64,UklGRpQAAABXRUJQVlA4IIgAAABQBQCdASoUAB4APu1or1CppaSiqAqpMB2JZwAD4/M4/hVlQaMAqgNp3Q08Jxh5p/hadzwA/rFfqho8i+71cX2qelX2Xw01a4JvmO8VLumw0xSESs18wYe85CCBRdOxJd8jIEZOITbjb6IsRDIrXrfNAH8O6K567WjdgE4Ogu1pr/n8gWlabAAA',
         srcSet: '/images/Z72_6229/Z72_6229-320w.webp 320w, /images/Z72_6229/Z72_6229-640w.webp 640w, /images/Z72_6229/Z72_6229-960w.webp 960w, /images/Z72_6229/Z72_6229-1280w.webp 1280w',
         src: '/images/Z72_6229/Z72_6229-1280w.webp',

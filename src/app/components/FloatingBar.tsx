@@ -13,17 +13,21 @@ interface FloatingBarProps {
     onShootHearts?: () => void
 }
 
-/** Small presentational component for peek wish items (avoids duplication) */
+/** Individual floating glass bubble — TikTok livestream comment style */
 function PeekWishItem({ wish }: { wish: import('./useWishes').Wish }) {
     return (
         <div
-            className="mb-1.5"
+            className="mb-2"
             style={{
-                maxWidth: '90%',
-                background: 'rgba(255,255,255,0.5)',
-                borderRadius: '10px',
-                padding: '5px 10px',
-                border: '1px solid rgba(212,204,190,0.3)',
+                maxWidth: '80%',
+                background: 'rgba(255,255,255,0.45)',
+                backdropFilter: 'blur(16px) saturate(160%)',
+                WebkitBackdropFilter: 'blur(16px) saturate(160%)',
+                borderRadius: '16px',
+                padding: '6px 12px',
+                border: '0.5px solid rgba(255,255,255,0.5)',
+                boxShadow:
+                    '0 2px 8px rgba(0,0,0,0.04), inset 0 1px 0 0 rgba(255,255,255,0.35)',
             }}
         >
             <span
@@ -34,13 +38,13 @@ function PeekWishItem({ wish }: { wish: import('./useWishes').Wish }) {
                     color: '#4A5D3A',
                 }}
             >
-                {wish.guest_name}:
+                {wish.guest_name}
             </span>{' '}
             <span
                 style={{
                     fontFamily: 'var(--font-primary)',
                     fontSize: '11px',
-                    color: '#4A4A4A',
+                    color: '#3A3A3A',
                 }}
             >
                 {wish.message}
@@ -58,7 +62,11 @@ function timeAgo(dateStr: string): string {
     }
 }
 
-export function FloatingBar({ onScrollToGallery, onScrollToGift, onShootHearts }: FloatingBarProps) {
+export function FloatingBar({
+    onScrollToGallery,
+    onScrollToGift,
+    onShootHearts,
+}: FloatingBarProps) {
     // --- Wishes state ---
     const { wishes, isLoading, sendWish, isSending, error, clearError, cooldownRemaining } =
         useWishes()
@@ -186,7 +194,7 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift, onShootHearts }
 
     return (
         <>
-            {/* ===== PEEK MODE ===== */}
+            {/* ===== PEEK MODE — TikTok Livestream Style ===== */}
             <AnimatePresence>
                 {showPeek && (
                     <motion.div
@@ -194,70 +202,48 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift, onShootHearts }
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 20 }}
                         transition={{ duration: 0.4, ease: 'easeOut' }}
-                        className="absolute bottom-[56px] left-0 right-0 z-[790]"
-                        style={{ pointerEvents: 'auto' }}
+                        className="absolute z-[790]"
+                        style={{
+                            bottom: 'calc(56px + max(6px, env(safe-area-inset-bottom, 6px)))',
+                            left: '12px',
+                            right: '50px',
+                            pointerEvents: 'auto',
+                        }}
                     >
-                        {/* Close peek button */}
+                        {/* Close peek — glass circle, top-right */}
                         <button
                             onClick={() => setPeekDismissed(true)}
-                            className="absolute top-1 right-2 flex items-center justify-center cursor-pointer z-10"
+                            className="absolute -top-1 -right-8 flex items-center justify-center cursor-pointer z-10"
                             style={{
                                 width: '22px',
                                 height: '22px',
                                 borderRadius: '50%',
-                                background: 'rgba(74,93,58,0.25)',
-                                border: 'none',
+                                background: 'rgba(255,255,255,0.4)',
+                                backdropFilter: 'blur(8px)',
+                                WebkitBackdropFilter: 'blur(8px)',
+                                border: '0.5px solid rgba(255,255,255,0.5)',
+                                boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
                                 color: '#4A5D3A',
                             }}
                         >
                             <X size={10} />
                         </button>
 
-                        {/* Peek messages with gradient fade + auto-scroll loop */}
+                        {/* Scrolling area — no container background, messages float freely */}
                         <div
                             style={{
-                                maxHeight: '140px',
+                                maxHeight: '150px',
                                 overflow: 'hidden',
                                 position: 'relative',
-                                padding: '8px 12px 4px',
                             }}
                         >
-                            {/* Top gradient fade */}
-                            <div
-                                style={{
-                                    position: 'absolute',
-                                    top: 0,
-                                    left: 0,
-                                    right: 0,
-                                    height: '24px',
-                                    background:
-                                        'linear-gradient(180deg, rgba(240,235,226,1) 0%, transparent 100%)',
-                                    zIndex: 1,
-                                    pointerEvents: 'none',
-                                }}
-                            />
-                            {/* Bottom gradient fade */}
-                            <div
-                                style={{
-                                    position: 'absolute',
-                                    bottom: 0,
-                                    left: 0,
-                                    right: 0,
-                                    height: '24px',
-                                    background:
-                                        'linear-gradient(0deg, rgba(240,235,226,1) 0%, transparent 100%)',
-                                    zIndex: 1,
-                                    pointerEvents: 'none',
-                                }}
-                            />
-
                             {/* Scrolling peek messages — duplicated for seamless loop */}
                             <div
                                 ref={peekScrollRef}
                                 className="peek-scroll-container"
                                 style={{
-                                    opacity: 0.7,
                                     animation: `peekScrollLoop ${peekScrollDuration}s linear infinite`,
+                                    padding: '4px 0',
                                 }}
                             >
                                 {/* First copy */}
@@ -274,7 +260,7 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift, onShootHearts }
                 )}
             </AnimatePresence>
 
-            {/* ===== FULL MESSAGES OVERLAY ===== */}
+            {/* ===== FULL MESSAGES OVERLAY — Liquid Glass ===== */}
             <AnimatePresence>
                 {showMessages && (
                     <motion.div
@@ -282,31 +268,39 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift, onShootHearts }
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 40 }}
                         transition={{ duration: 0.3, ease: 'easeOut' }}
-                        className="absolute bottom-[56px] left-0 right-0 z-[800]"
+                        className="floating-bar-glass absolute z-[800]"
                         style={{
+                            bottom: 'calc(56px + max(6px, env(safe-area-inset-bottom, 6px)))',
+                            left: '10px',
+                            right: '10px',
                             maxHeight: '55vh',
                             overflow: 'hidden',
                             display: 'flex',
                             flexDirection: 'column',
-                            background:
-                                'linear-gradient(180deg, transparent 0%, rgba(240,235,226,0.95) 15%)',
+                            borderRadius: '20px',
+                            background: 'rgba(255,255,255,0.5)',
+                            backdropFilter: 'blur(24px) saturate(180%)',
+                            WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+                            border: '0.5px solid rgba(255,255,255,0.6)',
+                            boxShadow:
+                                '0 4px 24px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04), inset 0 1px 0 0 rgba(255,255,255,0.4)',
                         }}
                     >
-                        {/* Close button */}
-                        <div className="flex justify-end px-3 pt-6 pb-1">
+                        {/* Close button — glass circle */}
+                        <div className="flex justify-end px-3 pt-3 pb-1">
                             <button
                                 onClick={handleCloseOverlay}
                                 className="flex items-center justify-center cursor-pointer"
                                 style={{
-                                    width: '30px',
-                                    height: '30px',
+                                    width: '28px',
+                                    height: '28px',
                                     borderRadius: '50%',
-                                    background: 'rgba(74,93,58,0.2)',
-                                    border: 'none',
+                                    background: 'rgba(255,255,255,0.4)',
+                                    border: '0.5px solid rgba(255,255,255,0.5)',
                                     color: '#4A5D3A',
                                 }}
                             >
-                                <X size={14} />
+                                <X size={13} />
                             </button>
                         </div>
 
@@ -342,11 +336,11 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift, onShootHearts }
                                         className="mb-2"
                                         style={{
                                             maxWidth: '88%',
-                                            background: 'rgba(255,255,255,0.7)',
-                                            borderRadius: '12px',
+                                            background: 'rgba(255,255,255,0.5)',
+                                            borderRadius: '14px',
                                             padding: '8px 12px',
-                                            boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
-                                            border: '1px solid rgba(212,204,190,0.4)',
+                                            boxShadow: '0 1px 4px rgba(0,0,0,0.03)',
+                                            border: '0.5px solid rgba(255,255,255,0.5)',
                                         }}
                                     >
                                         <div className="flex items-baseline gap-1">
@@ -388,7 +382,7 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift, onShootHearts }
                             <div ref={messagesEndRef} />
                         </div>
 
-                        {/* New messages indicator */}
+                        {/* New messages indicator — glass pill */}
                         <AnimatePresence>
                             {hasNewMessages && (
                                 <motion.button
@@ -398,15 +392,17 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift, onShootHearts }
                                     onClick={scrollToBottom}
                                     className="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1 cursor-pointer z-10"
                                     style={{
-                                        background: 'rgba(74,93,58,0.9)',
+                                        background: 'rgba(74,93,58,0.85)',
+                                        backdropFilter: 'blur(8px)',
+                                        WebkitBackdropFilter: 'blur(8px)',
                                         color: 'white',
-                                        border: 'none',
+                                        border: '0.5px solid rgba(255,255,255,0.2)',
                                         borderRadius: '16px',
                                         padding: '4px 12px',
                                         fontFamily: 'var(--font-primary)',
                                         fontSize: '11px',
                                         fontWeight: 600,
-                                        boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                                        boxShadow: '0 2px 12px rgba(0,0,0,0.12)',
                                     }}
                                 >
                                     <ChevronDown size={12} />
@@ -442,24 +438,31 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift, onShootHearts }
                 )}
             </AnimatePresence>
 
-            {/* ===== BOTTOM BAR ===== */}
+            {/* ===== BOTTOM BAR — Liquid Glass Floating Pill ===== */}
             <div
-                className="absolute bottom-0 left-0 right-0 z-[800] flex items-center gap-2"
+                className="floating-bar-glass absolute z-[800] flex items-center gap-2"
                 style={{
-                    background: 'rgba(255,255,255,0.92)',
-                    backdropFilter: 'blur(12px)',
-                    padding: '8px 10px',
-                    borderTop: '1px solid rgba(212,204,190,0.5)',
+                    bottom: 'max(6px, env(safe-area-inset-bottom, 6px))',
+                    left: '10px',
+                    right: '10px',
+                    borderRadius: '22px',
+                    background: 'rgba(255,255,255,0.55)',
+                    backdropFilter: 'blur(24px) saturate(180%)',
+                    WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+                    border: '0.5px solid rgba(255,255,255,0.65)',
+                    boxShadow:
+                        '0 4px 24px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04), inset 0 1px 0 0 rgba(255,255,255,0.5)',
+                    padding: '8px 12px',
                 }}
             >
                 {/* Message input */}
                 <div
                     className="flex-1 flex items-center gap-1 cursor-pointer"
                     style={{
-                        background: '#F0EBE2',
-                        borderRadius: '20px',
+                        background: 'rgba(240,235,226,0.5)',
+                        borderRadius: '18px',
                         padding: '7px 12px',
-                        border: '1px solid rgba(212,204,190,0.3)',
+                        border: '0.5px solid rgba(212,204,190,0.25)',
                     }}
                     onClick={handleInputAreaClick}
                 >
@@ -538,8 +541,8 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift, onShootHearts }
                     className="flex items-center gap-1 shrink-0 cursor-pointer"
                     style={{
                         background: 'rgba(232,180,160,0.25)',
-                        border: 'none',
-                        borderRadius: '20px',
+                        border: '0.5px solid rgba(232,180,160,0.15)',
+                        borderRadius: '18px',
                         padding: '7px 12px',
                     }}
                 >
@@ -569,7 +572,7 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift, onShootHearts }
                         background: '#D4856A',
                         border: 'none',
                         color: 'white',
-                        boxShadow: '0 2px 8px rgba(212,133,106,0.35)',
+                        boxShadow: '0 2px 12px rgba(212,133,106,0.35), 0 1px 3px rgba(0,0,0,0.06)',
                     }}
                 >
                     <Camera size={15} strokeWidth={1.8} />
@@ -587,6 +590,15 @@ export function FloatingBar({ onScrollToGallery, onScrollToGift, onShootHearts }
                 @keyframes peekScrollLoop {
                     0% { transform: translateY(0); }
                     100% { transform: translateY(-50%); }
+                }
+                @media (prefers-reduced-transparency: reduce) {
+                    .floating-bar-glass {
+                        background: rgba(255,255,255,0.92) !important;
+                        backdrop-filter: none !important;
+                        -webkit-backdrop-filter: none !important;
+                        border: 1px solid rgba(212,204,190,0.5) !important;
+                        box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+                    }
                 }
             `}</style>
         </>

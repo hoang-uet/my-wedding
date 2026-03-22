@@ -85,7 +85,11 @@ export function Gallery() {
     }, [lightboxIndex, closeLightbox, navigate])
 
     return (
-        <section id="gallery-section" className="relative" style={{ background: '#F0EBE2', padding: '48px 0 16px' }}>
+        <section
+            id="gallery-section"
+            className="relative"
+            style={{ background: '#F0EBE2', padding: '48px 0 16px' }}
+        >
             {/* Floating petals — z-1, subtle background decoration */}
             <FloatingPetals />
 
@@ -94,7 +98,7 @@ export function Gallery() {
                 <div className="flex items-baseline justify-center gap-4 flex-wrap">
                     <span
                         style={{
-                            fontFamily: "var(--font-display-serif)",
+                            fontFamily: 'var(--font-display-serif)',
                             fontSize: '32px',
                             fontWeight: 600,
                             color: '#3A3A3A',
@@ -105,7 +109,7 @@ export function Gallery() {
                     </span>
                     <span
                         style={{
-                            fontFamily: "var(--font-script-elegant)",
+                            fontFamily: 'var(--font-script-elegant)',
                             fontSize: '36px',
                             color: '#4A5D3A',
                         }}
@@ -114,7 +118,7 @@ export function Gallery() {
                     </span>
                     <span
                         style={{
-                            fontFamily: "var(--font-display-serif)",
+                            fontFamily: 'var(--font-display-serif)',
                             fontSize: '32px',
                             fontWeight: 600,
                             color: '#3A3A3A',
@@ -287,7 +291,7 @@ export function Gallery() {
                     <p
                         className="absolute bottom-6"
                         style={{
-                            fontFamily: "var(--font-primary)",
+                            fontFamily: 'var(--font-primary)',
                             fontSize: '13px',
                             color: 'rgba(255,255,255,0.5)',
                             letterSpacing: '0.1em',

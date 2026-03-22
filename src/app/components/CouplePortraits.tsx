@@ -92,7 +92,7 @@ export function CouplePortraits() {
                 >
                     <p
                         style={{
-                            fontFamily: "var(--font-label-casual)",
+                            fontFamily: 'var(--font-label-casual)',
                             fontSize: '18px',
                             color: '#8B7355',
                             fontWeight: 500,
@@ -104,7 +104,7 @@ export function CouplePortraits() {
                     </p>
                     <p
                         style={{
-                            fontFamily: "var(--font-calligraphy-vn)",
+                            fontFamily: 'var(--font-calligraphy-vn)',
                             fontSize: '30px',
                             color: '#4A5D3A',
                             lineHeight: 1.05,
@@ -192,7 +192,7 @@ export function CouplePortraits() {
                 >
                     <p
                         style={{
-                            fontFamily: "var(--font-label-casual)",
+                            fontFamily: 'var(--font-label-casual)',
                             fontSize: '18px',
                             color: '#8B7355',
                             fontWeight: 500,
@@ -204,7 +204,7 @@ export function CouplePortraits() {
                     </p>
                     <p
                         style={{
-                            fontFamily: "var(--font-calligraphy-vn)",
+                            fontFamily: 'var(--font-calligraphy-vn)',
                             fontSize: '30px',
                             color: '#4A5D3A',
                             lineHeight: 1.05,

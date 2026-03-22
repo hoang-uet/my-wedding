@@ -38,7 +38,7 @@ export function RSVPForm() {
                 <div style={{ animation: 'rsvpFadeIn 600ms ease' }}>
                     <p
                         style={{
-                            fontFamily: "var(--font-script-elegant)",
+                            fontFamily: 'var(--font-script-elegant)',
                             fontSize: '36px',
                             color: '#4A5D3A',
                             marginBottom: '12px',
@@ -48,7 +48,7 @@ export function RSVPForm() {
                     </p>
                     <p
                         style={{
-                            fontFamily: "var(--font-display-serif)",
+                            fontFamily: 'var(--font-display-serif)',
                             fontSize: '16px',
                             color: '#666',
                             fontStyle: 'italic',
@@ -72,7 +72,7 @@ export function RSVPForm() {
         border: '1px solid #D4CCBE',
         borderRadius: '6px',
         padding: '11px 14px',
-        fontFamily: "var(--font-primary)",
+        fontFamily: 'var(--font-primary)',
         fontSize: '14px',
         outline: 'none',
         boxSizing: 'border-box' as const,
@@ -82,7 +82,11 @@ export function RSVPForm() {
     }
 
     return (
-        <section ref={ref} className="relative overflow-hidden" style={{ background: '#F0EBE2', padding: '48px 20px' }}>
+        <section
+            ref={ref}
+            className="relative overflow-hidden"
+            style={{ background: '#F0EBE2', padding: '48px 20px' }}
+        >
             {/* Floral accents — z-1, below form content */}
             <CornerOrchidCluster position="top-left" size={95} delay={200} />
             <BouquetAccent position="bottom-right" size={140} delay={500} />
@@ -91,7 +95,7 @@ export function RSVPForm() {
             <p
                 className="text-center mb-6 relative z-10"
                 style={{
-                    fontFamily: "var(--font-display-serif)",
+                    fontFamily: 'var(--font-display-serif)',
                     fontSize: '16px',
                     color: '#4A5D3A',
                     lineHeight: 1.8,
@@ -117,7 +121,7 @@ export function RSVPForm() {
                 <h3
                     className="text-center mb-6"
                     style={{
-                        fontFamily: "var(--font-display-serif)",
+                        fontFamily: 'var(--font-display-serif)',
                         fontSize: '22px',
                         fontWeight: 600,
                         color: '#4A5D3A',
@@ -132,7 +136,7 @@ export function RSVPForm() {
                     <label
                         htmlFor="rsvp-name"
                         style={{
-                            fontFamily: "var(--font-primary)",
+                            fontFamily: 'var(--font-primary)',
                             fontSize: '13px',
                             fontWeight: 600,
                             color: '#4A5D3A',
@@ -165,7 +169,7 @@ export function RSVPForm() {
                     {error && (
                         <p
                             style={{
-                                fontFamily: "var(--font-primary)",
+                                fontFamily: 'var(--font-primary)',
                                 fontSize: '12px',
                                 color: '#E87461',
                                 marginTop: '4px',
@@ -180,7 +184,7 @@ export function RSVPForm() {
                 <div className="mb-5">
                     <p
                         style={{
-                            fontFamily: "var(--font-primary)",
+                            fontFamily: 'var(--font-primary)',
                             fontSize: '13px',
                             fontWeight: 600,
                             color: '#4A5D3A',
@@ -200,7 +204,7 @@ export function RSVPForm() {
                         />
                         <span
                             style={{
-                                fontFamily: "var(--font-primary)",
+                                fontFamily: 'var(--font-primary)',
                                 fontSize: '14px',
                                 color: '#3A3A3A',
                             }}
@@ -218,7 +222,7 @@ export function RSVPForm() {
                         />
                         <span
                             style={{
-                                fontFamily: "var(--font-primary)",
+                                fontFamily: 'var(--font-primary)',
                                 fontSize: '14px',
                                 color: '#3A3A3A',
                             }}
@@ -234,7 +238,7 @@ export function RSVPForm() {
                         <label
                             htmlFor="rsvp-guests"
                             style={{
-                                fontFamily: "var(--font-primary)",
+                                fontFamily: 'var(--font-primary)',
                                 fontSize: '13px',
                                 fontWeight: 600,
                                 color: '#4A5D3A',
@@ -265,7 +269,7 @@ export function RSVPForm() {
                     <label
                         htmlFor="rsvp-wish"
                         style={{
-                            fontFamily: "var(--font-primary)",
+                            fontFamily: 'var(--font-primary)',
                             fontSize: '13px',
                             fontWeight: 600,
                             color: '#4A5D3A',
@@ -308,7 +312,7 @@ export function RSVPForm() {
                         border: 'none',
                         borderRadius: '6px',
                         padding: '13px',
-                        fontFamily: "var(--font-primary)",
+                        fontFamily: 'var(--font-primary)',
                         fontSize: '14px',
                         fontWeight: 600,
                         cursor: loading ? 'not-allowed' : 'pointer',

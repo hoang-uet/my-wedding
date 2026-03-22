@@ -13,7 +13,10 @@ export interface Invitation {
 
 /** Normalize Vietnamese text for accent-insensitive search */
 const normalizeVN = (str: string) =>
-    str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+    str
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
 
 interface UseInvitationsReturn {
     invitations: Invitation[]
@@ -99,9 +102,7 @@ export function useInvitations(): UseInvitationsReturn {
     const filteredInvitations = useMemo(() => {
         if (!searchQuery.trim()) return invitations
         const normalized = normalizeVN(searchQuery.trim())
-        return invitations.filter((inv) =>
-            normalizeVN(inv.guest_name).includes(normalized),
-        )
+        return invitations.filter((inv) => normalizeVN(inv.guest_name).includes(normalized))
     }, [invitations, searchQuery])
 
     // Create invitation with hash, retry on collision
@@ -152,10 +153,7 @@ export function useInvitations(): UseInvitationsReturn {
         setError(null)
 
         try {
-            const { error: deleteError } = await supabase
-                .from('invitations')
-                .delete()
-                .eq('id', id)
+            const { error: deleteError } = await supabase.from('invitations').delete().eq('id', id)
 
             if (deleteError) throw new Error(deleteError.message)
 

@@ -44,7 +44,7 @@ function useFloralReveal(delay = 0) {
                     observer.disconnect()
                 }
             },
-            { threshold: 0.15 }
+            { threshold: 0.15 },
         )
         observer.observe(el)
         return () => observer.disconnect()
@@ -298,10 +298,7 @@ export function VineFrame({
    ═══════════════════════════════════════════════════════════════ */
 export function FloatingPetals() {
     return (
-        <div
-            className="absolute inset-0 pointer-events-none overflow-hidden"
-            style={{ zIndex: 1 }}
-        >
+        <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 1 }}>
             {[...Array(5)].map((_, i) => (
                 <div
                     key={i}

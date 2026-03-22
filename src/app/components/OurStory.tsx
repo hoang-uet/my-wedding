@@ -25,7 +25,7 @@ export function OurStory() {
                 <h2
                     className="text-center mb-3"
                     style={{
-                        fontFamily: "var(--font-script-elegant)",
+                        fontFamily: 'var(--font-script-elegant)',
                         fontSize: 'var(--text-display)',
                         color: '#4A5D3A',
                         fontWeight: 400,
@@ -51,7 +51,7 @@ export function OurStory() {
                         key={index}
                         className="text-center mb-5"
                         style={{
-                            fontFamily: "var(--font-primary)",
+                            fontFamily: 'var(--font-primary)',
                             fontSize: 'var(--text-body)',
                             fontWeight: 500,
                             color: '#4A4A4A',

@@ -26,22 +26,22 @@ const LOCAL_HEARTS_RANGE = 4 // 5–8
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 interface HeartBurstPayload {
-  /** Number of hearts to spawn */
-  c: number
+    /** Number of hearts to spawn */
+    c: number
 }
 
 // ─── Hook ────────────────────────────────────────────────────────────────────
 
 interface UseHeartBroadcastReturn {
-  /**
-   * Call when user clicks "Bắn tim".
-   * Returns the number of local hearts to spawn (0 if throttled).
-   */
-  shootHearts: () => number
-  /** Accumulated remote spawn count. Reset after consumption. */
-  remoteSpawnCount: number
-  /** Reset remoteSpawnCount to 0 after HeartCanvas processes it */
-  clearRemoteSpawn: () => void
+    /**
+     * Call when user clicks "Bắn tim".
+     * Returns the number of local hearts to spawn (0 if throttled).
+     */
+    shootHearts: () => number
+    /** Accumulated remote spawn count. Reset after consumption. */
+    remoteSpawnCount: number
+    /** Reset remoteSpawnCount to 0 after HeartCanvas processes it */
+    clearRemoteSpawn: () => void
 }
 
 /**
@@ -53,96 +53,96 @@ interface UseHeartBroadcastReturn {
  * - Graceful degradation: works offline (local hearts still fire)
  */
 export function useHeartBroadcast(): UseHeartBroadcastReturn {
-  const [remoteSpawnCount, setRemoteSpawnCount] = useState(0)
+    const [remoteSpawnCount, setRemoteSpawnCount] = useState(0)
 
-  // Refs for throttle/batch state (not reactive — no re-renders)
-  const clickTimestamps = useRef<number[]>([])
-  const pendingSendCount = useRef(0)
-  const sendTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const receiveBatchCount = useRef(0)
-  const receiveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const channelRef = useRef<RealtimeChannel | null>(null)
+    // Refs for throttle/batch state (not reactive — no re-renders)
+    const clickTimestamps = useRef<number[]>([])
+    const pendingSendCount = useRef(0)
+    const sendTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+    const receiveBatchCount = useRef(0)
+    const receiveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+    const channelRef = useRef<RealtimeChannel | null>(null)
 
-  // ── Supabase channel lifecycle ──
-  useEffect(() => {
-    if (!supabase) return
+    // ── Supabase channel lifecycle ──
+    useEffect(() => {
+        if (!supabase) return
 
-    const channel = supabase.channel(CHANNEL_NAME)
-    channelRef.current = channel
+        const channel = supabase.channel(CHANNEL_NAME)
+        channelRef.current = channel
 
-    channel
-      .on('broadcast', { event: EVENT_NAME }, (msg) => {
-        const payload = msg.payload as HeartBurstPayload
-        const count = Math.min(payload?.c ?? 0, PER_EVENT_CAP)
-        if (count <= 0) return
+        channel
+            .on('broadcast', { event: EVENT_NAME }, (msg) => {
+                const payload = msg.payload as HeartBurstPayload
+                const count = Math.min(payload?.c ?? 0, PER_EVENT_CAP)
+                if (count <= 0) return
 
-        // Batch incoming events
-        receiveBatchCount.current += count
+                // Batch incoming events
+                receiveBatchCount.current += count
 
-        if (!receiveTimerRef.current) {
-          receiveTimerRef.current = setTimeout(() => {
-            const capped = Math.min(receiveBatchCount.current, RECEIVE_BATCH_CAP)
-            setRemoteSpawnCount((prev) => prev + capped)
-            receiveBatchCount.current = 0
-            receiveTimerRef.current = null
-          }, RECEIVE_BATCH_DELAY_MS)
+                if (!receiveTimerRef.current) {
+                    receiveTimerRef.current = setTimeout(() => {
+                        const capped = Math.min(receiveBatchCount.current, RECEIVE_BATCH_CAP)
+                        setRemoteSpawnCount((prev) => prev + capped)
+                        receiveBatchCount.current = 0
+                        receiveTimerRef.current = null
+                    }, RECEIVE_BATCH_DELAY_MS)
+                }
+            })
+            .subscribe()
+
+        return () => {
+            if (sendTimerRef.current) clearTimeout(sendTimerRef.current)
+            if (receiveTimerRef.current) clearTimeout(receiveTimerRef.current)
+            supabase.removeChannel(channel)
+            channelRef.current = null
         }
-      })
-      .subscribe()
+    }, [])
 
-    return () => {
-      if (sendTimerRef.current) clearTimeout(sendTimerRef.current)
-      if (receiveTimerRef.current) clearTimeout(receiveTimerRef.current)
-      supabase.removeChannel(channel)
-      channelRef.current = null
-    }
-  }, [])
+    // ── Send broadcast (batched) ──
+    const flushSend = useCallback(() => {
+        const count = pendingSendCount.current
+        pendingSendCount.current = 0
+        sendTimerRef.current = null
+        if (count <= 0 || !channelRef.current) return
 
-  // ── Send broadcast (batched) ──
-  const flushSend = useCallback(() => {
-    const count = pendingSendCount.current
-    pendingSendCount.current = 0
-    sendTimerRef.current = null
-    if (count <= 0 || !channelRef.current) return
+        channelRef.current.send({
+            type: 'broadcast',
+            event: EVENT_NAME,
+            payload: { c: count } satisfies HeartBurstPayload,
+        })
+    }, [])
 
-    channelRef.current.send({
-      type: 'broadcast',
-      event: EVENT_NAME,
-      payload: { c: count } satisfies HeartBurstPayload,
-    })
-  }, [])
+    // ── Throttle check (sliding window) ──
+    const isThrottled = useCallback((): boolean => {
+        const now = Date.now()
+        const timestamps = clickTimestamps.current
+        // Evict expired timestamps
+        while (timestamps.length > 0 && now - timestamps[0] > THROTTLE_WINDOW_MS) {
+            timestamps.shift()
+        }
+        return timestamps.length >= THROTTLE_MAX_CLICKS
+    }, [])
 
-  // ── Throttle check (sliding window) ──
-  const isThrottled = useCallback((): boolean => {
-    const now = Date.now()
-    const timestamps = clickTimestamps.current
-    // Evict expired timestamps
-    while (timestamps.length > 0 && now - timestamps[0] > THROTTLE_WINDOW_MS) {
-      timestamps.shift()
-    }
-    return timestamps.length >= THROTTLE_MAX_CLICKS
-  }, [])
+    // ── Public: shoot hearts ──
+    const shootHearts = useCallback((): number => {
+        if (isThrottled()) return 0
 
-  // ── Public: shoot hearts ──
-  const shootHearts = useCallback((): number => {
-    if (isThrottled()) return 0
+        clickTimestamps.current.push(Date.now())
 
-    clickTimestamps.current.push(Date.now())
+        // Local hearts (immediate feedback)
+        const localCount = LOCAL_HEARTS_MIN + Math.floor(Math.random() * LOCAL_HEARTS_RANGE)
 
-    // Local hearts (immediate feedback)
-    const localCount = LOCAL_HEARTS_MIN + Math.floor(Math.random() * LOCAL_HEARTS_RANGE)
+        // Queue for broadcast batch
+        pendingSendCount.current += localCount
+        if (sendTimerRef.current) clearTimeout(sendTimerRef.current)
+        sendTimerRef.current = setTimeout(flushSend, SEND_BATCH_DELAY_MS)
 
-    // Queue for broadcast batch
-    pendingSendCount.current += localCount
-    if (sendTimerRef.current) clearTimeout(sendTimerRef.current)
-    sendTimerRef.current = setTimeout(flushSend, SEND_BATCH_DELAY_MS)
+        return localCount
+    }, [isThrottled, flushSend])
 
-    return localCount
-  }, [isThrottled, flushSend])
+    const clearRemoteSpawn = useCallback(() => {
+        setRemoteSpawnCount(0)
+    }, [])
 
-  const clearRemoteSpawn = useCallback(() => {
-    setRemoteSpawnCount(0)
-  }, [])
-
-  return { shootHearts, remoteSpawnCount, clearRemoteSpawn }
+    return { shootHearts, remoteSpawnCount, clearRemoteSpawn }
 }

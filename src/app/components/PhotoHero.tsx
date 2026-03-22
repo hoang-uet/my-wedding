@@ -33,7 +33,7 @@ export function PhotoHero() {
             >
                 <p
                     style={{
-                        fontFamily: "var(--font-calligraphy-vn)",
+                        fontFamily: 'var(--font-calligraphy-vn)',
                         fontSize: 'var(--text-quote)',
                         color: '#FFFFFF',
                         textShadow: '0 2px 20px rgba(0,0,0,0.35)',
@@ -53,7 +53,7 @@ export function PhotoHero() {
                 <p
                     className="mt-4"
                     style={{
-                        fontFamily: "var(--font-primary)",
+                        fontFamily: 'var(--font-primary)',
                         fontSize: '14px',
                         color: 'rgba(255,255,255,0.8)',
                         letterSpacing: '0.2em',

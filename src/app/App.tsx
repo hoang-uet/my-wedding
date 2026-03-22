@@ -75,7 +75,7 @@ export default function App() {
                 style={{
                     width: '100%',
                     maxWidth: '430px',
-                    height: '100vh',
+                    height: '100dvh',
                     overflow: 'hidden',
                     boxShadow: '0 20px 60px rgba(0,0,0,0.12), 0 8px 24px rgba(0,0,0,0.08)',
                     background: '#F0EBE2',
@@ -90,7 +90,7 @@ export default function App() {
                     className="flex-1 overflow-y-auto"
                     style={{
                         scrollBehavior: 'smooth',
-                        paddingBottom: '56px',
+                        paddingBottom: 'calc(66px + env(safe-area-inset-bottom, 0px))',
                     }}
                 >
                     <div className="relative">
@@ -116,10 +116,7 @@ export default function App() {
                 </div>
 
                 {/* Canvas heart particle system (z-100, pointer-events: none) */}
-                <HeartCanvas
-                    spawnSignal={spawnSignal}
-                    onSpawnConsumed={handleSpawnConsumed}
-                />
+                <HeartCanvas spawnSignal={spawnSignal} onSpawnConsumed={handleSpawnConsumed} />
 
                 {/* Floating bottom bar */}
                 <FloatingBar
@@ -133,10 +130,15 @@ export default function App() {
             <FloralAnimationStyles />
 
             <style>{`
+        @supports not (height: 100dvh) {
+          .phone-frame {
+            height: 100vh !important;
+          }
+        }
         @media (min-width: 768px) {
           .phone-frame {
             border-radius: 36px !important;
-            max-height: 100vh;
+            max-height: 100dvh;
           }
         }
         @media (max-width: 767px) {

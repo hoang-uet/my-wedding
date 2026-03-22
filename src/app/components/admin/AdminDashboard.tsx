@@ -1,16 +1,7 @@
 import { useState, useCallback } from 'react'
 import { formatDistanceToNow } from 'date-fns'
 import { vi } from 'date-fns/locale'
-import {
-    Search,
-    Plus,
-    Copy,
-    Trash2,
-    Lock,
-    ArrowLeft,
-    Mail,
-    User,
-} from 'lucide-react'
+import { Search, Plus, Copy, Trash2, Lock, ArrowLeft, Mail, User } from 'lucide-react'
 import {
     AlertDialog,
     AlertDialogAction,
@@ -47,7 +38,10 @@ function PinGate({ onAuthenticated }: { onAuthenticated: () => void }) {
     }
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen px-6" style={{ background: '#F0EBE2' }}>
+        <div
+            className="flex flex-col items-center justify-center min-h-screen px-6"
+            style={{ background: '#F0EBE2' }}
+        >
             <div
                 className="w-full max-w-[340px] p-8 rounded-2xl text-center"
                 style={{
@@ -95,14 +89,15 @@ function PinGate({ onAuthenticated }: { onAuthenticated: () => void }) {
                         style={{
                             fontFamily: 'var(--font-primary)',
                             background: 'rgba(255,255,255,0.9)',
-                            border: error
-                                ? '2px solid #E87461'
-                                : '2px solid rgba(139,115,85,0.2)',
+                            border: error ? '2px solid #E87461' : '2px solid rgba(139,115,85,0.2)',
                             color: '#2D2D2D',
                         }}
                     />
                     {error && (
-                        <p className="text-sm" style={{ color: '#E87461', fontFamily: 'var(--font-primary)' }}>
+                        <p
+                            className="text-sm"
+                            style={{ color: '#E87461', fontFamily: 'var(--font-primary)' }}
+                        >
                             Sai mã PIN. Vui lòng thử lại.
                         </p>
                     )}
@@ -361,7 +356,10 @@ function Dashboard() {
                 {/* Content */}
                 <div className="flex-1 px-4 py-3 space-y-3 overflow-y-auto">
                     {error && (
-                        <p className="text-sm text-center py-2" style={{ color: '#E87461', fontFamily: 'var(--font-primary)' }}>
+                        <p
+                            className="text-sm text-center py-2"
+                            style={{ color: '#E87461', fontFamily: 'var(--font-primary)' }}
+                        >
                             {error}
                         </p>
                     )}
@@ -370,9 +368,15 @@ function Dashboard() {
                         <div className="flex flex-col items-center py-12">
                             <div
                                 className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin"
-                                style={{ borderColor: 'rgba(74,93,58,0.3)', borderTopColor: 'transparent' }}
+                                style={{
+                                    borderColor: 'rgba(74,93,58,0.3)',
+                                    borderTopColor: 'transparent',
+                                }}
                             />
-                            <p className="mt-3 text-sm" style={{ color: '#8B7355', fontFamily: 'var(--font-primary)' }}>
+                            <p
+                                className="mt-3 text-sm"
+                                style={{ color: '#8B7355', fontFamily: 'var(--font-primary)' }}
+                            >
                                 Đang tải...
                             </p>
                         </div>
@@ -386,11 +390,18 @@ function Dashboard() {
                             </div>
                             <p
                                 className="font-medium mb-1"
-                                style={{ color: '#3C4E34', fontFamily: 'var(--font-primary)', fontSize: '15px' }}
+                                style={{
+                                    color: '#3C4E34',
+                                    fontFamily: 'var(--font-primary)',
+                                    fontSize: '15px',
+                                }}
                             >
                                 {searchQuery ? 'Không tìm thấy kết quả' : 'Chưa có thiệp nào'}
                             </p>
-                            <p className="text-sm" style={{ color: '#8B7355', fontFamily: 'var(--font-primary)' }}>
+                            <p
+                                className="text-sm"
+                                style={{ color: '#8B7355', fontFamily: 'var(--font-primary)' }}
+                            >
                                 {searchQuery
                                     ? `Không có khách mời nào khớp với "${searchQuery}"`
                                     : 'Nhấn "Tạo thiệp mới" để bắt đầu'}
@@ -443,12 +454,17 @@ function Dashboard() {
             >
                 <AlertDialogContent style={{ background: '#F0EBE2', borderRadius: '16px' }}>
                     <AlertDialogHeader>
-                        <AlertDialogTitle style={{ fontFamily: 'var(--font-display-serif)', color: '#3C4E34' }}>
+                        <AlertDialogTitle
+                            style={{ fontFamily: 'var(--font-display-serif)', color: '#3C4E34' }}
+                        >
                             Xóa thiệp mời?
                         </AlertDialogTitle>
-                        <AlertDialogDescription style={{ fontFamily: 'var(--font-primary)', color: '#8B7355' }}>
-                            Xóa thiệp mời cho <strong style={{ color: '#2D2D2D' }}>{deleteTarget?.guest_name}</strong>?
-                            Link sẽ không còn hoạt động.
+                        <AlertDialogDescription
+                            style={{ fontFamily: 'var(--font-primary)', color: '#8B7355' }}
+                        >
+                            Xóa thiệp mời cho{' '}
+                            <strong style={{ color: '#2D2D2D' }}>{deleteTarget?.guest_name}</strong>
+                            ? Link sẽ không còn hoạt động.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
