@@ -100,7 +100,7 @@ export function CreateInvitationModal({
                                     setError(null)
                                 }
                             }}
-                            placeholder='Ví dụ: "Anh Tuấn & Gia Đình"'
+                            placeholder='Ví dụ: "Bạn Tuấn & Gia Đình"'
                             autoFocus
                             className="w-full px-3 py-2.5 rounded-[10px] text-sm outline-none transition-colors"
                             style={{
@@ -120,13 +120,10 @@ export function CreateInvitationModal({
                                     fontFamily: 'var(--font-primary)',
                                 }}
                             >
-                                {error ?? 'Ví dụ: "Cô Lan", "Bác Hùng", "Anh Tuấn & Gia Đình"'}
+                                {error ?? 'Ví dụ: "Chị Quỳnh", "Anh Kiên", "Bạn Tuấn & Gia Đình"'}
                             </p>
                             {name.length > 0 && (
-                                <span
-                                    className="text-xs tabular-nums"
-                                    style={{ color: '#8B7355' }}
-                                >
+                                <span className="text-xs tabular-nums" style={{ color: '#8B7355' }}>
                                     {trimmedName.length}/{MAX_NAME_LENGTH}
                                 </span>
                             )}
@@ -138,7 +135,8 @@ export function CreateInvitationModal({
                         <div
                             className="rounded-xl p-4 text-center"
                             style={{
-                                background: 'linear-gradient(180deg, rgba(60,78,52,0.85) 0%, rgba(74,93,58,0.9) 100%)',
+                                background:
+                                    'linear-gradient(180deg, rgba(60,78,52,0.85) 0%, rgba(74,93,58,0.9) 100%)',
                                 border: '1px solid rgba(155,175,136,0.3)',
                             }}
                         >
@@ -164,8 +162,8 @@ export function CreateInvitationModal({
                             </p>
                             <p
                                 style={{
-                                    fontFamily: 'var(--font-calligraphy-vn)',
-                                    fontSize: '20px',
+                                    fontFamily: 'var(--font-envelope-guest)',
+                                    fontSize: '30px',
                                     color: '#FFECD2',
                                     textShadow: '0 1px 6px rgba(0,0,0,0.3)',
                                     lineHeight: 1.3,

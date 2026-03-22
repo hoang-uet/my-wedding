@@ -1,13 +1,18 @@
 # Spec 004: Cải thiện EnvelopeCard Animations
 
-## Trạng thái: Đang lên kế hoạch
+## Trạng thái: Đang triển khai (Phase 2)
 
 ## Tóm tắt
 
-Sửa 3 vấn đề trên component `EnvelopeCard.tsx`:
-1. Card content không hiển thị khi mở thiệp
-2. Hiệu ứng trái tim xấu, cần thay bằng particle burst
-3. Nắp thiệp đóng đè lên card trước khi card kết thúc animation
+### Phase 1 (Đã hoàn thành)
+1. ~~Card content không hiển thị khi mở thiệp~~ → Tăng CARD_RISE = 170
+2. ~~Hiệu ứng trái tim xấu~~ → Heart particle burst (15 SVG hearts)
+3. ~~Nắp thiệp đóng đè lên card~~ → 2-phase closing state machine
+
+### Phase 2 (Đang triển khai)
+4. Khi mở thiệp: nắp thiệp đè lên INVITATION CARD ở 1 khoảnh khắc nhỏ (z-index flash)
+5. Bóng mờ nhấp nhô lên xuống theo envelope float — cần cố định vị trí
+6. Card content bên trong INVITATION CARD vẫn không hiển thị (WeddingImage position bug)
 
 ---
 
@@ -275,9 +280,162 @@ const flapOpen = isOpening || isOpen || isClosingCard  // Flap vẫn mở trong 
 
 ---
 
+## Phase 2: Cải thiện hiệu ứng mở thiệp
+
+### Vấn đề 4: Z-index flash khi mở thiệp — nắp thiệp đè INVITATION CARD
+
+#### Phân tích nguyên nhân
+
+Khi state chuyển từ `closed` → `opening`:
+- Card z-index cần chuyển từ 1 → 2
+- Nhưng card có `transition: ... z-index 0.5s` — z-index chỉ nhảy tại thời điểm 250ms (midpoint)
+- Trong khoảng 0-250ms đầu tiên, card z vẫn = 1, flap z cũng = 1
+- Do flap nằm SAU card trong DOM → flap render đè lên card → gây nháy
+
+#### Giải pháp
+
+1. **Giữ card z-index = 2** (cao hơn flap z:1, thấp hơn pocket z:3) — card đè lên nắp thiệp nhưng KHÔNG đè lên thân thiệp
+2. **Loại bỏ transition delay cho z-index** trên CẢ card và flap — dùng `z-index 0s` thay vì `z-index 0.5s`/`z-index 1.2s`
+
+```tsx
+// Card z-index: giữ z:2 — trên flap (z:1), dưới pocket (z:3)
+const cardZ = (isOpen || isOpening || isClosingCard) ? 2 : 1
+
+// Card + Flap transition: z-index chuyển ngay lập tức (0s), không delay
+// Card: 'transform 1s cubic-bezier(...) 0.5s, z-index 0s'
+// Flap: 'transform 1.2s cubic-bezier(...), z-index 0s'  (trước đó: z-index 1.2s)
+```
+
+**Lý do root cause thật sự là transition delay, không phải giá trị z-index:**
+- Card có `z-index 0.5s` → z nhảy tại midpoint 250ms → 250ms đầu card vẫn z:1
+- Flap có `z-index 1.2s` → z nhảy tại midpoint 600ms → 600ms đầu flap vẫn z:5
+- Kết quả: 250ms đầu card z:1 < flap z:5 → nắp đè card → nháy
+- Fix: cả hai dùng `z-index 0s` → card z:2 > flap z:1 ngay lập tức
+
+#### Thay đổi cụ thể
+
+| File | Dòng | Thay đổi |
+|------|------|----------|
+| `EnvelopeCard.tsx` | L323-324 | Card transition: `z-index 0.5s` → `z-index 0s` |
+| `EnvelopeCard.tsx` | L458 | Flap transition: `z-index 1.2s` → `z-index 0s` |
+
+---
+
+### Vấn đề 5: Bóng mờ nhấp nhô theo envelope float
+
+#### Phân tích nguyên nhân
+
+Bóng mờ (oval shadow) hiện là **child element** của envelope div — envelope div có `animation: envelopeFloat 3s ease-in-out infinite` di chuyển ±20px. Do bóng là con của element float → bóng cũng di chuyển ±20px theo.
+
+```
+Hiện tại:
+  <div envelope (float ±20px)>     ← parent float
+    <div shadow />                 ← child → cũng float ±20px
+  </div>
+
+Mong muốn:
+  Shadow cố định tại vị trí "Chạm để mở thiệp", chỉ thay đổi scaleX
+```
+
+#### Giải pháp
+
+Di chuyển shadow ra NGOÀI envelope div, đặt làm sibling trong outer wrapper:
+
+```
+<div wrapper>
+  <div envelope (float animation)>
+    ... envelope parts (không có shadow) ...
+  </div>
+  <div shadow (absolute, bottom: -25px, chỉ animate scaleX) />
+</div>
+```
+
+Shadow được đặt với `position: absolute; bottom: -25px` của wrapper → luôn cố định bất kể envelope float hay wrapper height thay đổi.
+
+#### Thay đổi cụ thể
+
+| File | Dòng | Thay đổi |
+|------|------|----------|
+| `EnvelopeCard.tsx` | L275-291 | Xóa shadow div khỏi bên trong envelope |
+| `EnvelopeCard.tsx` | — | Thêm shadow div làm sibling cuối cùng trong wrapper, `absolute bottom-[-25px]` |
+
+---
+
+### Vấn đề 6: Card content không hiển thị — WeddingImage position bug
+
+#### Phân tích nguyên nhân (Root cause)
+
+Component `WeddingImage` set `position: 'relative'` qua **inline style** — inline style có specificity cao hơn Tailwind class `absolute`:
+
+```tsx
+// WeddingImage.tsx - line 33
+<div className={className} style={{ position: 'relative', ... }}>
+
+// EnvelopeCard.tsx - truyền className="absolute inset-0 w-full h-full"
+// → Tailwind `absolute` bị inline `position: relative` override!
+```
+
+**Hệ quả:**
+1. WeddingImage div có `position: relative` + `width: 100%` + `height: 100%` → chiếm hết space trong flow
+2. Card content div (cũng `h-full`) bắt đầu SAU WeddingImage → tổng content = 200% parent height
+3. Parent có `overflow: hidden` → content bị cắt hoàn toàn, không nhìn thấy
+
+```
+Parent (overflow: hidden, h=193px):
+  ┌─────────────────┐
+  │ WeddingImage     │ ← position:relative, h:100% = 193px (chiếm hết)
+  │ (background)     │
+  ├─────────────────┤ ← 193px
+  │ Card content     │ ← h:100% = 193px, nhưng bị overflow:hidden cắt!
+  │ (tên, ngày, lời  │
+  │  mời — INVISIBLE)│
+  └─────────────────┘
+```
+
+#### Giải pháp
+
+Truyền `position: 'absolute'` qua style prop — spread operator `...style` trong WeddingImage sẽ override `position: 'relative'`:
+
+```tsx
+<WeddingImage
+    image={weddingImages.thankYou}
+    alt="Wedding"
+    sizes="280px"
+    className="absolute inset-0 w-full h-full"
+    style={{ borderRadius: '6px', aspectRatio: 'unset', position: 'absolute' }}
+/>
+```
+
+#### Thay đổi cụ thể
+
+| File | Dòng | Thay đổi |
+|------|------|----------|
+| `EnvelopeCard.tsx` | L344 | Thêm `position: 'absolute'` vào style prop của WeddingImage |
+
+---
+
+## Tổng hợp Phase 2
+
+### Thứ tự triển khai
+
+1. **Fix #6** (card content) — sửa position bug, content sẽ hiển thị ngay
+2. **Fix #4** (z-index flash) — tăng card z + bỏ transition delay
+3. **Fix #5** (shadow) — di chuyển shadow ra ngoài envelope
+
+### Checklist
+
+- [ ] **Step 1:** Thêm `position: 'absolute'` vào WeddingImage style prop
+- [ ] **Step 2:** Card z-index: `2` → `4` khi opening/open/closing-card
+- [ ] **Step 3:** Card transition: `z-index 0.5s` → `z-index 0s` (cả opening lẫn closing)
+- [ ] **Step 4:** Di chuyển shadow div ra khỏi envelope, đặt trong wrapper với `absolute bottom`
+- [ ] **Step 5:** Thêm Playwright tests cho 3 fixes mới
+- [ ] **Step 6:** Verify trên mobile viewport
+
+---
+
 ## Tham chiếu
 
-- Template mẫu: `src/app/components/template-envelope-card.png`
-- Ảnh hiện tại: `src/app/components/local-envelope-card.png`
+- Template mẫu: `specs/004-envelope-card-animations/template-envelope-card.png`
+- Ảnh hiện tại: `specs/004-envelope-card-animations/local-envelope-card.png`
 - Component: `src/app/components/EnvelopeCard.tsx`
 - Animation reference: cinelove.me/template/pc/thiep-cuoi-48

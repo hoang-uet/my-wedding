@@ -76,12 +76,11 @@ export function InvitationInfo({ guestName }: InvitationInfoProps) {
                 {/* ── "TRÂN TRỌNG KÍNH MỜI" ── */}
                 <p
                     style={{
-                        fontFamily: 'var(--font-display-serif)',
+                        fontFamily: 'var(--font-venue)',
                         fontSize: '16px',
                         color: '#4A5D3A',
                         letterSpacing: '0.18em',
                         textTransform: 'uppercase',
-                        fontStyle: 'italic',
                         fontWeight: 400,
                     }}
                 >
@@ -92,11 +91,11 @@ export function InvitationInfo({ guestName }: InvitationInfoProps) {
                 <p
                     data-testid="invitation-guest-name"
                     style={{
-                        fontFamily: 'var(--font-calligraphy-vn)',
-                        fontSize: guestName ? '28px' : '32px',
+                        fontFamily: 'var(--font-envelope-guest)',
+                        fontSize: '40px',
                         color: 'rgb(199, 21, 21)',
                         lineHeight: 1.3,
-                        marginTop: '8px',
+                        marginTop: '12px',
                         maxWidth: '90%',
                         wordBreak: 'break-word',
                     }}
@@ -107,12 +106,11 @@ export function InvitationInfo({ guestName }: InvitationInfoProps) {
                 {/* ── "THAM DỰ TIỆC CHUNG VUI / CÙNG GIA ĐÌNH CHÚNG TÔI" ── */}
                 <p
                     style={{
-                        fontFamily: 'var(--font-display-serif)',
+                        fontFamily: 'var(--font-venue)',
                         fontSize: '14px',
                         color: '#4A5D3A',
                         letterSpacing: '0.14em',
                         textTransform: 'uppercase',
-                        fontStyle: 'italic',
                         fontWeight: 400,
                         lineHeight: 1.8,
                         marginTop: '16px',

@@ -10,7 +10,7 @@ import orchidSingle from '@/assets/orchid-single.png'
  *   closed → opening → open → closing-card → closing-flap → closed
  *
  * Z-index layers (inside envelope):
- *   0: body   1: side flaps   1-2: card (1 closed, 2 open/opening/closing-card)   3: pocket   1-5: flap (5 closed/closing-flap, 1 open/closing-card)   10: seal   7: hearts
+ *   0: body/shadow   1: side flaps   1-2: card (1 closed, 2 open/opening/closing-card)   3: pocket   1-5: flap (5 closed/closing-flap, 1 open/closing-card)   10: seal   7: hearts
  *
  * Animation timings:
  *   - Idle: float up/down 20px (3s ease-in-out infinite)
@@ -55,9 +55,10 @@ function rand(min: number, max: number) {
 function generateHearts(): HeartParticle[] {
     return Array.from({ length: HEART_COUNT }, (_, i) => {
         // Favor upward burst (70% upper hemisphere)
-        const angle = Math.random() < 0.7
-            ? rand(-Math.PI * 0.85, -Math.PI * 0.15) // upper arc
-            : rand(Math.PI * 0.15, Math.PI * 0.85)   // lower arc (fewer)
+        const angle =
+            Math.random() < 0.7
+                ? rand(-Math.PI * 0.85, -Math.PI * 0.15) // upper arc
+                : rand(Math.PI * 0.15, Math.PI * 0.85) // lower arc (fewer)
         const distance = rand(70, 200)
 
         // Size distribution: 40% small, 40% medium, 20% large
@@ -101,19 +102,21 @@ function HeartBurst() {
                     width={h.size}
                     height={h.size}
                     fill={h.color}
-                    style={{
-                        position: 'absolute',
-                        left: -h.size / 2,
-                        top: -h.size / 2,
-                        '--hx': `${h.x}px`,
-                        '--hy': `${h.y}px`,
-                        '--h-drift': `${h.drift}px`,
-                        '--h-sway': `${h.sway}px`,
-                        '--h-rot': `${h.rotation}deg`,
-                        animation: `heartBurst ${h.duration}ms cubic-bezier(0.25, 0.46, 0.45, 0.94) ${h.delay}ms both`,
-                        willChange: 'transform, opacity',
-                        filter: `drop-shadow(0 1px 3px rgba(0,0,0,0.15))`,
-                    } as React.CSSProperties}
+                    style={
+                        {
+                            position: 'absolute',
+                            left: -h.size / 2,
+                            top: -h.size / 2,
+                            '--hx': `${h.x}px`,
+                            '--hy': `${h.y}px`,
+                            '--h-drift': `${h.drift}px`,
+                            '--h-sway': `${h.sway}px`,
+                            '--h-rot': `${h.rotation}deg`,
+                            animation: `heartBurst ${h.duration}ms cubic-bezier(0.25, 0.46, 0.45, 0.94) ${h.delay}ms both`,
+                            willChange: 'transform, opacity',
+                            filter: `drop-shadow(0 1px 3px rgba(0,0,0,0.15))`,
+                        } as React.CSSProperties
+                    }
                     data-testid={`heart-${h.id}`}
                 >
                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
@@ -126,9 +129,11 @@ function HeartBurst() {
 interface EnvelopeCardProps {
     /** Called when user taps the envelope to open (first click). Use to trigger music. */
     onOpen?: () => void
+    /** Guest name from personalized invitation link. null/undefined = generic text. */
+    guestName?: string | null
 }
 
-export function EnvelopeCard({ onOpen }: EnvelopeCardProps) {
+export function EnvelopeCard({ onOpen, guestName }: EnvelopeCardProps) {
     const [state, setState] = useState<EnvelopeState>('closed')
     const [heartsKey, setHeartsKey] = useState(0)
     const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -171,8 +176,7 @@ export function EnvelopeCard({ onOpen }: EnvelopeCardProps) {
 
     // Wrapper grows to accommodate the card rising above.
     // During closing-card, keep expanded so layout doesn't jump while card descends.
-    const wrapperH =
-        isOpen || isOpening || isClosingCard ? ENV_H + CARD_RISE + 10 : ENV_H
+    const wrapperH = isOpen || isOpening || isClosingCard ? ENV_H + CARD_RISE + 10 : ENV_H
 
     return (
         <section
@@ -254,9 +258,10 @@ export function EnvelopeCard({ onOpen }: EnvelopeCardProps) {
                 style={{
                     width: `${ENV_W}px`,
                     height: `${wrapperH}px`,
-                    transition: isClosingCard || isClosingFlap
-                        ? 'height 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.3s'
-                        : 'height 800ms cubic-bezier(0.34, 1.2, 0.64, 1)',
+                    transition:
+                        isClosingCard || isClosingFlap
+                            ? 'height 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.3s'
+                            : 'height 800ms cubic-bezier(0.34, 1.2, 0.64, 1)',
                 }}
             >
                 {/* ═══════════════════════════════════
@@ -272,24 +277,6 @@ export function EnvelopeCard({ onOpen }: EnvelopeCardProps) {
                     }}
                     onClick={handleClick}
                 >
-                    {/* ── Oval shadow beneath envelope ── */}
-                    <div
-                        className="absolute pointer-events-none"
-                        style={{
-                            width: `${ENV_W * 1.14}px`,
-                            height: '25px',
-                            borderRadius: '50%',
-                            background: 'rgba(0, 0, 0, 0.2)',
-                            top: `${ENV_H + 50}px`,
-                            left: '50%',
-                            transform: 'translateX(-50%)',
-                            filter: 'blur(4px)',
-                            boxShadow: '0 0 20px rgba(0, 0, 0, 0.2)',
-                            animation: 'shadowScale 3s ease-in-out infinite',
-                            zIndex: 0,
-                        }}
-                    />
-
                     {/* Body background — z:0 */}
                     <div
                         className="absolute inset-0"
@@ -307,7 +294,8 @@ export function EnvelopeCard({ onOpen }: EnvelopeCardProps) {
               INVITATION CARD
               Ref: position: relative; width: 90%; height: 90%; top: 5%
               Fully contained in envelope when closed (no overhang).
-              z:1 closed (below pocket z:3), z:2 open (still below pocket).
+              z:1 closed (below pocket z:3), z:2 open (above flap z:1, below pocket z:3).
+              z-index transition is instant (0s) to prevent flash.
               ─────────────────────────────────── */}
                     <div
                         className="absolute"
@@ -320,8 +308,8 @@ export function EnvelopeCard({ onOpen }: EnvelopeCardProps) {
                             bottom: '5%',
                             transform: `translateY(${cardY}px)`,
                             transition: isClosingCard
-                                ? 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s, z-index 0.1s'
-                                : 'transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s, z-index 0.5s',
+                                ? 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s, z-index 0s'
+                                : 'transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s, z-index 0s',
                             pointerEvents: isOpen ? 'auto' : 'none',
                         }}
                     >
@@ -341,7 +329,11 @@ export function EnvelopeCard({ onOpen }: EnvelopeCardProps) {
                                 alt="Wedding"
                                 sizes="280px"
                                 className="absolute inset-0 w-full h-full"
-                                style={{ borderRadius: '6px', aspectRatio: 'unset' }}
+                                style={{
+                                    borderRadius: '6px',
+                                    aspectRatio: 'unset',
+                                    position: 'absolute',
+                                }}
                             />
                             {/* Dark overlay */}
                             <div
@@ -361,13 +353,13 @@ export function EnvelopeCard({ onOpen }: EnvelopeCardProps) {
                             />
 
                             {/* Card content */}
-                            <div className="relative z-10 flex flex-col items-center justify-center h-full px-5 py-6">
+                            <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 py-5">
                                 {/* Label */}
                                 <p
                                     style={{
                                         fontFamily: 'var(--font-formal)',
-                                        fontSize: '13px',
-                                        color: 'rgba(255,255,255,0.88)',
+                                        fontSize: '11px',
+                                        color: 'rgba(255,255,255,0.85)',
                                         letterSpacing: '0.28em',
                                         textTransform: 'uppercase',
                                         fontWeight: 400,
@@ -379,11 +371,11 @@ export function EnvelopeCard({ onOpen }: EnvelopeCardProps) {
                                 {/* Decorative line */}
                                 <div
                                     style={{
-                                        width: '60px',
+                                        width: '50px',
                                         height: '1px',
                                         background:
                                             'linear-gradient(90deg, transparent, rgba(200,185,154,0.8), transparent)',
-                                        margin: '10px 0 14px',
+                                        margin: '6px 0 10px',
                                     }}
                                 />
 
@@ -391,7 +383,7 @@ export function EnvelopeCard({ onOpen }: EnvelopeCardProps) {
                                 <p
                                     style={{
                                         fontFamily: 'var(--font-envelope-guest)',
-                                        fontSize: '33px',
+                                        fontSize: '28px',
                                         color: '#FFFFFF',
                                         textShadow: '0 2px 16px rgba(0,0,0,0.3)',
                                         lineHeight: 1.15,
@@ -407,27 +399,59 @@ export function EnvelopeCard({ onOpen }: EnvelopeCardProps) {
                                 <p
                                     style={{
                                         fontFamily: 'var(--font-primary)',
-                                        fontSize: '14px',
-                                        color: 'rgba(255,255,255,0.93)',
+                                        fontSize: '12px',
+                                        color: 'rgba(255,255,255,0.9)',
                                         fontWeight: 400,
-                                        marginTop: '6px',
+                                        marginTop: '4px',
                                         letterSpacing: '0.15em',
                                     }}
                                 >
                                     05.04.2026
                                 </p>
 
+                                {/* Decorative line 2 */}
+                                <div
+                                    style={{
+                                        width: '40px',
+                                        height: '1px',
+                                        background:
+                                            'linear-gradient(90deg, transparent, rgba(200,185,154,0.6), transparent)',
+                                        margin: '10px 0 8px',
+                                    }}
+                                />
+
                                 {/* Invitation text */}
                                 <p
                                     style={{
                                         fontFamily: 'var(--font-formal)',
-                                        fontSize: '15px',
-                                        color: 'rgba(255,255,255,0.82)',
-                                        marginTop: '14px',
+                                        fontSize: '12px',
+                                        color: 'rgba(255,255,255,0.85)',
+                                        letterSpacing: '0.12em',
                                     }}
                                 >
-                                    Trân trọng mời Bạn + Nt
+                                    Trân trọng kính mời
                                 </p>
+
+                                {/* Guest name (personalized) — only shown when available */}
+                                {guestName && (
+                                    <p
+                                        data-testid="envelope-guest-name"
+                                        style={{
+                                            fontFamily: 'var(--font-envelope-guest)',
+                                            fontSize: '20px',
+                                            color: '#FFFFFF',
+                                            fontWeight: 600,
+                                            textShadow: '0 1px 8px rgba(0,0,0,0.25)',
+                                            lineHeight: 1.3,
+                                            marginTop: '4px',
+                                            maxWidth: '90%',
+                                            wordBreak: 'break-word',
+                                            textAlign: 'center',
+                                        }}
+                                    >
+                                        {guestName}
+                                    </p>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -472,7 +496,7 @@ export function EnvelopeCard({ onOpen }: EnvelopeCardProps) {
                             transform: flapOpen ? 'rotateX(180deg)' : 'rotateX(0deg)',
                             transition: isClosingFlap
                                 ? 'transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), z-index 0s'
-                                : 'transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), z-index 1.2s',
+                                : 'transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), z-index 0s',
                         }}
                     />
 
@@ -504,6 +528,25 @@ export function EnvelopeCard({ onOpen }: EnvelopeCardProps) {
                  Two-phase animation: burst outward → float up & fade. ── */}
                     {showHearts && <HeartBurst key={heartsKey} />}
                 </div>
+
+                {/* ── Oval shadow — fixed position, NOT inside floating envelope ── */}
+                <div
+                    className="absolute pointer-events-none"
+                    data-testid="envelope-shadow"
+                    style={{
+                        width: `${ENV_W * 1.14}px`,
+                        height: '25px',
+                        borderRadius: '50%',
+                        background: 'rgba(0, 0, 0, 0.2)',
+                        bottom: '-52px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        filter: 'blur(4px)',
+                        boxShadow: '0 0 20px rgba(0, 0, 0, 0.2)',
+                        animation: 'shadowScale 3s ease-in-out infinite',
+                        zIndex: 0,
+                    }}
+                />
             </div>
 
             {/* ── Touch prompt ── */}
@@ -532,7 +575,11 @@ export function EnvelopeCard({ onOpen }: EnvelopeCardProps) {
                         transition: 'opacity 500ms ease',
                     }}
                 >
-                    {isClosed ? 'Chạm để mở thiệp' : isOpen || isClosingCard ? 'Chạm để đóng thiệp' : ''}
+                    {isClosed
+                        ? 'Chạm để mở thiệp'
+                        : isOpen || isClosingCard
+                          ? 'Chạm để đóng thiệp'
+                          : ''}
                 </p>
                 <div
                     style={{

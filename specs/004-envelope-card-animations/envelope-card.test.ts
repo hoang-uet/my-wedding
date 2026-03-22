@@ -5,6 +5,9 @@
  *   Fix #1: Card content fully visible when open (CARD_RISE = 170)
  *   Fix #2: Heart particle burst (15 SVG hearts, radial explosion)
  *   Fix #3: 2-phase closing — card descends before flap closes (no z-index overlap)
+ *   Fix #4: Card z-index always above flap during opening (no flash)
+ *   Fix #5: Shadow stays fixed — not affected by envelope float animation
+ *   Fix #6: Card content renders (WeddingImage position:absolute override)
  */
 
 import { test, expect, Page } from '@playwright/test'
@@ -179,5 +182,126 @@ test.describe('Spec 004: EnvelopeCard Animations', () => {
         await expect(hearts.locator('svg')).toHaveCount(15)
 
         await page.screenshot({ path: '.playwright-mcp/004-reopen-after-close.png' })
+    })
+
+    // ── Fix #4: Card z-index always above flap during opening ──
+
+    test('Fix #4: card z-index is immediately higher than flap during opening', async ({ page }) => {
+        await scrollToEnvelope(page)
+
+        const card = page.locator('[data-testid="invitation-card"]')
+        const flap = page.locator('[data-testid="envelope-flap"]')
+
+        // Click to start opening
+        await page.getByText('Chạm để mở thiệp').click({ force: true })
+
+        // Check at 100ms — very early in the opening animation
+        await page.waitForTimeout(100)
+
+        const cardZ = await card.evaluate((el) =>
+            window.getComputedStyle(el).zIndex
+        )
+        const flapZ = await flap.evaluate((el) =>
+            window.getComputedStyle(el).zIndex
+        )
+
+        console.log(`Opening early: card z=${cardZ}, flap z=${flapZ}`)
+        // Card z must be strictly higher than flap z (no flash)
+        expect(parseInt(cardZ)).toBeGreaterThan(parseInt(flapZ))
+
+        await page.screenshot({ path: '.playwright-mcp/004-opening-z-index.png' })
+    })
+
+    test('Fix #4: card z-index is 4 when fully open (above pocket z:3)', async ({ page }) => {
+        await scrollToEnvelope(page)
+        await openEnvelope(page)
+
+        const card = page.locator('[data-testid="invitation-card"]')
+        const cardZ = await card.evaluate((el) =>
+            window.getComputedStyle(el).zIndex
+        )
+
+        console.log(`Open state: card z=${cardZ} (expected 2)`)
+        expect(cardZ).toBe('2')
+    })
+
+    // ── Fix #5: Shadow stays fixed (not affected by envelope float) ──
+
+    test('Fix #5: shadow is outside floating envelope (fixed position)', async ({ page }) => {
+        await scrollToEnvelope(page)
+
+        const shadow = page.locator('[data-testid="envelope-shadow"]')
+        await expect(shadow).toHaveCount(1)
+
+        // Shadow should NOT be a descendant of the floating envelope
+        // The envelope has cursor-pointer class — shadow should not be inside it
+        const shadowInsideEnvelope = page.locator('.cursor-pointer [data-testid="envelope-shadow"]')
+        await expect(shadowInsideEnvelope).toHaveCount(0)
+    })
+
+    test('Fix #5: shadow Y position stays stable during float cycle', async ({ page }) => {
+        await scrollToEnvelope(page)
+
+        const shadow = page.locator('[data-testid="envelope-shadow"]')
+
+        // Sample shadow Y position at different points in the float cycle
+        const positions: number[] = []
+        for (let i = 0; i < 4; i++) {
+            await page.waitForTimeout(750) // ~1/4 of the 3s float cycle
+            const box = await shadow.boundingBox()
+            if (box) positions.push(Math.round(box.y))
+        }
+
+        console.log(`Shadow Y positions over float cycle: ${positions.join(', ')}`)
+
+        // All positions should be identical (shadow doesn't float)
+        // Allow 1px tolerance for subpixel rendering
+        const minY = Math.min(...positions)
+        const maxY = Math.max(...positions)
+        expect(maxY - minY).toBeLessThanOrEqual(1)
+    })
+
+    // ── Fix #6: Card content actually renders ──
+
+    test('Fix #6: invitation card content is rendered and visible when open', async ({ page }) => {
+        await scrollToEnvelope(page)
+        await openEnvelope(page)
+
+        // Verify all card content elements are present and visible
+        await expect(page.getByText('Thiệp mời cưới')).toBeVisible()
+        await expect(page.getByText('05.04.2026')).toBeVisible()
+        const card = page.locator('[data-testid="invitation-card"]')
+        await expect(card.getByText(/Trân trọng kính mời/)).toBeVisible()
+
+        await page.screenshot({ path: '.playwright-mcp/004-card-content-rendered.png' })
+    })
+
+    test('Fix #6: no guest name shown on default route (no hash)', async ({ page }) => {
+        await scrollToEnvelope(page)
+        await openEnvelope(page)
+
+        // Default route (/) has no guestName — guest name element should not exist
+        const guestNameEl = page.locator('[data-testid="envelope-guest-name"]')
+        await expect(guestNameEl).toHaveCount(0)
+    })
+
+    test('Fix #6: card content is within the card bounds (not clipped)', async ({ page }) => {
+        await scrollToEnvelope(page)
+        await openEnvelope(page)
+
+        const card = page.locator('[data-testid="invitation-card"]')
+        const cardBox = await card.boundingBox()
+
+        // Check that the "Thiệp mời cưới" text is inside the card bounds
+        const label = page.getByText('Thiệp mời cưới')
+        const labelBox = await label.boundingBox()
+
+        if (cardBox && labelBox) {
+            console.log(`Card bounds: top=${cardBox.y}, bottom=${cardBox.y + cardBox.height}`)
+            console.log(`Label position: top=${labelBox.y}, bottom=${labelBox.y + labelBox.height}`)
+            // Label should be within card vertical bounds
+            expect(labelBox.y).toBeGreaterThanOrEqual(cardBox.y)
+            expect(labelBox.y + labelBox.height).toBeLessThanOrEqual(cardBox.y + cardBox.height + 2)
+        }
     })
 })

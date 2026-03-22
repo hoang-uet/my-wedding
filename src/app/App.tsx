@@ -76,7 +76,7 @@ export default function App() {
                     }}
                 >
                     <div className="relative">
-                        <EnvelopeCard onOpen={handleEnvelopeOpen} />
+                        <EnvelopeCard onOpen={handleEnvelopeOpen} guestName={guestName} />
                         <WeddingPhotoDivider />
                         <FamilyInfo />
                         <InvitationInfo guestName={guestName} />
