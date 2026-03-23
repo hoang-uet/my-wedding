@@ -73,7 +73,7 @@ export function RSVPForm() {
         borderRadius: '6px',
         padding: '11px 14px',
         fontFamily: 'var(--font-primary)',
-        fontSize: '14px',
+        fontSize: '16px',
         outline: 'none',
         boxSizing: 'border-box' as const,
         background: 'white',

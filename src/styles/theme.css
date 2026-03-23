@@ -218,4 +218,13 @@
         font-weight: var(--font-weight-normal);
         line-height: 1.5;
     }
+
+    /* Prevent iOS Safari auto-zoom on input focus (triggered when font-size < 16px) */
+    @media screen and (max-width: 768px) {
+        input,
+        textarea,
+        select {
+            font-size: 16px !important;
+        }
+    }
 }

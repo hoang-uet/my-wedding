@@ -18,7 +18,6 @@ import { WeddingTimeline } from './components/WeddingTimeline'
 import { PhotoQuoteSplit } from './components/PhotoQuoteSplit'
 import { Countdown } from './components/Countdown'
 import { Gallery } from './components/Gallery'
-import { RSVPForm } from './components/RSVPForm'
 import { WeddingGift } from './components/WeddingGift'
 import { ThankYou } from './components/ThankYou'
 import { FloatingBar } from './components/FloatingBar'
@@ -109,7 +108,6 @@ export default function App() {
                         <PhotoQuoteSplit />
                         <Countdown />
                         <Gallery />
-                        {/* <RSVPForm /> */}
                         <WeddingGift />
                         <ThankYou />
                     </div>

@@ -113,7 +113,7 @@ export function NameModal({ open, onConfirm, onClose }: NameModalProps) {
                             border: error ? '1px solid #E87461' : '1px solid rgba(212,204,190,0.5)',
                             background: 'rgba(255,255,255,0.7)',
                             fontFamily: 'var(--font-primary)',
-                            fontSize: '14px',
+                            fontSize: '16px',
                             color: '#3A3A3A',
                             outline: 'none',
                             boxSizing: 'border-box',

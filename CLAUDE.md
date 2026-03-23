@@ -92,6 +92,9 @@ Mỗi tính năng có spec riêng trong thư mục `specs/`. Đọc spec trướ
 | 003 | Thiệp mời cá nhân hóa (Personalized Invitations) | Đã triển khai (FE) | [`specs/003-personalized-invitations/spec.md`](specs/003-personalized-invitations/spec.md) |
 | 004 | EnvelopeCard Animation States | Đã triển khai | [`specs/004-envelopecard-animation/spec.md`](specs/004-envelopecard-animation/spec.md) |
 | 005 | Real-time Heart Blessings Animation | Đã triển khai | [`specs/005-heart-animation-v2/spec.md`](specs/005-heart-animation-v2/spec.md) |
+| 006 | Gallery Masonry + Lightbox | Đã triển khai | [`specs/006-gallery-masonry-lightbox/spec.md`](specs/006-gallery-masonry-lightbox/spec.md) |
+| 007 | Floating Bar + Messages Overlay | Đã triển khai | [`specs/007-floating-bar-ios-safe-area/spec.md`](specs/007-floating-bar-ios-safe-area/spec.md) |
+| 008 | Fix Mobile Auto-Zoom on Input Focus | Đã triển khai | [`specs/008-fix-mobile-input-zoom/spec.md`](specs/008-fix-mobile-input-zoom/spec.md) |
 
 > **Quy ước thêm tính năng mới:**
 > 1. Tạo thư mục `specs/{ID}-{tên-tính-năng}/spec.md`

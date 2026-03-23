@@ -88,21 +88,78 @@ export function FloatingBar({
     const peekWishes = useMemo(() => wishes.slice(-5), [wishes])
     const showPeek = !showMessages && !peekDismissed && peekWishes.length > 0
 
-    // --- Peek auto-scroll loop (CSS animation driven, duplicated content for seamless loop) ---
+    // --- Peek interactive auto-scroll (rAF-based with pause/resume) ---
     const peekScrollRef = useRef<HTMLDivElement>(null)
-    const [peekScrollDuration, setPeekScrollDuration] = useState(12)
+    const peekContainerRef = useRef<HTMLDivElement>(null)
+    const peekRafRef = useRef<number>(0)
+    const peekInteractingRef = useRef(false)
+    const peekResumeTimerRef = useRef<ReturnType<typeof setTimeout>>(null)
+    const peekSpeedRef = useRef(0) // current speed (for ease-in)
+    const TARGET_SPEED = 30 // px/s
+    const RESUME_DELAY = 3000 // ms
+    const EASE_IN_DURATION = 500 // ms
+    const peekEaseStartRef = useRef(0)
 
-    // Measure peek content height to calculate animation duration
+    // rAF auto-scroll loop
     useEffect(() => {
-        if (!showPeek || !peekScrollRef.current) return
-        const el = peekScrollRef.current
-        // Each "copy" is half the total scrollHeight (since content is duplicated)
-        const singleHeight = el.scrollHeight / 2
-        // ~30px/s scroll speed — adjust for content amount
-        const speed = 30
-        const duration = Math.max(6, singleHeight / speed)
-        setPeekScrollDuration(duration)
+        if (!showPeek) return
+        const container = peekContainerRef.current
+        const content = peekScrollRef.current
+        if (!container || !content) return
+
+        let lastTime = 0
+        peekSpeedRef.current = TARGET_SPEED
+        peekInteractingRef.current = false
+
+        const tick = (time: number) => {
+            if (!lastTime) lastTime = time
+            const delta = (time - lastTime) / 1000
+            lastTime = time
+
+            if (!peekInteractingRef.current) {
+                // Ease-in: ramp speed from 0 to TARGET_SPEED
+                if (peekEaseStartRef.current > 0) {
+                    const elapsed = time - peekEaseStartRef.current
+                    const t = Math.min(1, elapsed / EASE_IN_DURATION)
+                    peekSpeedRef.current = TARGET_SPEED * t * t // quadratic ease-in
+                    if (t >= 1) peekEaseStartRef.current = 0
+                }
+
+                container.scrollTop += peekSpeedRef.current * delta
+
+                // Seamless loop: when scrolled past first copy, wrap to start
+                const singleHeight = content.scrollHeight / 2
+                if (singleHeight > 0 && container.scrollTop >= singleHeight) {
+                    container.scrollTop -= singleHeight
+                }
+            }
+
+            peekRafRef.current = requestAnimationFrame(tick)
+        }
+
+        peekRafRef.current = requestAnimationFrame(tick)
+
+        return () => {
+            cancelAnimationFrame(peekRafRef.current)
+            if (peekResumeTimerRef.current) clearTimeout(peekResumeTimerRef.current)
+        }
     }, [showPeek, peekWishes])
+
+    // Pause auto-scroll on user interaction
+    const peekPause = useCallback(() => {
+        peekInteractingRef.current = true
+        if (peekResumeTimerRef.current) clearTimeout(peekResumeTimerRef.current)
+    }, [])
+
+    // Schedule resume after debounce
+    const peekScheduleResume = useCallback(() => {
+        if (peekResumeTimerRef.current) clearTimeout(peekResumeTimerRef.current)
+        peekResumeTimerRef.current = setTimeout(() => {
+            peekSpeedRef.current = 0
+            peekEaseStartRef.current = performance.now()
+            peekInteractingRef.current = false
+        }, RESUME_DELAY)
+    }, [])
 
     // --- Detect new messages for auto-scroll ---
     useEffect(() => {
@@ -229,20 +286,29 @@ export function FloatingBar({
                             <X size={10} />
                         </button>
 
-                        {/* Scrolling area — no container background, messages float freely */}
+                        {/* Scrolling area — scrollable container for interactive auto-scroll */}
                         <div
+                            ref={peekContainerRef}
+                            className="peek-scroll-area"
                             style={{
                                 maxHeight: '150px',
-                                overflow: 'hidden',
+                                overflowY: 'auto',
                                 position: 'relative',
+                            }}
+                            onTouchStart={peekPause}
+                            onTouchEnd={peekScheduleResume}
+                            onMouseDown={peekPause}
+                            onMouseUp={peekScheduleResume}
+                            onWheel={(e) => {
+                                peekPause()
+                                // Debounce resume on wheel since there's no single "end" event
+                                if (e.deltaY !== 0) peekScheduleResume()
                             }}
                         >
                             {/* Scrolling peek messages — duplicated for seamless loop */}
                             <div
                                 ref={peekScrollRef}
-                                className="peek-scroll-container"
                                 style={{
-                                    animation: `peekScrollLoop ${peekScrollDuration}s linear infinite`,
                                     padding: '4px 0',
                                 }}
                             >
@@ -481,7 +547,7 @@ export function FloatingBar({
                                 className="flex-1 bg-transparent outline-none border-none"
                                 style={{
                                     fontFamily: 'var(--font-primary)',
-                                    fontSize: '13px',
+                                    fontSize: '16px',
                                     color: '#3A3A3A',
                                 }}
                                 autoFocus
@@ -587,9 +653,12 @@ export function FloatingBar({
             />
 
             <style>{`
-                @keyframes peekScrollLoop {
-                    0% { transform: translateY(0); }
-                    100% { transform: translateY(-50%); }
+                .peek-scroll-area {
+                    scrollbar-width: none;
+                    -ms-overflow-style: none;
+                }
+                .peek-scroll-area::-webkit-scrollbar {
+                    display: none;
                 }
                 @media (prefers-reduced-transparency: reduce) {
                     .floating-bar-glass {
