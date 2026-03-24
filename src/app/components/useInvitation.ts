@@ -10,13 +10,8 @@ interface UseInvitationReturn {
     isFound: boolean
 }
 
-/** Retry delays in ms — escalating backoff to handle Supabase cold starts */
-const RETRY_DELAYS = [800, 2000, 4000]
-
 /**
  * Fetches guest name from Supabase by invitation hash.
- * Retries with exponential backoff to handle Supabase free-tier cold starts
- * and PostgREST connection pool warm-up delays.
  * Returns null gracefully if hash is missing, invalid, or Supabase is unavailable.
  */
 export function useInvitation(hash: string | undefined): UseInvitationReturn {
@@ -35,64 +30,38 @@ export function useInvitation(hash: string | undefined): UseInvitationReturn {
         let cancelled = false
         setIsLoading(true)
 
-        const queryByHash = async () => {
-            const { data, error } = await supabase
-                .from('invitations')
-                .select('guest_name')
-                .eq('hash', hash)
-                .limit(1)
-                .single()
-
-            if (error || !data) return null
-            return data.guest_name as string
-        }
-
-        const fetchWithRetry = async () => {
+        const fetchInvitation = async () => {
             try {
-                // First attempt — immediate
-                const name = await queryByHash()
+                const { data, error } = await supabase
+                    .from('invitations')
+                    .select('guest_name')
+                    .eq('hash', hash)
+                    .limit(1)
+                    .single()
+
                 if (cancelled) return
 
-                if (name) {
-                    setGuestName(name)
-                    setIsFound(true)
-                    setIsLoading(false)
-                    return
-                }
-
-                // Retry with backoff — handles Supabase cold start / propagation delay
-                for (const delay of RETRY_DELAYS) {
-                    await new Promise((r) => setTimeout(r, delay))
-                    if (cancelled) return
-
-                    const retryName = await queryByHash()
-                    if (cancelled) return
-
-                    if (retryName) {
-                        setGuestName(retryName)
-                        setIsFound(true)
-                        setIsLoading(false)
-                        return
-                    }
-                }
-
-                // All retries exhausted — hash genuinely doesn't exist
-                if (!cancelled) {
+                if (error || !data) {
                     setGuestName(null)
                     setIsFound(false)
-                    setIsLoading(false)
+                } else {
+                    setGuestName(data.guest_name)
+                    setIsFound(true)
                 }
             } catch {
                 // Supabase connection error — fallback to generic invitation
                 if (!cancelled) {
                     setGuestName(null)
                     setIsFound(false)
+                }
+            } finally {
+                if (!cancelled) {
                     setIsLoading(false)
                 }
             }
         }
 
-        fetchWithRetry()
+        fetchInvitation()
 
         return () => {
             cancelled = true
