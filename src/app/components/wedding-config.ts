@@ -38,7 +38,7 @@ export const weddingConfig = {
     event: {
         time: '2026-04-04T17:00:00+07:00',
         dayOfWeek: 'Thứ Bảy',
-        lunarDate: 'Tức ngày 18 tháng 02 năm 2026',
+        lunarDate: 'Tức ngày 17 tháng 02 âm lịch năm 2026',
         groom: {
             venue: 'Tư Gia Nhà Trai',
             address: 'Xóm 2, Thôn Thọ Bình, Xã Triệu Việt Vương, Hưng Yên',
