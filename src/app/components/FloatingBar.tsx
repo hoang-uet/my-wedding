@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect, useMemo } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { X, Camera, Smile, Send, ChevronDown, Loader2 } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
@@ -84,8 +84,8 @@ export function FloatingBar({
     const [hasNewMessages, setHasNewMessages] = useState(false)
     const prevWishCountRef = useRef(wishes.length)
 
-    // --- Peek mode: last 5 wishes ---
-    const peekWishes = useMemo(() => wishes.slice(-5), [wishes])
+    // --- Peek mode: all wishes ---
+    const peekWishes = wishes
     const showPeek = !showMessages && !peekDismissed && peekWishes.length > 0
 
     // --- Peek auto-scroll loop (CSS animation driven, duplicated content for seamless loop) ---
